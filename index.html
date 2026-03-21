@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Future Map</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --bg-secondary: #f7f7f5;
+      --text: #1a1a1a;
+      --text-secondary: #6b6b68;
+      --border: rgba(0,0,0,0.1);
+      --accent: #1a4a8a;
+      --accent-light: #e8f0fa;
+      --accent-mid: #2d6ec2;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a1a;
+        --bg-secondary: #1e2028;
+        --text: #f0ede8;
+        --text-secondary: #9a9992;
+        --border: rgba(255,255,255,0.1);
+        --accent: #2d6ec2;
+        --accent-light: #0d1e3a;
+        --accent-mid: #5b9de8;
+      }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 0.5px solid var(--border);
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-logo span {
+      color: var(--accent-mid);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-links a.coming-soon {
+      opacity: 0.45;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .hero {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 7rem 2rem 5rem;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-mid);
+      background: var(--accent-light);
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-bottom: 2rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 500;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent-mid);
+    }
+
+    .hero p {
+      font-size: 1.125rem;
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin-bottom: 2.5rem;
+      line-height: 1.75;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--accent);
+      color: #ffffff;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+
+    .btn-primary:hover { opacity: 0.85; }
+
+    .btn-secondary {
+      display: inline-block;
+      color: var(--text-secondary);
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 400;
+      text-decoration: none;
+      border: 0.5px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    .btn-secondary:hover { background: var(--bg-secondary); }
+
+    .divider {
+      border: none;
+      border-top: 0.5px solid var(--border);
+      margin: 0 2rem;
+    }
+
+    .section {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 3rem;
+    }
+
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 0.5px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .pillar {
+      background: var(--bg);
+      padding: 2rem 1.75rem;
+    }
+
+    .pillar-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .pillar-icon svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--accent-mid);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .pillar h3 {
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .pillar p {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    .coming-up {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 2.5rem;
+    }
+
+    .coming-up h2 {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .coming-up p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+    }
+
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .feature-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-mid);
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+
+    .mission-block {
+      border-left: 2px solid var(--accent-mid);
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      margin: 3rem 0;
+    }
+
+    .mission-block p {
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.6;
+      letter-spacing: -0.01em;
+    }
+
+    footer {
+      border-top: 0.5px solid var(--border);
+      padding: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    footer p {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover { color: var(--text); }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 1rem; }
+      .nav-links { gap: 1rem; }
+      .hero { padding: 4rem 1.25rem 3rem; }
+      .section { padding: 3rem 1.25rem; }
+      .pillars { grid-template-columns: 1fr; }
+      .divider { margin: 0 1.25rem; }
+      footer { padding: 1.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">The <span>Future</span> Map</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#" class="coming-soon">Explore</a></li>
+      <li><a href="#" class="coming-soon">Articles</a></li>
+      <li><a href="#" class="coming-soon">Take action</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-tag">Now building</div>
+    <h1>Mapping the path to a <em>sustainable future</em></h1>
+    <p>
+      The Future Map is a free, open resource dedicated to informing, enabling, and inspiring action on clean energy and climate change, from global policy to local impact.
+    </p>
+    <div class="hero-actions">
+      <a href="#about" class="btn-primary">Learn more</a>
+      <a href="#coming-up" class="btn-secondary">What's coming</a>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <section class="section" id="about">
+    <p class="section-label">Mission</p>
+
+    <div class="mission-block">
+      <p>To inform, enable, and inspire a sustainable future.</p>
+    </div>
+
+    <p style="color: var(--text-secondary); font-size: 15px; line-height: 1.8;">
+      The Future Map exists because the climate crisis is not a distant problem, it's happening now, unevenly, and at a pace that demands more than awareness. It demands understanding, action, and advocacy from everyone. This platform is being built to show you: where things stand, what is being done, who is doing it, and how you can be part of the change.
+    </p>
+  </section>
+
+  <hr class="divider" />
+
+  <section class="section">
+    <p class="section-label">The Foundations</p>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18M3 12h18M12 3c-2.5 3-4 5.7-4 9s1.5 6 4 9M12 3c2.5 3 4 5.7 4 9s-1.5 6-4 9"/></svg>
+        </div>
+        <h3>Inform</h3>
+        <p>Clear, accurate, and regularly updated information on clean energy development and climate impact across every region of the world.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <h3>Enable</h3>
+        <p>Resources, tools, and connections to organizations working on the ground, so anyone can turn awareness to meaningful action.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M8 12l3 3 5-5"/></svg>
+        </div>
+        <h3>Inspire</h3>
+        <p>Stories of progress, remarkable people, and the case that the future is not set in stone, that action at every scale makes a difference.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <section class="section" id="coming-up">
+    <p class="section-label">Coming soon</p>
+    <div class="coming-up">
+      <h2>The map is being built</h2>
+      <p>Here is what is in development.</p>
+      <ul class="feature-list">
+        <li>
+          <span class="feature-dot"></span>
+          <span><strong style="font-weight:500; color: var(--text);">Interactive world map</strong> — explore clean energy initiatives, climate impact, technological developments, government actions, and organizations by continent, country, and local area.</span>
+        </li>
+        <li>
+          <span class="feature-dot"></span>
+          <span><strong style="font-weight:500; color: var(--text);">US policy tracker</strong> — a regularly updated log of federal bills, executive orders, and agency developments related to energy, climate, and the environment.</span>
+        </li>
+        <li>
+          <span class="feature-dot"></span>
+          <span><strong style="font-weight:500; color: var(--text);">Articles and analysis</strong> — writing on developments in clean energy, climate science, and environmental policy.</span>
+        </li>
+        <li>
+          <span class="feature-dot"></span>
+          <span><strong style="font-weight:500; color: var(--text);">Take action</strong> — resources for individuals who want to move from awareness to advocacy and real-world impact.</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 The Future Map. Built with intention.</p>
+    <ul class="footer-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="https://instagram.com/the_future_map" target="_blank">Instagram</a></li>
+    </ul>
+  </footer>
+
+</body>
+</html>
