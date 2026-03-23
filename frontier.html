@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Frontier — The Future Map</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --bg-secondary: #f7f7f5;
+      --text: #1a1a1a;
+      --text-secondary: #6b6b68;
+      --border: rgba(0,0,0,0.1);
+      --accent: #1a4a8a;
+      --accent-light: #e8f0fa;
+      --accent-mid: #2d6ec2;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a1a;
+        --bg-secondary: #1e2028;
+        --text: #f0ede8;
+        --text-secondary: #9a9992;
+        --border: rgba(255,255,255,0.1);
+        --accent: #2d6ec2;
+        --accent-light: #0d1e3a;
+        --accent-mid: #5b9de8;
+      }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 0.5px solid var(--border);
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-logo span { color: var(--accent-mid); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-links a.active {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .nav-links a.coming-soon {
+      opacity: 0.45;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .page-header {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 4rem 2rem 2rem;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .page-header-label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-mid);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-header h1 {
+      font-size: 2rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-header p {
+      font-size: 15px;
+      color: var(--text-secondary);
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent-mid);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+
+    .meta {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    a.article-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    a.article-link:hover .article-title {
+      color: var(--accent-mid);
+    }
+
+    .article-title {
+      transition: color 0.15s;
+    }
+
+    /* ── HERO ARTICLE ── */
+    .hero-article {
+      background: var(--bg-secondary);
+      border-radius: 16px;
+      padding: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .hero-article .tag { margin-bottom: 1.25rem; }
+
+    .hero-article .article-title {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      margin-bottom: 1rem;
+    }
+
+    .hero-article .article-desc {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      margin-bottom: 1.5rem;
+      max-width: 640px;
+    }
+
+    .hero-article .meta-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .source-badge {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: var(--bg);
+      border: 0.5px solid var(--border);
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+
+    /* ── FEATURED GRID ── */
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 0.5px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 3rem;
+    }
+
+    .featured-card {
+      background: var(--bg);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .featured-card .article-title {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .featured-card .article-desc {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .featured-card .meta-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: auto;
+      padding-top: 0.75rem;
+      border-top: 0.5px solid var(--border);
+    }
+
+    /* ── ARTICLE LIST ── */
+    .article-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .list-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      padding: 1.5rem 0;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .list-item:first-child { border-top: 0.5px solid var(--border); }
+
+    .list-number {
+      font-size: 13px;
+      color: var(--text-secondary);
+      min-width: 24px;
+      padding-top: 3px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .list-content { flex: 1; }
+
+    .list-item .article-title {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.4;
+      margin-bottom: 0.35rem;
+    }
+
+    .list-item .article-desc {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+    }
+
+    .list-item .meta-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    footer {
+      border-top: 0.5px solid var(--border);
+      padding: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    footer p { font-size: 13px; color: var(--text-secondary); }
+
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover { color: var(--text); }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 1rem; }
+      .nav-links { gap: 1rem; }
+      .page-header { padding: 3rem 1.25rem 1.5rem; }
+      .container { padding: 2rem 1.25rem; }
+      .hero-article { padding: 1.75rem; }
+      footer { padding: 1.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">The <span>Future</span> Map</a>
+    <ul class="nav-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#coming-up" class="coming-soon">Explore</a></li>
+      <li><a href="frontier.html" class="active">The Frontier</a></li>
+      <li><a href="index.html#coming-up" class="coming-soon">Take action</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-header">
+    <p class="page-header-label">The Frontier</p>
+    <h1>What's happening at the front</h1>
+    <p>Curated reading on technological developments in clean energy, climate, and environmental science.</p>
+  </div>
+
+  <div class="container">
+
+    <p class="section-label">Featured</p>
+    <a class="article-link" href="PASTE_ARTICLE_URL_HERE" target="_blank" rel="noopener">
+      <div class="hero-article">
+        <span class="tag">Solar</span>
+        <h2 class="article-title">Title</h2>
+        <p class="article-desc">Description</p>
+        <div class="meta-row">
+          <span class="source-badge">MIT Technology Review</span>
+          <span class="meta">March 18, 2026</span>
+        </div>
+      </div>
+    </a>
+
+    <p class="section-label">Also this week</p>
+    <div class="featured-grid">
+
+      <a class="article-link" href="PASTE_ARTICLE_URL_HERE" target="_blank" rel="noopener">
+        <div class="featured-card">
+          <span class="tag">Grid</span>
+          <h3 class="article-title">Title</h3>
+          <p class="article-desc">Description</p>
+          <div class="meta-row">
+            <span class="source-badge">Carbon Brief</span>
+            <span class="meta">March 15, 2026</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="article-link" href="PASTE_ARTICLE_URL_HERE" target="_blank" rel="noopener">
+        <div class="featured-card">
+          <span class="tag">Carbon</span>
+          <h3 class="article-title">Title</h3>
+          <p class="article-desc">Description</p>
+          <div class="meta-row">
+            <span class="source-badge">Nature</span>
+            <span class="meta">March 12, 2026</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="article-link" href="PASTE_ARTICLE_URL_HERE" target="_blank" rel="noopener">
+        <div class="featured-card">
+          <span class="tag">Wind</span>
+          <h3 class="article-title">Title</h3>
+          <p class="article-desc">Description</p>
+          <div class="meta-row">
+            <span class="source-badge">IEA</span>
+            <span class="meta">March 10, 2026</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <p class="section-label">More from The Frontier</p>
+    <div class="article-list">
+
+      <a class="article-link" href="PASTE_ARTICLE_URL_HERE" target="_blank" rel="noopener">
+        <div class="list-item">
+          <span class="list-number">01</span>
+          <div class="list-content">
+            <h3 class="article-title">Title</h3>
+            <p class="article-desc">Description</p>
+            <div class="meta-row">
+              <span class="tag">Hydrogen</span>
+              <span class="source-badge">BloombergNEF</span>
+              <span class="meta">March 8, 2026</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a class="article-link" href="PASTE_ARTICLE_URL_HERE" target="_blank" rel="noopener">
+        <div class="list-item">
+          <span class="list-number">02</span>
+          <div class="list-content">
+            <h3 class="article-title">Title</h3>
+            <p class="article-desc">Description</p>
+            <div class="meta-row">
+              <span class="tag">Grid</span>
+              <span class="source-badge">MIT Technology Review</span>
+              <span class="meta">March 5, 2026</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a class="article-link" href="PASTE_ARTICLE_URL_HERE" target="_blank" rel="noopener">
+        <div class="list-item">
+          <span class="list-number">03</span>
+          <div class="list-content">
+            <h3 class="article-title">Title</h3>
+            <p class="article-desc">Description</p>
+            <div class="meta-row">
+              <span class="tag">EVs</span>
+              <span class="source-badge">The Guardian</span>
+              <span class="meta">March 3, 2026</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- ARCHIVE LINK -->
+    <div style="margin-top: 4rem; padding-top: 3rem; border-top: 0.5px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <p style="font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 0.25rem;">Looking for older articles?</p>
+        <p style="font-size: 13.5px; color: var(--text-secondary);">Every article ever posted on The Frontier, newest first.</p>
+      </div>
+      <a href="archive.html" style="display: inline-block; font-size: 14px; font-weight: 500; color: var(--accent-mid); text-decoration: none; border: 0.5px solid var(--border); padding: 10px 20px; border-radius: 8px; white-space: nowrap; transition: background 0.15s;">Browse the archive →</a>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>© 2026 The Future Map. Built with intention.</p>
+    <ul class="footer-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="https://instagram.com/the_future_map" target="_blank">Instagram</a></li>
+    </ul>
+  </footer>
+
+</body>
+</html>
