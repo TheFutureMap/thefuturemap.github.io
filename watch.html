@@ -246,7 +246,10 @@
       font-weight: 500;
       line-height: 1.4;
       color: var(--text);
+      transition: color 0.15s;
     }
+
+    .entry-card a:hover .entry-title { color: var(--accent-mid); }
 
     .entry-meta {
       font-size: 13px;
@@ -340,12 +343,14 @@
         <option value="Executive Order">Executive Order</option>
         <option value="Legislation">Legislation</option>
         <option value="Agency Action">Agency Action</option>
+        <option value="Court Ruling">Court Ruling</option>
         <option value="Memorandum">Memorandum</option>
         <option value="Withdrawal">Withdrawal</option>
       </select>
       <select id="filter-status" onchange="filter()">
         <option value="">All statuses</option>
         <option value="Signed">Signed</option>
+        <option value="Finalized">Finalized</option>
         <option value="Passed">Passed</option>
         <option value="Proposed">Proposed</option>
         <option value="Reversed">Reversed</option>
@@ -358,20 +363,24 @@
     <div class="timeline" id="timeline">
 
       <!-- ENTRY — add new entries at the TOP, newest first -->
+      <!-- Executive Order source: federalregister.gov -->
+      <!-- Legislation source: congress.gov -->
+      <!-- Agency Action source: federalregister.gov -->
+      <!-- Court Ruling source: supremecourt.gov or courtlistener.com -->
+      <!-- Memorandum source: whitehouse.gov -->
 
-      <div class="entry" data-type="Executive Order" data-status="Signed">
+      <div class="entry" data-type="Agency Action" data-status="Signed">
         <div class="entry-dot" style="background: var(--text-secondary);"></div>
         <div class="entry-card">
           <div class="entry-top">
-            <h3 class="entry-title">Title</h3>
+            <a href="https://www.epa.gov/regulations-emissions-vehicles-and-engines/final-rule-rescission-greenhouse-gas-endangerment" target="_blank" rel="noopener" style="text-decoration: none;"><h3 class="entry-title">Rescission of the Greenhouse Gas Endangerment Finding and Motor Vehicle Greenhouse Gas Emission Standards Under the Clean Air Act</h3></a>
             <div class="entry-badges">
-              <span class="badge badge-type">Executive Order</span>
-              <span class="badge badge-signed">Signed</span>
+              <span class="badge badge-type">Agency Action</span>
+              <span class="badge badge-signed">Finalized</span>
             </div>
           </div>
-          <p class="entry-meta">January 1, 2026</p>
-          <p class="entry-summary">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
-          <a class="entry-link" href="#" target="_blank" rel="noopener">View source →</a>
+          <p class="entry-meta">April 20, 2026</p>
+          <p class="entry-summary">The EPA rescinded its 2009 finding that greenhouse gases endanger public health, removing the legal basis for all federal vehicle emissions standards under the Clean Air Act. The rule also repeals all GHG emission standards for light, medium, and heavy-duty vehicles from model year 2012 onward. Legal challenges from environmental groups and states are expected in the DC Circuit. Finalized February 12, 2026. Effective April 20, 2026.</p>
         </div>
       </div>
 
@@ -379,7 +388,7 @@
         <div class="entry-dot" style="background: var(--text-secondary);"></div>
         <div class="entry-card">
           <div class="entry-top">
-            <h3 class="entry-title">Title</h3>
+            <a href="https://www.congress.gov" target="_blank" rel="noopener" style="text-decoration: none;"><h3 class="entry-title">Title</h3></a>
             <div class="entry-badges">
               <span class="badge badge-type">Legislation</span>
               <span class="badge badge-signed">Signed</span>
@@ -387,7 +396,6 @@
           </div>
           <p class="entry-meta">July 1, 2025</p>
           <p class="entry-summary">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
-          <a class="entry-link" href="#" target="_blank" rel="noopener">View source →</a>
         </div>
       </div>
 
@@ -395,7 +403,7 @@
         <div class="entry-dot" style="background: var(--text-secondary);"></div>
         <div class="entry-card">
           <div class="entry-top">
-            <h3 class="entry-title">Title</h3>
+            <a href="https://www.federalregister.gov" target="_blank" rel="noopener" style="text-decoration: none;"><h3 class="entry-title">Title</h3></a>
             <div class="entry-badges">
               <span class="badge badge-type">Executive Order</span>
               <span class="badge badge-signed">Signed</span>
@@ -403,7 +411,6 @@
           </div>
           <p class="entry-meta">April 8, 2025</p>
           <p class="entry-summary">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
-          <a class="entry-link" href="#" target="_blank" rel="noopener">View source →</a>
         </div>
       </div>
 
@@ -411,7 +418,7 @@
         <div class="entry-dot" style="background: var(--text-secondary);"></div>
         <div class="entry-card">
           <div class="entry-top">
-            <h3 class="entry-title">Title</h3>
+            <a href="https://www.federalregister.gov" target="_blank" rel="noopener" style="text-decoration: none;"><h3 class="entry-title">Title</h3></a>
             <div class="entry-badges">
               <span class="badge badge-type">Executive Order</span>
               <span class="badge badge-signed">Signed</span>
@@ -419,7 +426,6 @@
           </div>
           <p class="entry-meta">January 20, 2025</p>
           <p class="entry-summary">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
-          <a class="entry-link" href="#" target="_blank" rel="noopener">View source →</a>
         </div>
       </div>
 
@@ -427,7 +433,7 @@
         <div class="entry-dot" style="background: var(--text-secondary);"></div>
         <div class="entry-card">
           <div class="entry-top">
-            <h3 class="entry-title">Title</h3>
+            <a href="https://www.federalregister.gov" target="_blank" rel="noopener" style="text-decoration: none;"><h3 class="entry-title">Title</h3></a>
             <div class="entry-badges">
               <span class="badge badge-type">Executive Order</span>
               <span class="badge badge-signed">Signed</span>
@@ -435,7 +441,6 @@
           </div>
           <p class="entry-meta">January 20, 2025</p>
           <p class="entry-summary">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
-          <a class="entry-link" href="#" target="_blank" rel="noopener">View source →</a>
         </div>
       </div>
 
