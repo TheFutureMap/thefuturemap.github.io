@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Frontier — The Future Map</title>
+  <title>Archive — The Frontier — The Future Map</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -77,10 +77,7 @@
 
     .nav-links a:hover { color: var(--text); }
 
-    .nav-links a.active {
-      color: var(--text);
-      font-weight: 500;
-    }
+    .nav-links a.active { color: var(--text); font-weight: 500; }
 
     .nav-links a.coming-soon {
       opacity: 0.45;
@@ -95,14 +92,21 @@
       border-bottom: 0.5px solid var(--border);
     }
 
-    .page-header-label {
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--accent-mid);
-      margin-bottom: 0.5rem;
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
     }
+
+    .breadcrumb a {
+      color: var(--accent-mid);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover { text-decoration: underline; }
 
     .page-header h1 {
       font-size: 2rem;
@@ -142,9 +146,16 @@
       border-radius: 100px;
     }
 
-    .meta {
-      font-size: 13px;
+    .meta { font-size: 13px; color: var(--text-secondary); }
+
+    .source-badge {
+      font-size: 12px;
+      font-weight: 500;
       color: var(--text-secondary);
+      background: var(--bg-secondary);
+      border: 0.5px solid var(--border);
+      padding: 3px 10px;
+      border-radius: 100px;
     }
 
     a.article-link {
@@ -153,101 +164,10 @@
       display: block;
     }
 
-    a.article-link:hover .article-title {
-      color: var(--accent-mid);
-    }
+    a.article-link:hover .article-title { color: var(--accent-mid); }
 
-    .article-title {
-      transition: color 0.15s;
-    }
+    .article-title { transition: color 0.15s; }
 
-    /* ── HERO ARTICLE ── */
-    .hero-article {
-      background: var(--bg-secondary);
-      border-radius: 16px;
-      padding: 3rem;
-      margin-bottom: 3rem;
-    }
-
-    .hero-article .tag { margin-bottom: 1.25rem; }
-
-    .hero-article .article-title {
-      font-size: clamp(1.4rem, 3vw, 2rem);
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      line-height: 1.25;
-      margin-bottom: 1rem;
-    }
-
-    .hero-article .article-desc {
-      font-size: 15px;
-      color: var(--text-secondary);
-      line-height: 1.75;
-      margin-bottom: 1.5rem;
-      max-width: 640px;
-    }
-
-    .hero-article .meta-row {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .source-badge {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      background: var(--bg);
-      border: 0.5px solid var(--border);
-      padding: 3px 10px;
-      border-radius: 100px;
-    }
-
-    /* ── FEATURED GRID ── */
-    .featured-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1px;
-      background: var(--border);
-      border: 0.5px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 3rem;
-    }
-
-    .featured-card {
-      background: var(--bg);
-      padding: 1.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .featured-card .article-title {
-      font-size: 15px;
-      font-weight: 500;
-      line-height: 1.4;
-    }
-
-    .featured-card .article-desc {
-      font-size: 13.5px;
-      color: var(--text-secondary);
-      line-height: 1.65;
-      flex: 1;
-    }
-
-    .featured-card .meta-row {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      margin-top: auto;
-      padding-top: 0.75rem;
-      border-top: 0.5px solid var(--border);
-    }
-
-    /* ── ARTICLE LIST ── */
     .article-list {
       display: flex;
       flex-direction: column;
@@ -295,6 +215,18 @@
       flex-wrap: wrap;
     }
 
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 14px;
+      color: var(--accent-mid);
+      text-decoration: none;
+      margin-top: 3rem;
+    }
+
+    .back-link:hover { text-decoration: underline; }
+
     footer {
       border-top: 0.5px solid var(--border);
       padding: 2rem;
@@ -322,7 +254,6 @@
       .nav-links { gap: 1rem; }
       .page-header { padding: 3rem 1.25rem 1.5rem; }
       .container { padding: 2rem 1.25rem; }
-      .hero-article { padding: 1.75rem; }
       footer { padding: 1.5rem 1.25rem; }
     }
   </style>
@@ -341,49 +272,46 @@
   </nav>
 
   <div class="page-header">
-    <p class="page-header-label">The Frontier</p>
-    <h1>What's happening at the front</h1>
-    <p>Curated reading on technological developments in clean energy, climate, and environmental science.</p>
+    <div class="breadcrumb">
+      <a href="frontier.html">The Frontier</a>
+      <span>›</span>
+      <span>Archive</span>
+    </div>
+    <h1>Archive</h1>
+    <p>Every article posted on The Frontier, newest first.</p>
   </div>
 
   <div class="container">
 
-    <p class="section-label">Featured</p>
-    <a class="article-link" href="https://www.technologyreview.com/2026/01/15/1131348/climate-technologies-2026/" target="_blank" rel="noopener">
-      <div class="hero-article">
-        <span class="tag">FRONTIERS</span>
-        <h2 class="article-title">Three climate technologies breaking through in 2026</h2>
-        <p class="article-desc">Three technologies from MIT Technology Review's 2026 Breakthrough Technologies list stand out for climate, sodium-ion batteries, next generation nuclear reactors, and hyperscale AI data centers.</p>
-        <div class="meta-row">
-          <span class="source-badge">MIT Technology Review</span>
-          <span class="meta">January 15, 2026</span>
-        </div>
-      </div>
-    </a>
+    <input
+      type="text"
+      id="search"
+      placeholder="Search by title, topic, source, date..."
+      style="width: 100%; padding: 10px 16px; font-size: 14px; border: 0.5px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); margin-bottom: 2rem; outline: none;"
+      oninput="filterArticles()"
+    />
 
-    <p class="section-label">Also Read</p>
-    <div class="featured-grid">
+    <p class="section-label">All articles</p>
+    <div class="article-list" id="article-list">
 
       <a class="article-link" href="https://e360.yale.edu/features/1.5-degrees-tipping-points" target="_blank" rel="noopener">
-        <div class="featured-card">
-          <span class="tag">CLIMATE</span>
-          <h3 class="article-title">Overshoot: The World Is Hitting Point of No Return on Climate</h3>
-          <p class="article-desc">Scientists warn that the world has now breached the 1.5°C warming threshold for the first time over a three-year period, putting it on course for irreversible tipping points, including the collapse of ice sheets and the death of the Amazon rainforest.</p>
-          <div class="meta-row">
-            <span class="source-badge">Yale Environment 360</span>
-            <span class="meta">January 28, 2026</span>
+        <div class="list-item">
+          <span class="list-number">01</span>
+          <div class="list-content">
+            <h3 class="article-title">Overshoot: The World Is Hitting Point of No Return on Climate</h3>
+            <p class="article-desc">Scientists warn that the world has now breached the 1.5°C warming threshold for the first time over a three-year period, putting it on course for irreversible tipping points, including the collapse of ice sheets and the death of the Amazon rainforest.</p>
+            <div class="meta-row">
+              <span class="tag">CLIMATE</span>
+              <span class="source-badge">Yale Environment 360</span>
+              <span class="meta">January 28, 2026</span>
+            </div>
           </div>
         </div>
       </a>
 
-    </div>
-
-    <p class="section-label">More from The Frontier</p>
-    <div class="article-list">
-
       <a class="article-link" href="https://earth.org/energy-transition-where-are-we-headed-in-2026/" target="_blank" rel="noopener">
         <div class="list-item">
-          <span class="list-number">01</span>
+          <span class="list-number">02</span>
           <div class="list-content">
             <h3 class="article-title">Energy Transition: Where Are We Headed in 2026?</h3>
             <p class="article-desc">A broad look at the state of the global energy transition as 2026 begins. Where renewables stand, what momentum has been built, and what obstacles remain on the path to a clean energy economy.</p>
@@ -396,18 +324,46 @@
         </div>
       </a>
 
+      <a class="article-link" href="https://www.technologyreview.com/2026/01/15/1131348/climate-technologies-2026/" target="_blank" rel="noopener">
+        <div class="list-item">
+          <span class="list-number">03</span>
+          <div class="list-content">
+            <h3 class="article-title">Three climate technologies breaking through in 2026</h3>
+            <p class="article-desc">Three technologies from MIT Technology Review's 2026 Breakthrough Technologies list stand out for climate, sodium-ion batteries, next generation nuclear reactors, and hyperscale AI data centers.</p>
+            <div class="meta-row">
+              <span class="tag">FRONTIERS</span>
+              <span class="source-badge">MIT Technology Review</span>
+              <span class="meta">January 15, 2026</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
     </div>
 
-    <!-- ARCHIVE LINK -->
-    <div style="margin-top: 4rem; padding-top: 3rem; border-top: 0.5px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
-      <div>
-        <p style="font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 0.25rem;">Looking for more articles?</p>
-        <p style="font-size: 13.5px; color: var(--text-secondary);">Every article ever posted on The Frontier, newest first.</p>
-      </div>
-      <a href="archive.html" style="display: inline-block; font-size: 14px; font-weight: 500; color: var(--accent-mid); text-decoration: none; border: 0.5px solid var(--border); padding: 10px 20px; border-radius: 8px; white-space: nowrap; transition: background 0.15s;">Browse the archive →</a>
-    </div>
+    <p id="no-results" style="display:none; font-size: 14px; color: var(--text-secondary); padding: 2rem 0;">No articles match your search.</p>
+
+    <a href="frontier.html" class="back-link">← Back to The Frontier</a>
 
   </div>
+
+  <script>
+    function filterArticles() {
+      const query = document.getElementById('search').value.toLowerCase();
+      const items = document.querySelectorAll('#article-list .article-link');
+      let visible = 0;
+      items.forEach(item => {
+        const text = item.innerText.toLowerCase();
+        if (text.includes(query)) {
+          item.style.display = 'block';
+          visible++;
+        } else {
+          item.style.display = 'none';
+        }
+      });
+      document.getElementById('no-results').style.display = visible === 0 ? 'block' : 'none';
+    }
+  </script>
 
   <footer>
     <p>© 2026 The Future Map. Built with intention.</p>
