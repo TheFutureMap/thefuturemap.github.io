@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Take Action — The Future Map</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --bg-secondary: #f7f7f5;
+      --text: #1a1a1a;
+      --text-secondary: #6b6b68;
+      --border: rgba(0,0,0,0.1);
+      --accent: #1a4a8a;
+      --accent-light: #e8f0fa;
+      --accent-mid: #2d6ec2;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a1a;
+        --bg-secondary: #1e2028;
+        --text: #f0ede8;
+        --text-secondary: #9a9992;
+        --border: rgba(255,255,255,0.1);
+        --accent: #2d6ec2;
+        --accent-light: #0d1e3a;
+        --accent-mid: #5b9de8;
+      }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 0.5px solid var(--border);
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-logo span { color: var(--accent-mid); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.active { color: var(--text); font-weight: 500; }
+    .nav-links a.coming-soon { opacity: 0.45; cursor: default; pointer-events: none; }
+
+    .page-header {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 4rem 2rem 2rem;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .page-header-label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-mid);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-header h1 {
+      font-size: 2rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-header p {
+      font-size: 15px;
+      color: var(--text-secondary);
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-intro {
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      max-width: 640px;
+      line-height: 1.75;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--accent-mid);
+      background: var(--accent-light);
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+
+    .location-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: var(--bg-secondary);
+      border: 0.5px solid var(--border);
+      padding: 3px 10px;
+      border-radius: 100px;
+    }
+
+    /* CONTROLS */
+    .controls {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+      align-items: center;
+    }
+
+    .controls input {
+      flex: 1;
+      min-width: 200px;
+      padding: 9px 14px;
+      font-size: 14px;
+      border: 0.5px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+    }
+
+    .controls select {
+      padding: 9px 14px;
+      font-size: 14px;
+      border: 0.5px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* ORG CARDS */
+    .scale-group {
+      margin-bottom: 3rem;
+    }
+
+    .scale-group:last-child { margin-bottom: 0; }
+
+    .scale-heading {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .org-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 0.5px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .org-card {
+      background: var(--bg);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .org-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .org-name {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.15s;
+      line-height: 1.3;
+    }
+
+    .org-name:hover { color: var(--accent-mid); }
+
+    .org-desc {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .org-footer {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      padding-top: 0.75rem;
+      border-top: 0.5px solid var(--border);
+      margin-top: auto;
+    }
+
+    /* ACTION CARDS */
+    .action-section {
+      margin-bottom: 3rem;
+    }
+
+    .action-section:last-child { margin-bottom: 0; }
+
+    .action-category-heading {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+    }
+
+    .action-card {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .action-card h4 {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .action-card p {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .action-link {
+      display: inline-block;
+      margin-top: 0.5rem;
+      font-size: 13px;
+      color: var(--accent-mid);
+      text-decoration: none;
+    }
+
+    .action-link:hover { text-decoration: underline; }
+
+    .no-results {
+      display: none;
+      font-size: 14px;
+      color: var(--text-secondary);
+      padding: 2rem 0;
+    }
+
+    .divider {
+      border: none;
+      border-top: 0.5px solid var(--border);
+      margin: 3rem 0;
+    }
+
+    footer {
+      border-top: 0.5px solid var(--border);
+      padding: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    footer p { font-size: 13px; color: var(--text-secondary); }
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+    .footer-links a { font-size: 13px; color: var(--text-secondary); text-decoration: none; }
+    .footer-links a:hover { color: var(--text); }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 1rem; }
+      .nav-links { gap: 1rem; }
+      .page-header { padding: 3rem 1.25rem 1.5rem; }
+      .container { padding: 2rem 1.25rem; }
+      footer { padding: 1.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">The <span>Future</span> Map</a>
+    <ul class="nav-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#coming-up" class="coming-soon">Explore</a></li>
+      <li><a href="frontier.html">The Frontier</a></li>
+      <li><a href="watch.html">The Watch</a></li>
+      <li><a href="action.html" class="active">Take Action</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-header">
+    <p class="page-header-label">Take Action</p>
+    <h1>Your part in the change</h1>
+    <p>Resources for those who want to move from awareness to real impact.</p>
+  </div>
+
+  <div class="container">
+
+    <!-- ORGANIZATIONS -->
+    <p class="section-label">Organizations to Support</p>
+    <p class="section-intro">These worldwide organizations are doing serious work on clean energy, climate, and the environment. Find some that aligns with what you care about most.</p>
+
+    <div class="controls">
+      <input type="text" id="org-search" placeholder="Search organizations..." oninput="filterOrgs()" />
+      <select id="org-filter-focus" onchange="filterOrgs()">
+        <option value="">All focus areas</option>
+        <option value="Advocacy">Advocacy</option>
+        <option value="Legal">Legal</option>
+        <option value="Conservation">Conservation</option>
+        <option value="Technology">Technology</option>
+        <option value="Policy">Policy</option>
+        <option value="Community">Community</option>
+        <option value="Education">Education</option>
+      </select>
+      <select id="org-filter-scale" onchange="filterOrgs()">
+        <option value="">All scales</option>
+        <option value="Global">Global</option>
+        <option value="US">US</option>
+      </select>
+    </div>
+
+    <div id="org-list">
+
+      <div class="scale-group" data-scale="Global">
+        <p class="scale-heading">Global</p>
+        <div class="org-grid">
+
+          <div class="org-card" data-focus="Advocacy" data-scale="Global">
+            <div class="org-card-top">
+              <a href="https://350.org" target="_blank" rel="noopener" class="org-name">350.org</a>
+            </div>
+            <p class="org-desc">A global movement working to accelerate the renewable energy transition and end the fossil fuel era through grassroots campaigns, activist training, and international organizing.</p>
+            <div class="org-footer">
+              <span class="tag">Advocacy</span>
+              <span class="location-tag">Global</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Policy" data-scale="Global">
+            <div class="org-card-top">
+              <a href="https://www.edf.org" target="_blank" rel="noopener" class="org-name">Environmental Defense Fund</a>
+            </div>
+            <p class="org-desc">A science-driven nonprofit tackling climate change and pollution globally. Works across governments, companies, and communities to reduce emissions and strengthen environmental policy.</p>
+            <div class="org-footer">
+              <span class="tag">Policy</span>
+              <span class="location-tag">Global</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Policy" data-scale="Global">
+            <div class="org-card-top">
+              <a href="https://www.catf.us" target="_blank" rel="noopener" class="org-name">Clean Air Task Force</a>
+            </div>
+            <p class="org-desc">Focused on reducing the most impactful greenhouse gas emissions through technical analysis and policy advocacy. Their work on methane reduction influenced 152 countries at COP28.</p>
+            <div class="org-footer">
+              <span class="tag">Policy</span>
+              <span class="location-tag">Global</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Legal" data-scale="Global">
+            <div class="org-card-top">
+              <a href="https://earthjustice.org" target="_blank" rel="noopener" class="org-name">Earthjustice</a>
+            </div>
+            <p class="org-desc">The leading nonprofit environmental law organization. Uses litigation and policy advocacy to enforce environmental protections and defend communities on the frontlines of pollution and climate impacts.</p>
+            <div class="org-footer">
+              <span class="tag">Legal</span>
+              <span class="location-tag">Global</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Conservation" data-scale="Global">
+            <div class="org-card-top">
+              <a href="https://www.worldwildlife.org" target="_blank" rel="noopener" class="org-name">World Wildlife Fund</a>
+            </div>
+            <p class="org-desc">Protects wildlife, restores ecosystems, and advances nature-based climate solutions across nearly 100 countries. One of the world's largest and most recognized conservation organizations.</p>
+            <div class="org-footer">
+              <span class="tag">Conservation</span>
+              <span class="location-tag">Global</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Technology" data-scale="Global">
+            <div class="org-card-top">
+              <a href="https://carbon180.org" target="_blank" rel="noopener" class="org-name">Carbon180</a>
+            </div>
+            <p class="org-desc">A nonprofit focused on carbon removal solutions through research, policy, and advocacy. Their work helped shape the US direct air capture tax credit and continues to influence carbon removal markets and regulation worldwide.</p>
+            <div class="org-footer">
+              <span class="tag">Technology</span>
+              <span class="location-tag">Global</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Education" data-scale="Global">
+            <div class="org-card-top">
+              <a href="https://www.climaterealityproject.org" target="_blank" rel="noopener" class="org-name">Climate Reality Project</a>
+            </div>
+            <p class="org-desc">Founded by Al Gore, this organization trains and mobilizes grassroots climate activists around the world to lead local action on clean energy and environmental justice.</p>
+            <div class="org-footer">
+              <span class="tag">Education</span>
+              <span class="location-tag">Global</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Community" data-scale="Global">
+            <div class="org-card-top">
+              <a href="https://rmi.org" target="_blank" rel="noopener" class="org-name">Rocky Mountain Institute</a>
+            </div>
+            <p class="org-desc">An independent nonprofit working to accelerate the clean energy transition through research, analysis, and collaboration with businesses, governments, and communities worldwide.</p>
+            <div class="org-footer">
+              <span class="tag">Policy</span>
+              <span class="location-tag">Global</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="scale-group" data-scale="US" style="margin-top: 2.5rem;">
+        <p class="scale-heading">United States</p>
+        <div class="org-grid">
+
+          <div class="org-card" data-focus="Advocacy" data-scale="US">
+            <div class="org-card-top">
+              <a href="https://www.sierraclub.org" target="_blank" rel="noopener" class="org-name">Sierra Club</a>
+            </div>
+            <p class="org-desc">One of the oldest and largest environmental organizations in the US. Works to solve the climate crisis through a clean energy economy and protect public lands, waters, and communities.</p>
+            <div class="org-footer">
+              <span class="tag">Advocacy</span>
+              <span class="location-tag">US</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Legal" data-scale="US">
+            <div class="org-card-top">
+              <a href="https://www.nrdc.org" target="_blank" rel="noopener" class="org-name">NRDC</a>
+            </div>
+            <p class="org-desc">Natural Resources Defense Council. Uses law, science, and the support of over 3 million members to protect the planet's wildlife, waters, and clean energy future.</p>
+            <div class="org-footer">
+              <span class="tag">Legal</span>
+              <span class="location-tag">US</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Advocacy" data-scale="US">
+            <div class="org-card-top">
+              <a href="https://www.sunrisemovement.org" target="_blank" rel="noopener" class="org-name">Sunrise Movement</a>
+            </div>
+            <p class="org-desc">A youth-led political movement fighting to stop climate change and create millions of jobs in the process. Known for grassroots organizing, direct action, and electoral engagement.</p>
+            <div class="org-footer">
+              <span class="tag">Advocacy</span>
+              <span class="location-tag">US</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Community" data-scale="US">
+            <div class="org-card-top">
+              <a href="https://www.solutionsproject.org" target="_blank" rel="noopener" class="org-name">The Solutions Project</a>
+            </div>
+            <p class="org-desc">Funds and amplifies frontline climate justice solutions, directing flexible grants to organizations led by Black, Indigenous, and people of color communities, those most affected by climate change.</p>
+            <div class="org-footer">
+              <span class="tag">Community</span>
+              <span class="location-tag">US</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="scale-group" style="margin-top: 2.5rem;">
+        <p class="scale-heading">Local — Coming with the Map</p>
+        <div style="background: var(--bg-secondary); border-radius: 12px; padding: 1.75rem;">
+          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.75;">Local and regional organizations will be integrated with the interactive map when it launches. You will be able to explore your region and find organizations working in your area.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <p id="org-no-results" class="no-results">No organizations match your search.</p>
+
+    <hr class="divider" />
+
+    <!-- INDIVIDUAL ACTIONS -->
+    <p class="section-label">Individual Actions</p>
+    <p class="section-intro">You don't have to do everything. Pick one thing that fits your life and start there. Actions compound, and your impact will be greater than you'll ever know.</p>
+
+    <div id="action-list">
+
+      <div class="action-section">
+        <h3 class="action-category-heading">Learn and Stay Informed</h3>
+        <div class="action-grid">
+
+          <div class="action-card">
+            <h4>Follow credible climate sources</h4>
+            <p>Bookmark Carbon Brief, Canary Media, and Yale E360 for regular, accurate updates on clean energy and climate. Understanding what is happening is the first step to doing something about it.</p>
+          </div>
+
+          <div class="action-card">
+            <h4>Track what your government is doing</h4>
+            <p>Check The Watch regularly to follow federal actions on energy and climate. Knowing what policies are being made or reversed keeps you informed and ready to respond.</p>
+            <a href="watch.html" class="action-link">Go to The Watch →</a>
+          </div>
+
+          <div class="action-card">
+            <h4>Calculate your personal footprint</h4>
+            <p>Explore The Lab and calculate your personal carbon footprint to understand where your emissions actually come from. Most people are surprised by the results.</p>
+            <a href="lab.html" class="action-link">Go to The Lab →</a>
+            <p style="font-size: 12px; font-weight: 500; color: #8a6200; margin-top: 0.5rem; padding: 8px 12px; background: #fff8e6; border-radius: 6px; border: 0.5px solid #f5c842;">⚠ The Lab is currently under development.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="action-section" style="margin-top: 2rem;">
+        <h3 class="action-category-heading">Speak Up and Advocate</h3>
+        <div class="action-grid">
+
+          <div class="action-card">
+            <h4>Contact your representatives</h4>
+            <p>Elected officials respond to constituent pressure. A direct call or email about specific climate legislation is one of the most effective individual actions you can take.</p>
+            <a href="https://www.congress.gov/members/find-your-member" target="_blank" rel="noopener" class="action-link">Find your representative →</a>
+          </div>
+
+          <div class="action-card">
+            <h4>Vote on climate</h4>
+            <p>Climate policy is decided at every level of government, federal, state, and local. Research candidates' positions on clean energy, climate, and environmental justice. Make it a priority at the ballot.</p>
+            <a href="https://www.vote.org" target="_blank" rel="noopener" class="action-link">Register or check your status →</a>
+          </div>
+
+          <div class="action-card">
+            <h4>Talk about it</h4>
+            <p>Talk about the climate crisis we face with the people around you, friends, family, and your community. Conversation and discourse shifts culture and policy more than you know.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="action-section" style="margin-top: 2rem;">
+        <h3 class="action-category-heading">Reduce Your Impact</h3>
+        <div class="action-grid">
+
+          <div class="action-card">
+            <h4>Switch to clean energy at home</h4>
+            <p>Many utility providers now offer clean energy plans, or you can switch to a clean energy supplier. It is one of the most high-impact changes a household can make.</p>
+          </div>
+
+          <div class="action-card">
+            <h4>Reduce consumption and waste</h4>
+            <p>The production of goods accounts for a significant share of global emissions. Buying less, buying used, and reducing food waste are practical and immediate.</p>
+          </div>
+
+          <div class="action-card">
+            <h4>Rethink transportation</h4>
+            <p>Transportation is one of the largest sources of personal emissions. Walking, cycling, public transit, or reducing flights where possible all make a measurable difference.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="action-section" style="margin-top: 2rem;">
+        <h3 class="action-category-heading">Support and Give</h3>
+        <div class="action-grid">
+
+          <div class="action-card">
+            <h4>Donate to effective organizations</h4>
+            <p>Financial support to well-run global organizations multiplies your impact far beyond what individual actions alone can achieve. Small, regular donations add up.</p>
+            <a href="#org-list" class="action-link">Browse organizations above →</a>
+          </div>
+
+          <div class="action-card">
+            <h4>Volunteer locally</h4>
+            <p>Most climate and environmental organizations need volunteers for campaigns, events, and outreach. Local involvement builds power and keeps you connected to the cause.</p>
+          </div>
+
+          <div class="action-card">
+            <h4>Divest from fossil fuels</h4>
+            <p>If you have savings or investments, look into whether your bank or fund holds fossil fuel assets. Moving money toward clean energy investments sends a message to the market.</p>
+            <a href="https://gofossilfree.org" target="_blank" rel="noopener" class="action-link">Learn about divestment →</a>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer>
+    <p>© 2026 The Future Map. Built with intention.</p>
+    <ul class="footer-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="https://instagram.com/the_future_map" target="_blank">Instagram</a></li>
+    </ul>
+  </footer>
+
+  <script>
+    function filterOrgs() {
+      const query = document.getElementById('org-search').value.toLowerCase();
+      const focus = document.getElementById('org-filter-focus').value;
+      const scale = document.getElementById('org-filter-scale').value;
+      const cards = document.querySelectorAll('.org-card');
+      const groups = document.querySelectorAll('.scale-group');
+      let totalVisible = 0;
+
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        const matchQuery = text.includes(query);
+        const matchFocus = !focus || card.dataset.focus === focus;
+        const matchScale = !scale || card.dataset.scale === scale;
+        card.style.display = matchQuery && matchFocus && matchScale ? 'flex' : 'none';
+      });
+
+      groups.forEach(group => {
+        const visibleCards = group.querySelectorAll('.org-card[style*="flex"]').length ||
+          [...group.querySelectorAll('.org-card')].filter(c => c.style.display !== 'none').length;
+        group.style.display = visibleCards === 0 ? 'none' : 'block';
+        totalVisible += visibleCards;
+      });
+
+      document.getElementById('org-no-results').style.display = totalVisible === 0 ? 'block' : 'none';
+    }
+  </script>
+
+</body>
+</html>
