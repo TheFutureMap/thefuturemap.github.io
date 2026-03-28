@@ -374,6 +374,7 @@
       <select id="org-filter-focus" onchange="filterOrgs()">
         <option value="">All focus areas</option>
         <option value="Advocacy">Advocacy</option>
+        <option value="Research">Research</option>
         <option value="Technology">Technology</option>
         <option value="Conservation">Conservation</option>
         <option value="Policy">Policy</option>
@@ -385,6 +386,7 @@
         <option value="">All scales</option>
         <option value="Global">Global</option>
         <option value="US">US</option>
+        <option value="International">International</option>
       </select>
     </div>
 
@@ -398,9 +400,42 @@
             <div class="org-card-top">
               <a href="https://350.org" target="_blank" rel="noopener" class="org-name">350.org</a>
             </div>
-            <p class="org-desc">A global movement working to accelerate the renewable energy transition and end the fossil fuel era through grassroots campaigns, activist training, and international organizing.</p>
+            <p class="org-desc">A global movement working to accelerate the clean energy transition and end the fossil fuel era through grassroots campaigns, activist training, and international organizing.</p>
             <div class="org-footer">
               <span class="tag">Advocacy</span>
+              <span class="location-tag">Global</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Advocacy" data-scale="Global">
+            <div class="org-card-top">
+              <a href="https://www.greenpeace.org" target="_blank" rel="noopener" class="org-name">Greenpeace</a>
+            </div>
+            <p class="org-desc">One of the world's most recognizable environmental organizations, known for direct action campaigns on climate, deforestation, ocean protection, and the phase-out of fossil fuels across dozens of countries.</p>
+            <div class="org-footer">
+              <span class="tag">Advocacy</span>
+              <span class="location-tag">Global</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Advocacy" data-scale="Global">
+            <div class="org-card-top">
+              <a href="https://climatenetwork.org" target="_blank" rel="noopener" class="org-name">Climate Action Network</a>
+            </div>
+            <p class="org-desc">A worldwide network of over 1,800 civil society organizations working to promote government and individual action to limit climate change to ecologically sustainable levels.</p>
+            <div class="org-footer">
+              <span class="tag">Advocacy</span>
+              <span class="location-tag">Global</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Education" data-scale="Global">
+            <div class="org-card-top">
+              <a href="https://www.climaterealityproject.org" target="_blank" rel="noopener" class="org-name">Climate Reality Project</a>
+            </div>
+            <p class="org-desc">Founded by Al Gore, this organization trains and mobilizes grassroots climate leaders around the world to drive local action on clean energy and environmental justice.</p>
+            <div class="org-footer">
+              <span class="tag">Education</span>
               <span class="location-tag">Global</span>
             </div>
           </div>
@@ -420,9 +455,42 @@
             <div class="org-card-top">
               <a href="https://www.catf.us" target="_blank" rel="noopener" class="org-name">Clean Air Task Force</a>
             </div>
-            <p class="org-desc">Focused on reducing the most impactful greenhouse gas emissions through technical analysis and policy advocacy. Their work on methane reduction influenced 152 countries at COP28.</p>
+            <p class="org-desc">Focused on reducing the most impactful greenhouse gas emissions through technical analysis and policy advocacy. Their methane reduction work has influenced international climate negotiations.</p>
             <div class="org-footer">
               <span class="tag">Policy</span>
+              <span class="location-tag">Global</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Policy" data-scale="Global">
+            <div class="org-card-top">
+              <a href="https://rmi.org" target="_blank" rel="noopener" class="org-name">Rocky Mountain Institute</a>
+            </div>
+            <p class="org-desc">An independent nonprofit accelerating the clean energy transition through research, analysis, and collaboration with businesses, governments, and communities worldwide.</p>
+            <div class="org-footer">
+              <span class="tag">Policy</span>
+              <span class="location-tag">Global</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Research" data-scale="Global">
+            <div class="org-card-top">
+              <a href="https://www.wri.org" target="_blank" rel="noopener" class="org-name">World Resources Institute</a>
+            </div>
+            <p class="org-desc">A global research organization working on sustainable food, land, water, energy, cities, and climate. Produces widely cited data and analysis on emissions, deforestation, and energy transitions.</p>
+            <div class="org-footer">
+              <span class="tag">Research</span>
+              <span class="location-tag">Global</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Technology" data-scale="Global">
+            <div class="org-card-top">
+              <a href="https://carbon180.org" target="_blank" rel="noopener" class="org-name">Carbon180</a>
+            </div>
+            <p class="org-desc">A nonprofit focused on carbon removal solutions through research, policy, and advocacy. Their work helped shape the US direct air capture tax credit and continues to influence carbon removal markets and regulation worldwide.</p>
+            <div class="org-footer">
+              <span class="tag">Technology</span>
               <span class="location-tag">Global</span>
             </div>
           </div>
@@ -440,6 +508,17 @@
 
           <div class="org-card" data-focus="Conservation" data-scale="Global">
             <div class="org-card-top">
+              <a href="https://www.nature.org" target="_blank" rel="noopener" class="org-name">The Nature Conservancy</a>
+            </div>
+            <p class="org-desc">One of the largest conservation organizations in the world, protecting land and water across 79 countries through science, partnerships, and the scaling of nature-based climate solutions.</p>
+            <div class="org-footer">
+              <span class="tag">Conservation</span>
+              <span class="location-tag">Global</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Conservation" data-scale="Global">
+            <div class="org-card-top">
               <a href="https://www.worldwildlife.org" target="_blank" rel="noopener" class="org-name">World Wildlife Fund</a>
             </div>
             <p class="org-desc">Protects wildlife, restores ecosystems, and advances nature-based climate solutions across nearly 100 countries. One of the world's largest and most recognized conservation organizations.</p>
@@ -449,35 +528,35 @@
             </div>
           </div>
 
-          <div class="org-card" data-focus="Technology" data-scale="Global">
+          <div class="org-card" data-focus="Conservation" data-scale="Global">
             <div class="org-card-top">
-              <a href="https://carbon180.org" target="_blank" rel="noopener" class="org-name">Carbon180</a>
+              <a href="https://www.rainforest-alliance.org" target="_blank" rel="noopener" class="org-name">Rainforest Alliance</a>
             </div>
-            <p class="org-desc">A nonprofit focused on carbon removal solutions through research, policy, and advocacy. Their work helped shape the US direct air capture tax credit and continues to influence carbon removal markets and regulation worldwide.</p>
+            <p class="org-desc">Works to conserve biodiversity and improve livelihoods by promoting sustainable land use, responsible supply chains, and the protection of tropical forests as critical climate assets.</p>
             <div class="org-footer">
-              <span class="tag">Technology</span>
+              <span class="tag">Conservation</span>
               <span class="location-tag">Global</span>
             </div>
           </div>
 
-          <div class="org-card" data-focus="Education" data-scale="Global">
+          <div class="org-card" data-focus="Conservation" data-scale="Global">
             <div class="org-card-top">
-              <a href="https://www.climaterealityproject.org" target="_blank" rel="noopener" class="org-name">Climate Reality Project</a>
+              <a href="https://rare.org" target="_blank" rel="noopener" class="org-name">RARE Conservation</a>
             </div>
-            <p class="org-desc">Founded by Al Gore, this organization trains and mobilizes grassroots climate activists around the world to lead local action on clean energy and environmental justice.</p>
+            <p class="org-desc">Focuses on changing human behavior to protect nature and climate, using social science and community-led approaches to drive conservation outcomes in the places that need it most.</p>
             <div class="org-footer">
-              <span class="tag">Education</span>
+              <span class="tag">Conservation</span>
               <span class="location-tag">Global</span>
             </div>
           </div>
 
           <div class="org-card" data-focus="Community" data-scale="Global">
             <div class="org-card-top">
-              <a href="https://rmi.org" target="_blank" rel="noopener" class="org-name">Rocky Mountain Institute</a>
+              <a href="https://www.indigenousclimateaction.com" target="_blank" rel="noopener" class="org-name">Indigenous Climate Action</a>
             </div>
-            <p class="org-desc">An independent nonprofit working to accelerate the clean energy transition through research, analysis, and collaboration with businesses, governments, and communities worldwide.</p>
+            <p class="org-desc">An Indigenous-led organization guided by knowledge keepers, water protectors, and land defenders. Believes that Indigenous rights and knowledge systems are critical to solving the climate crisis and achieving climate justice.</p>
             <div class="org-footer">
-              <span class="tag">Policy</span>
+              <span class="tag">Community</span>
               <span class="location-tag">Global</span>
             </div>
           </div>
@@ -500,6 +579,28 @@
             </div>
           </div>
 
+          <div class="org-card" data-focus="Advocacy" data-scale="US">
+            <div class="org-card-top">
+              <a href="https://www.sunrisemovement.org" target="_blank" rel="noopener" class="org-name">Sunrise Movement</a>
+            </div>
+            <p class="org-desc">A youth-led political movement fighting to stop climate change and create millions of jobs in the process. Known for grassroots organizing, direct action, and electoral engagement.</p>
+            <div class="org-footer">
+              <span class="tag">Advocacy</span>
+              <span class="location-tag">US</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Advocacy" data-scale="US">
+            <div class="org-card-top">
+              <a href="https://cleanpower.org" target="_blank" rel="noopener" class="org-name">American Clean Power</a>
+            </div>
+            <p class="org-desc">Unites the US clean energy industry to address climate change and drive economic growth, working at the federal, state, and local levels to accelerate the deployment of renewable energy.</p>
+            <div class="org-footer">
+              <span class="tag">Advocacy</span>
+              <span class="location-tag">US</span>
+            </div>
+          </div>
+
           <div class="org-card" data-focus="Legal" data-scale="US">
             <div class="org-card-top">
               <a href="https://www.nrdc.org" target="_blank" rel="noopener" class="org-name">NRDC</a>
@@ -511,13 +612,46 @@
             </div>
           </div>
 
-          <div class="org-card" data-focus="Advocacy" data-scale="US">
+          <div class="org-card" data-focus="Policy" data-scale="US">
             <div class="org-card-top">
-              <a href="https://www.sunrisemovement.org" target="_blank" rel="noopener" class="org-name">Sunrise Movement</a>
+              <a href="https://www.aceee.org" target="_blank" rel="noopener" class="org-name">ACEEE</a>
             </div>
-            <p class="org-desc">A youth-led political movement fighting to stop climate change and create millions of jobs in the process. Known for grassroots organizing, direct action, and electoral engagement.</p>
+            <p class="org-desc">The American Council for an Energy-Efficient Economy. Leverages energy efficiency to advance economic prosperity, energy security, and environmental protection for all Americans through policy and research.</p>
             <div class="org-footer">
-              <span class="tag">Advocacy</span>
+              <span class="tag">Policy</span>
+              <span class="location-tag">US</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Technology" data-scale="US">
+            <div class="org-card-top">
+              <a href="https://www.rewiringamerica.org" target="_blank" rel="noopener" class="org-name">Rewiring America</a>
+            </div>
+            <p class="org-desc">A nonprofit dedicated to electrifying American homes, businesses, and communities. Develops accessible data and tools to help individuals and policymakers accelerate the transition away from fossil fuels.</p>
+            <div class="org-footer">
+              <span class="tag">Technology</span>
+              <span class="location-tag">US</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Education" data-scale="US">
+            <div class="org-card-top">
+              <a href="https://www.eesi.org" target="_blank" rel="noopener" class="org-name">EESI</a>
+            </div>
+            <p class="org-desc">The Environmental and Energy Study Institute. Provides non-partisan education and information on energy and environmental policy to members of Congress, their staff, and the public.</p>
+            <div class="org-footer">
+              <span class="tag">Education</span>
+              <span class="location-tag">US</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Conservation" data-scale="US">
+            <div class="org-card-top">
+              <a href="https://oceanconservancy.org" target="_blank" rel="noopener" class="org-name">Ocean Conservancy</a>
+            </div>
+            <p class="org-desc">Works to protect the ocean from climate change, plastic pollution, and industrial threats. Advocates for science-based policies and leads large-scale ocean and coastal cleanup efforts.</p>
+            <div class="org-footer">
+              <span class="tag">Conservation</span>
               <span class="location-tag">US</span>
             </div>
           </div>
@@ -530,6 +664,79 @@
             <div class="org-footer">
               <span class="tag">Community</span>
               <span class="location-tag">US</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Community" data-scale="US">
+            <div class="org-card-top">
+              <a href="https://climatejusticealliance.org" target="_blank" rel="noopener" class="org-name">Climate Justice Alliance</a>
+            </div>
+            <p class="org-desc">A coalition of frontline communities and organizations building a just transition away from extractive economic systems, centering racial and economic justice at the heart of climate action.</p>
+            <div class="org-footer">
+              <span class="tag">Community</span>
+              <span class="location-tag">US</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="scale-group" data-scale="International" style="margin-top: 2.5rem;">
+        <p class="scale-heading">International & Intergovernmental</p>
+        <div class="org-grid">
+
+          <div class="org-card" data-focus="Policy" data-scale="International">
+            <div class="org-card-top">
+              <a href="https://www.unep.org" target="_blank" rel="noopener" class="org-name">UNEP</a>
+            </div>
+            <p class="org-desc">The United Nations Environment Programme. Coordinates global environmental action, drives climate agreements, and monitors the state of the planet across 193 member countries.</p>
+            <div class="org-footer">
+              <span class="tag">Policy</span>
+              <span class="location-tag">International</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Community" data-scale="International">
+            <div class="org-card-top">
+              <a href="https://www.c40.org" target="_blank" rel="noopener" class="org-name">C40 Cities</a>
+            </div>
+            <p class="org-desc">A network of nearly 100 of the world's largest cities committed to delivering climate action in line with science. Helps cities share solutions, access finance, and accelerate the urban clean energy transition.</p>
+            <div class="org-footer">
+              <span class="tag">Community</span>
+              <span class="location-tag">International</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Research" data-scale="International">
+            <div class="org-card-top">
+              <a href="https://www.ipcc.ch" target="_blank" rel="noopener" class="org-name">IPCC</a>
+            </div>
+            <p class="org-desc">The Intergovernmental Panel on Climate Change. The world's leading scientific body on climate change, producing comprehensive assessments of climate science that form the basis for international policy. A reference body, not a donor organization.</p>
+            <div class="org-footer">
+              <span class="tag">Research</span>
+              <span class="location-tag">International</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Research" data-scale="International">
+            <div class="org-card-top">
+              <a href="https://www.iea.org" target="_blank" rel="noopener" class="org-name">IEA</a>
+            </div>
+            <p class="org-desc">The International Energy Agency. Provides authoritative data, analysis, and policy recommendations on global energy markets, clean energy transitions, and energy security. A reference body, not a donor organization.</p>
+            <div class="org-footer">
+              <span class="tag">Research</span>
+              <span class="location-tag">International</span>
+            </div>
+          </div>
+
+          <div class="org-card" data-focus="Research" data-scale="International">
+            <div class="org-card-top">
+              <a href="https://www.irena.org" target="_blank" rel="noopener" class="org-name">IRENA</a>
+            </div>
+            <p class="org-desc">The International Renewable Energy Agency. Supports countries in the global energy transition by providing data, analysis, and technical assistance on renewable energy deployment worldwide. A reference body, not a donor organization.</p>
+            <div class="org-footer">
+              <span class="tag">Research</span>
+              <span class="location-tag">International</span>
             </div>
           </div>
 
@@ -668,7 +875,7 @@
       const focus = document.getElementById('org-filter-focus').value;
       const scale = document.getElementById('org-filter-scale').value;
       const cards = document.querySelectorAll('.org-card');
-      const groups = document.querySelectorAll('.scale-group');
+      const groups = document.querySelectorAll('.scale-group[data-scale]');
       let totalVisible = 0;
 
       cards.forEach(card => {
@@ -680,8 +887,7 @@
       });
 
       groups.forEach(group => {
-        const visibleCards = group.querySelectorAll('.org-card[style*="flex"]').length ||
-          [...group.querySelectorAll('.org-card')].filter(c => c.style.display !== 'none').length;
+        const visibleCards = [...group.querySelectorAll('.org-card')].filter(c => c.style.display !== 'none').length;
         group.style.display = visibleCards === 0 ? 'none' : 'block';
         totalVisible += visibleCards;
       });
