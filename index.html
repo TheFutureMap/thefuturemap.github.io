@@ -4,7 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Future Map</title>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -32,6 +36,8 @@
       }
     }
 
+    html { scroll-behavior: smooth; }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: var(--bg);
@@ -40,10 +46,15 @@
       font-size: 16px;
     }
 
+    body.map-active { overflow: hidden; }
+
+    /* ── NAV ── */
     nav {
-      position: sticky;
+      position: fixed;
       top: 0;
-      z-index: 100;
+      left: 0;
+      right: 0;
+      z-index: 200;
       background: var(--bg);
       border-bottom: 0.5px solid var(--border);
       padding: 0 2rem;
@@ -61,9 +72,7 @@
       letter-spacing: -0.01em;
     }
 
-    .nav-logo span {
-      color: var(--accent-mid);
-    }
+    .nav-logo span { color: var(--accent-mid); }
 
     .nav-links {
       display: flex;
@@ -86,15 +95,86 @@
       pointer-events: none;
     }
 
-    .hero {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 7rem 2rem 5rem;
+    /* ── MAP SECTION ── */
+    .map-section {
+      position: relative;
+      height: calc(100vh - 56px);
+      margin-top: 56px;
+      overflow: hidden;
+    }
+
+    /* The Leaflet map container */
+    #map {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      opacity: 0.28;
+      filter: blur(0.8px) saturate(0.7);
+      pointer-events: none;
+      transition: opacity 0.7s ease, filter 0.7s ease;
+    }
+
+    #map.active {
+      opacity: 1;
+      filter: none;
+      pointer-events: all;
+    }
+
+    /* Hide Leaflet controls in background mode */
+    #map:not(.active) .leaflet-control-container { display: none; }
+
+    /* Leaflet zoom control styling */
+    .leaflet-control-zoom a {
+      background: var(--bg) !important;
+      color: var(--text) !important;
+      border-color: var(--border) !important;
+    }
+
+    /* Leaflet attribution — keep small */
+    .leaflet-control-attribution {
+      font-size: 10px !important;
+      opacity: 0.6;
+      background: var(--bg) !important;
+    }
+
+    /* ── HERO OVERLAY ── */
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+      text-align: center;
+      transition: opacity 0.6s ease;
+      pointer-events: all;
+      background: radial-gradient(ellipse at center,
+        rgba(255,255,255,0.88) 0%,
+        rgba(255,255,255,0.55) 55%,
+        transparent 100%);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .hero-overlay {
+        background: radial-gradient(ellipse at center,
+          rgba(26,26,26,0.92) 0%,
+          rgba(26,26,26,0.6) 55%,
+          transparent 100%);
+      }
+    }
+
+    .hero-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
     }
 
     .hero-tag {
       display: inline-block;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 500;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -102,48 +182,53 @@
       background: var(--accent-light);
       padding: 4px 12px;
       border-radius: 100px;
-      margin-bottom: 2rem;
+      margin-bottom: 1.75rem;
     }
 
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.25rem);
+    .hero-overlay h1 {
+      font-size: clamp(1.9rem, 4.5vw, 3.2rem);
       font-weight: 500;
       line-height: 1.15;
       letter-spacing: -0.03em;
       color: var(--text);
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
+      max-width: 700px;
     }
 
-    .hero h1 em {
+    .hero-overlay h1 em {
       font-style: normal;
       color: var(--accent-mid);
     }
 
-    .hero p {
-      font-size: 1.125rem;
+    .hero-overlay p {
+      font-size: 1.05rem;
       color: var(--text-secondary);
-      max-width: 560px;
-      margin-bottom: 2.5rem;
+      max-width: 520px;
+      margin-bottom: 2.25rem;
       line-height: 1.75;
     }
 
     .hero-actions {
       display: flex;
-      gap: 1rem;
+      gap: 0.875rem;
       flex-wrap: wrap;
       align-items: center;
+      justify-content: center;
     }
 
     .btn-primary {
       display: inline-block;
       background: var(--accent);
       color: #ffffff;
-      padding: 10px 24px;
+      padding: 11px 28px;
       border-radius: 8px;
       font-size: 14px;
       font-weight: 500;
       text-decoration: none;
+      border: none;
+      cursor: pointer;
       transition: opacity 0.15s;
+      font-family: inherit;
     }
 
     .btn-primary:hover { opacity: 0.85; }
@@ -151,7 +236,7 @@
     .btn-secondary {
       display: inline-block;
       color: var(--text-secondary);
-      padding: 10px 24px;
+      padding: 11px 28px;
       border-radius: 8px;
       font-size: 14px;
       font-weight: 400;
@@ -161,6 +246,245 @@
     }
 
     .btn-secondary:hover { background: var(--bg-secondary); }
+
+    /* ── EXIT BUTTON ── */
+    .exit-btn {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      z-index: 50;
+      background: var(--bg);
+      color: var(--text);
+      border: 0.5px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, background 0.15s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .exit-btn:hover { background: var(--bg-secondary); }
+
+    .exit-btn.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ── HOVER CARD ── */
+    .hover-card {
+      position: absolute;
+      z-index: 40;
+      background: var(--bg);
+      border: 0.5px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      pointer-events: none;
+      display: none;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      min-width: 160px;
+      transition: opacity 0.1s;
+    }
+
+    .hover-card-flag {
+      font-size: 18px;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .hover-card-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .hover-card-stat {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .hover-card-hint {
+      font-size: 11px;
+      color: var(--accent-mid);
+      margin-top: 6px;
+    }
+
+    /* For non-featured countries */
+    .hover-card-name.generic {
+      color: var(--text-secondary);
+    }
+
+    /* ── COUNTRY PANEL ── */
+    .country-panel {
+      position: absolute;
+      top: 50%;
+      right: 1.5rem;
+      transform: translateY(-50%) translateX(calc(100% + 2rem));
+      z-index: 40;
+      background: var(--bg);
+      border: 0.5px solid var(--border);
+      border-radius: 14px;
+      width: 360px;
+      max-height: 78vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+      opacity: 0;
+      overflow: hidden;
+    }
+
+    .country-panel.open {
+      transform: translateY(-50%) translateX(0);
+      opacity: 1;
+    }
+
+    .panel-header {
+      padding: 1.25rem 1.5rem 1rem;
+      border-bottom: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    .panel-close {
+      position: absolute;
+      top: 0.875rem;
+      right: 0.875rem;
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      line-height: 1;
+      padding: 4px;
+      font-family: inherit;
+      transition: color 0.15s;
+    }
+
+    .panel-close:hover { color: var(--text); }
+
+    .panel-flag { font-size: 26px; }
+
+    .panel-name {
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .panel-stats {
+      display: flex;
+      gap: 8px;
+      padding: 0.875rem 1.5rem;
+      border-bottom: 0.5px solid var(--border);
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    .stat-pill {
+      background: var(--bg-secondary);
+      border: 0.5px solid var(--border);
+      border-radius: 100px;
+      padding: 4px 12px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .stat-pill span {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      opacity: 0.6;
+    }
+
+    .stat-pill strong {
+      font-weight: 500;
+      color: var(--text);
+      font-size: 12px;
+    }
+
+    /* Panel tabs */
+    .panel-tabs {
+      display: flex;
+      border-bottom: 0.5px solid var(--border);
+      flex-shrink: 0;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      padding: 10px 8px;
+      cursor: pointer;
+      font-family: inherit;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover { color: var(--text); }
+
+    .tab-btn.active {
+      color: var(--accent-mid);
+      border-bottom-color: var(--accent-mid);
+    }
+
+    .panel-content {
+      padding: 1.25rem 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .panel-placeholder {
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      padding: 0.875rem 1rem;
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+
+    .panel-footer {
+      padding: 1rem 1.5rem;
+      border-top: 0.5px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .btn-explore-country {
+      display: block;
+      text-align: center;
+      background: var(--accent);
+      color: #ffffff;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+
+    .btn-explore-country:hover { opacity: 0.85; }
+
+    /* ── BELOW-FOLD CONTENT ── */
+    .page-content { background: var(--bg); }
 
     .divider {
       border: none;
@@ -181,6 +505,20 @@
       text-transform: uppercase;
       color: var(--text-secondary);
       margin-bottom: 3rem;
+    }
+
+    .mission-block {
+      border-left: 2px solid var(--accent-mid);
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      margin: 3rem 0;
+    }
+
+    .mission-block p {
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.6;
+      letter-spacing: -0.01em;
     }
 
     .pillars {
@@ -244,7 +582,7 @@
       margin-bottom: 0.5rem;
     }
 
-    .coming-up p {
+    .coming-up > p {
       font-size: 14px;
       color: var(--text-secondary);
       margin-bottom: 2rem;
@@ -274,20 +612,6 @@
       flex-shrink: 0;
     }
 
-    .mission-block {
-      border-left: 2px solid var(--accent-mid);
-      padding: 0.25rem 0 0.25rem 1.5rem;
-      margin: 3rem 0;
-    }
-
-    .mission-block p {
-      font-size: 1.25rem;
-      font-weight: 400;
-      color: var(--text);
-      line-height: 1.6;
-      letter-spacing: -0.01em;
-    }
-
     footer {
       border-top: 0.5px solid var(--border);
       padding: 2rem;
@@ -298,16 +622,9 @@
       gap: 1rem;
     }
 
-    footer p {
-      font-size: 13px;
-      color: var(--text-secondary);
-    }
+    footer p { font-size: 13px; color: var(--text-secondary); }
 
-    .footer-links {
-      display: flex;
-      gap: 1.5rem;
-      list-style: none;
-    }
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; }
 
     .footer-links a {
       font-size: 13px;
@@ -320,116 +637,621 @@
     @media (max-width: 600px) {
       nav { padding: 0 1rem; }
       .nav-links { gap: 1rem; }
-      .hero { padding: 4rem 1.25rem 3rem; }
       .section { padding: 3rem 1.25rem; }
       .pillars { grid-template-columns: 1fr; }
       .divider { margin: 0 1.25rem; }
       footer { padding: 1.5rem 1.25rem; }
+
+      .country-panel {
+        top: auto;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        width: 100%;
+        max-height: 65vh;
+        border-radius: 14px 14px 0 0;
+        transform: translateY(100%);
+      }
+
+      .country-panel.open {
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
 <body>
 
+  <!-- NAV -->
   <nav>
     <a href="/" class="nav-logo">The <span>Future</span> Map</a>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
-      <li><a href="#" class="coming-soon">Explore</a></li>
+      <li><a href="#" id="exploreNavBtn">Explore</a></li>
       <li><a href="frontier.html">The Frontier</a></li>
       <li><a href="watch.html">The Watch</a></li>
       <li><a href="action.html">Take Action</a></li>
     </ul>
   </nav>
 
-  <section class="hero">
-    <div class="hero-tag">In Development</div>
-    <h1>Mapping the path to a <em>sustainable future</em></h1>
-    <p>
-      The Future Map is a free, open resource dedicated to informing, enabling, and inspiring action on clean energy, climate change, and the environment.
-    </p>
-    <div class="hero-actions">
-      <a href="#about" class="btn-primary">Learn more</a>
-      <a href="#coming-up" class="btn-secondary">Coming Soon</a>
-    </div>
-  </section>
+  <!-- MAP SECTION -->
+  <section class="map-section" id="mapSection">
 
-  <hr class="divider" />
+    <!-- Leaflet map (background when inactive, full when exploring) -->
+    <div id="map"></div>
 
-  <section class="section" id="about">
-    <p class="section-label">Mission</p>
-
-    <div class="mission-block">
-      <p>To inform, enable, and inspire a sustainable future.</p>
-    </div>
-
-    <p style="color: var(--text-secondary); font-size: 15px; line-height: 1.8;">
-      The Future Map exists because the climate crisis is not a distant problem, it's happening now at an unprecedented pace. Our future demands understanding and action, and the map is being built to show you where things are, what is being done, who is doing it, and how you can be a part of the change.
-    </p>
-  </section>
-
-  <hr class="divider" />
-
-  <section class="section">
-    <p class="section-label">The Foundations</p>
-    <div class="pillars">
-      <div class="pillar">
-        <div class="pillar-icon">
-          <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="11" x2="17" y2="11"/><line x1="7" y1="14" x2="14" y2="14"/></svg>
-        </div>
-        <h3>Inform</h3>
-        <p>Clear, accurate, and regularly updated information on clean energy development and climate impact across every region of the world.</p>
-      </div>
-      <div class="pillar">
-        <div class="pillar-icon">
-          <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        </div>
-        <h3>Enable</h3>
-        <p>Resources and connections to organizations working on the ground, so anyone can turn awareness and understanding into real action.</p>
-      </div>
-      <div class="pillar">
-        <div class="pillar-icon">
-          <svg viewBox="0 0 24 24"><line x1="12" y1="23" x2="12" y2="11"/><path d="M12 17 C7 17 3 13 3 8 C7 8 11 10 12 14"/><path d="M12 13 C17 13 21 9 21 4 C17 4 13 7 12 11"/></svg>
-        </div>
-        <h3>Inspire</h3>
-        <p>Stories of progress, remarkable people, and the case that the future is not set in stone, and that action by anyone at every scale makes a difference.</p>
+    <!-- Hero overlay -->
+    <div class="hero-overlay" id="heroOverlay">
+      <div class="hero-tag">In Development</div>
+      <h1>Mapping the path to a <em>sustainable future</em></h1>
+      <p>The Future Map is a free, open resource dedicated to informing, enabling, and inspiring action on clean energy, climate change, and the environment.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" id="exploreBtn">Explore the Map</button>
+        <a href="#about" class="btn-secondary">Learn More</a>
       </div>
     </div>
+
+    <!-- Exit button (visible in explore mode) -->
+    <button class="exit-btn" id="exitBtn">← Exit Map</button>
+
+    <!-- Hover card -->
+    <div class="hover-card" id="hoverCard">
+      <span class="hover-card-flag" id="hoverFlag"></span>
+      <div class="hover-card-name" id="hoverName"></div>
+      <div class="hover-card-stat" id="hoverStat"></div>
+      <div class="hover-card-hint" id="hoverHint"></div>
+    </div>
+
+    <!-- Country panel (slides in on click) -->
+    <div class="country-panel" id="countryPanel">
+      <button class="panel-close" id="panelClose">×</button>
+      <div class="panel-header">
+        <span class="panel-flag" id="panelFlag"></span>
+        <h2 class="panel-name" id="panelName"></h2>
+      </div>
+      <div class="panel-stats" id="panelStats"></div>
+      <div class="panel-tabs" id="panelTabs">
+        <button class="tab-btn active" data-tab="overview">Overview</button>
+        <button class="tab-btn" data-tab="cleanEnergy">Clean Energy</button>
+        <button class="tab-btn" data-tab="government">Government</button>
+        <button class="tab-btn" data-tab="organizations">Organizations</button>
+      </div>
+      <div class="panel-content" id="panelContent"></div>
+      <div class="panel-footer">
+        <a class="btn-explore-country" id="panelExploreBtn" href="#">Explore in detail →</a>
+      </div>
+    </div>
+
   </section>
 
-  <hr class="divider" />
+  <!-- BELOW-FOLD PAGE CONTENT -->
+  <div class="page-content">
 
-  <section class="section" id="coming-up">
-    <p class="section-label">Coming soon</p>
-    <div class="coming-up">
-      <h2>The map is being built</h2>
-      <ul class="feature-list">
-        <li>
-          <span class="feature-dot"></span>
-          <span><strong style="font-weight:500; color: var(--text);">Interactive world map</strong> - explore clean energy initiatives, climate impact, technological developments, government actions, and organizations by continent, country, and local area.</span>
-        </li>
-        <li>
-          <span class="feature-dot"></span>
-          <span><strong style="font-weight:500; color: var(--text);">The Frontier</strong> - writing on technological and scientific developments in clean energy, climate, and environmental science.</span>
-        </li>
-        <li>
-          <span class="feature-dot"></span>
-          <span><strong style="font-weight:500; color: var(--text);">The Watch</strong> - a regularly updated log of legislation, executive orders, court rulings, and agency actions related to energy, climate, and the environment.</span>
-        </li>
-        <li>
-          <span class="feature-dot"></span>
-          <span><strong style="font-weight:500; color: var(--text);">Take Action</strong> - resources for those who want to move from awareness to real impact.</span>
-        </li>
+    <hr class="divider" />
+
+    <section class="section" id="about">
+      <p class="section-label">Mission</p>
+      <div class="mission-block">
+        <p>To inform, enable, and inspire a sustainable future.</p>
+      </div>
+      <p style="color: var(--text-secondary); font-size: 15px; line-height: 1.8;">
+        The Future Map exists because the climate crisis is not a distant problem, it's happening now at an unprecedented pace. Our future demands understanding and action, and the map is being built to show you where things are, what is being done, who is doing it, and how you can be a part of the change.
+      </p>
+    </section>
+
+    <hr class="divider" />
+
+    <section class="section">
+      <p class="section-label">The Foundations</p>
+      <div class="pillars">
+        <div class="pillar">
+          <div class="pillar-icon">
+            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="11" x2="17" y2="11"/><line x1="7" y1="14" x2="14" y2="14"/></svg>
+          </div>
+          <h3>Inform</h3>
+          <p>Clear, accurate, and regularly updated information on clean energy development and climate impact across every region of the world.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">
+            <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <h3>Enable</h3>
+          <p>Resources and connections to organizations working on the ground, so anyone can turn awareness and understanding into real action.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="23" x2="12" y2="11"/><path d="M12 17 C7 17 3 13 3 8 C7 8 11 10 12 14"/><path d="M12 13 C17 13 21 9 21 4 C17 4 13 7 12 11"/></svg>
+          </div>
+          <h3>Inspire</h3>
+          <p>Stories of progress, remarkable people, and the case that the future is not set in stone, and that action by anyone at every scale makes a difference.</p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <section class="section" id="coming-up">
+      <p class="section-label">Coming Soon</p>
+      <div class="coming-up">
+        <h2>The map is being built</h2>
+        <ul class="feature-list">
+          <li>
+            <span class="feature-dot"></span>
+            <span><strong style="font-weight:500; color: var(--text);">Interactive world map</strong> - explore clean energy initiatives, climate impact, technological developments, government actions, and organizations by continent, country, and local area.</span>
+          </li>
+          <li>
+            <span class="feature-dot"></span>
+            <span><strong style="font-weight:500; color: var(--text);">The Frontier</strong> - writing on technological and scientific developments in clean energy, climate, and environmental science.</span>
+          </li>
+          <li>
+            <span class="feature-dot"></span>
+            <span><strong style="font-weight:500; color: var(--text);">The Watch</strong> - a regularly updated log of legislation, executive orders, court rulings, and agency actions related to energy, climate, and the environment.</span>
+          </li>
+          <li>
+            <span class="feature-dot"></span>
+            <span><strong style="font-weight:500; color: var(--text);">Take Action</strong> - resources for those who want to move from awareness to real impact.</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2026 The Future Map.</p>
+      <ul class="footer-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="https://instagram.com/the_future_map" target="_blank">Instagram</a></li>
       </ul>
-    </div>
-  </section>
+    </footer>
 
-  <footer>
-    <p>© 2026 The Future Map.</p>
-    <ul class="footer-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="https://instagram.com/the_future_map" target="_blank">Instagram</a></li>
-    </ul>
-  </footer>
+  </div>
 
+  <script>
+    // ── COUNTRY DATA ──────────────────────────────────────────────
+    // ISO A3 codes map to country info
+    // Stats and content are placeholders — fill in as the project grows
+
+    const COUNTRIES = {
+      'USA': {
+        name: 'United States',
+        flag: '🇺🇸',
+        stats: { emissions: '14.7t CO₂/capita', cleanEnergy: '22%', population: '335M' },
+        tabs: {
+          overview: 'The United States is the world\'s second-largest emitter of greenhouse gases, accounting for roughly 14% of global CO₂ emissions. A major clean energy transition is underway, though recent federal policy reversals have created significant uncertainty for the sector.',
+          cleanEnergy: 'Placeholder — solar and wind capacity have been expanding rapidly. The Inflation Reduction Act\'s clean energy incentives have been partially rolled back. Offshore wind development continues in key coastal states.',
+          government: 'See The Watch for a regularly updated log of current federal actions on energy, climate, and the environment.',
+          organizations: ['Sierra Club', 'NRDC', 'Sunrise Movement', 'Rewiring America', 'Earthjustice']
+        },
+        page: 'country-usa.html'
+      },
+      'FRA': {
+        name: 'France',
+        flag: '🇫🇷',
+        stats: { emissions: '5.1t CO₂/capita', cleanEnergy: '23%', population: '68M' },
+        tabs: {
+          overview: 'Placeholder — France is a leader in nuclear energy, which provides approximately 70% of its electricity. The country has committed to expanding renewable energy while navigating the future of its nuclear fleet.',
+          cleanEnergy: 'Placeholder — significant investment in offshore wind and solar. Nuclear provides the backbone of low-carbon electricity generation.',
+          government: 'Placeholder — government actions and policies on clean energy and climate.',
+          organizations: []
+        },
+        page: 'country-france.html'
+      },
+      'DEU': {
+        name: 'Germany',
+        flag: '🇩🇪',
+        stats: { emissions: '8.9t CO₂/capita', cleanEnergy: '47%', population: '84M' },
+        tabs: {
+          overview: 'Placeholder — Germany has been a global leader in the energy transition (Energiewende), dramatically expanding wind and solar while phasing out nuclear power. Coal phase-out remains a major challenge.',
+          cleanEnergy: 'Placeholder — wind energy is the dominant clean source. Solar expanding rapidly. Significant grid modernization underway.',
+          government: 'Placeholder — government actions and policies on clean energy and climate.',
+          organizations: []
+        },
+        page: 'country-germany.html'
+      },
+      'NOR': {
+        name: 'Norway',
+        flag: '🇳🇴',
+        stats: { emissions: '7.8t CO₂/capita', cleanEnergy: '98%', population: '5.5M' },
+        tabs: {
+          overview: 'Placeholder — Norway generates nearly all of its electricity from hydropower, making it one of the cleanest electricity systems in the world. However, it remains a major oil and gas exporter.',
+          cleanEnergy: 'Placeholder — hydropower dominates. Norway is also investing in offshore wind and green hydrogen.',
+          government: 'Placeholder — government actions and policies on clean energy and climate.',
+          organizations: []
+        },
+        page: 'country-norway.html'
+      },
+      'IND': {
+        name: 'India',
+        flag: '🇮🇳',
+        stats: { emissions: '1.9t CO₂/capita', cleanEnergy: '22%', population: '1.4B' },
+        tabs: {
+          overview: 'Placeholder — India is the world\'s third-largest emitter but has low per-capita emissions. It has ambitious clean energy targets and is rapidly expanding solar and wind capacity, while coal still dominates electricity generation.',
+          cleanEnergy: 'Placeholder — solar expansion is among the fastest in the world. Wind capacity growing. Coal remains dominant.',
+          government: 'Placeholder — government actions and policies on clean energy and climate.',
+          organizations: []
+        },
+        page: 'country-india.html'
+      },
+      'CHN': {
+        name: 'China',
+        flag: '🇨🇳',
+        stats: { emissions: '7.4t CO₂/capita', cleanEnergy: '30%', population: '1.4B' },
+        tabs: {
+          overview: 'Placeholder — China is the world\'s largest emitter and the world\'s largest installer of clean energy. It leads the world in solar panels, wind turbines, and electric vehicles, while also continuing to build coal power plants.',
+          cleanEnergy: 'Placeholder — dominates global solar and wind manufacturing. Massive hydropower capacity. EV transition accelerating.',
+          government: 'Placeholder — government actions and policies on clean energy and climate.',
+          organizations: []
+        },
+        page: 'country-china.html'
+      },
+      'KHM': {
+        name: 'Cambodia',
+        flag: '🇰🇭',
+        stats: { emissions: '0.7t CO₂/capita', cleanEnergy: '35%', population: '17M' },
+        tabs: {
+          overview: 'Placeholder — Cambodia is a low-emission, developing nation in Southeast Asia facing significant climate vulnerability, including flooding, drought, and sea level rise in coastal and river delta areas.',
+          cleanEnergy: 'Placeholder — solar is expanding rapidly. Hydropower provides significant capacity. Energy access remains a key challenge in rural areas.',
+          government: 'Placeholder — government actions and policies on clean energy and climate.',
+          organizations: []
+        },
+        page: 'country-cambodia.html'
+      },
+      'SGP': {
+        name: 'Singapore',
+        flag: '🇸🇬',
+        stats: { emissions: '8.2t CO₂/capita', cleanEnergy: '3%', population: '6M' },
+        tabs: {
+          overview: 'Placeholder — Singapore is a small, highly urbanized city-state with limited renewable energy potential due to its geography. It is working on imported clean energy and carbon pricing to meet climate targets.',
+          cleanEnergy: 'Placeholder — limited solar due to land constraints. Exploring regional clean energy imports from neighboring countries.',
+          government: 'Placeholder — government actions and policies on clean energy and climate.',
+          organizations: []
+        },
+        page: 'country-singapore.html'
+      },
+      'VNM': {
+        name: 'Vietnam',
+        flag: '🇻🇳',
+        stats: { emissions: '2.6t CO₂/capita', cleanEnergy: '44%', population: '98M' },
+        tabs: {
+          overview: 'Placeholder — Vietnam has seen one of the fastest clean energy transitions in Southeast Asia, dramatically expanding solar and wind in recent years. It faces significant climate vulnerability, particularly in the Mekong Delta.',
+          cleanEnergy: 'Placeholder — solar capacity has grown exponentially. Wind expanding offshore and onshore. Coal still plays a major role.',
+          government: 'Placeholder — government actions and policies on clean energy and climate.',
+          organizations: []
+        },
+        page: 'country-vietnam.html'
+      }
+    };
+
+    const FEATURED_CODES = new Set(Object.keys(COUNTRIES));
+
+    // ── MAP SETUP ─────────────────────────────────────────────────
+
+    const map = L.map('map', {
+      center: [20, 10],
+      zoom: 2,
+      minZoom: 2,
+      maxZoom: 8,
+      zoomControl: true,
+      scrollWheelZoom: false, // enabled when in explore mode
+      worldCopyJump: false
+    });
+
+    // CartoDB Positron tiles — clean, minimal, free
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+
+    // Country layer
+    let countryLayer = null;
+    let activeLayer = null;
+    let currentCountryCode = null;
+
+    // Default style for all countries
+    function defaultStyle(feature) {
+      const code = feature.id;
+      if (FEATURED_CODES.has(code)) {
+        return {
+          fillColor: '#2d6ec2',
+          fillOpacity: 0.18,
+          color: '#1a4a8a',
+          weight: 1.5,
+          opacity: 0.8
+        };
+      }
+      return {
+        fillColor: '#94a3b8',
+        fillOpacity: 0.08,
+        color: '#94a3b8',
+        weight: 0.5,
+        opacity: 0.5
+      };
+    }
+
+    function hoverStyle(isFeatured) {
+      return isFeatured ? {
+        fillColor: '#1a4a8a',
+        fillOpacity: 0.32,
+        color: '#0f2d5c',
+        weight: 2,
+        opacity: 1
+      } : {
+        fillColor: '#64748b',
+        fillOpacity: 0.18,
+        color: '#64748b',
+        weight: 1,
+        opacity: 0.7
+      };
+    }
+
+    function selectedStyle() {
+      return {
+        fillColor: '#1a4a8a',
+        fillOpacity: 0.45,
+        color: '#0f2d5c',
+        weight: 2.5,
+        opacity: 1
+      };
+    }
+
+    // Loading indicator
+    const loadingDiv = L.control({ position: 'bottomleft' });
+    loadingDiv.onAdd = function() {
+      const div = L.DomUtil.create('div');
+      div.id = 'mapLoading';
+      div.style.cssText = 'background:var(--bg);border:0.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:12px;color:var(--text-secondary);font-family:inherit;';
+      div.textContent = 'Loading countries...';
+      return div;
+    };
+    loadingDiv.addTo(map);
+
+    // Load world GeoJSON
+    fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
+      .then(r => r.json())
+      .then(data => {
+        const loading = document.getElementById('mapLoading');
+        if (loading) loading.remove();
+        countryLayer = L.geoJson(data, {
+          style: defaultStyle,
+          onEachFeature: function(feature, layer) {
+            const code = feature.id;
+            const isFeatured = FEATURED_CODES.has(code);
+            const country = COUNTRIES[code];
+
+            layer.on({
+              mouseover: function(e) {
+                if (!isMapActive) return;
+                if (code !== currentCountryCode) {
+                  layer.setStyle(hoverStyle(isFeatured));
+                }
+                if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                  layer.bringToFront();
+                }
+                showHoverCard(e, code, country, isFeatured);
+              },
+              mouseout: function() {
+                if (!isMapActive) return;
+                if (code !== currentCountryCode) {
+                  countryLayer.resetStyle(layer);
+                }
+                hideHoverCard();
+              },
+              mousemove: function(e) {
+                if (!isMapActive) return;
+                positionHoverCard(e);
+              },
+              click: function(e) {
+                if (!isMapActive) return;
+                L.DomEvent.stopPropagation(e);
+                selectCountry(code, country, layer);
+              }
+            });
+          }
+        }).addTo(map);
+      })
+      .catch(err => {
+        console.error('Failed to load country data:', err);
+        const loading = document.getElementById('mapLoading');
+        if (loading) {
+          loading.textContent = 'Country data unavailable in preview. Will load on GitHub Pages.';
+          loading.style.color = '#a32d2d';
+        }
+      });
+
+    // Close panel when clicking map background
+    map.on('click', function() {
+      if (isMapActive) closePanel();
+    });
+
+    // ── HOVER CARD ────────────────────────────────────────────────
+
+    const hoverCard = document.getElementById('hoverCard');
+    const hoverFlag = document.getElementById('hoverFlag');
+    const hoverName = document.getElementById('hoverName');
+    const hoverStat = document.getElementById('hoverStat');
+    const hoverHint = document.getElementById('hoverHint');
+
+    function showHoverCard(e, code, country, isFeatured) {
+      hoverCard.style.display = 'block';
+      if (isFeatured && country) {
+        hoverFlag.textContent = country.flag;
+        hoverName.textContent = country.name;
+        hoverName.className = 'hover-card-name';
+        hoverStat.textContent = country.stats.emissions + ' emissions';
+        hoverHint.textContent = 'Click to explore';
+      } else {
+        hoverFlag.textContent = '';
+        const name = e.target.feature?.properties?.name || code;
+        hoverName.textContent = name;
+        hoverName.className = 'hover-card-name generic';
+        hoverStat.textContent = '';
+        hoverHint.textContent = '';
+      }
+      positionHoverCard(e);
+    }
+
+    function positionHoverCard(e) {
+      const mapEl = document.getElementById('map');
+      const rect = mapEl.getBoundingClientRect();
+      const x = e.originalEvent.clientX - rect.left;
+      const y = e.originalEvent.clientY - rect.top;
+
+      // Keep card within bounds
+      const cardW = 180;
+      const cardH = 80;
+      const left = Math.min(x + 16, rect.width - cardW - 10);
+      const top = Math.max(y - cardH - 12, 10);
+
+      hoverCard.style.left = left + 'px';
+      hoverCard.style.top = top + 'px';
+    }
+
+    function hideHoverCard() {
+      hoverCard.style.display = 'none';
+    }
+
+    // ── COUNTRY PANEL ─────────────────────────────────────────────
+
+    const countryPanel = document.getElementById('countryPanel');
+    const panelFlag = document.getElementById('panelFlag');
+    const panelName = document.getElementById('panelName');
+    const panelStats = document.getElementById('panelStats');
+    const panelContent = document.getElementById('panelContent');
+    const panelExploreBtn = document.getElementById('panelExploreBtn');
+
+    let currentTab = 'overview';
+
+    function selectCountry(code, country, layer) {
+      // Reset previously selected
+      if (activeLayer && activeLayer !== layer) {
+        countryLayer.resetStyle(activeLayer);
+      }
+      currentCountryCode = code;
+      activeLayer = layer;
+      layer.setStyle(selectedStyle());
+
+      if (!country) {
+        // Non-featured country — show minimal panel
+        panelFlag.textContent = '';
+        panelName.textContent = layer.feature.properties.name || code;
+        panelStats.innerHTML = '';
+        panelContent.innerHTML = '<p class="panel-placeholder">Detailed information for this country is coming soon as The Future Map grows.</p>';
+        panelExploreBtn.style.display = 'none';
+      } else {
+        panelFlag.textContent = country.flag;
+        panelName.textContent = country.name;
+        renderStats(country.stats);
+        renderTab(country, currentTab);
+        panelExploreBtn.href = country.page;
+        panelExploreBtn.style.display = 'block';
+        panelExploreBtn.textContent = 'Explore ' + country.name + ' →';
+      }
+
+      countryPanel.classList.add('open');
+    }
+
+    function renderStats(stats) {
+      panelStats.innerHTML = Object.entries(stats).map(([key, val]) => {
+        const labels = {
+          emissions: 'Emissions',
+          cleanEnergy: 'Clean Energy',
+          population: 'Population'
+        };
+        return `<div class="stat-pill"><span>${labels[key] || key}</span><strong>${val}</strong></div>`;
+      }).join('');
+    }
+
+    function renderTab(country, tab) {
+      const content = country.tabs[tab];
+      if (tab === 'organizations') {
+        const orgs = country.tabs.organizations;
+        if (!orgs || orgs.length === 0) {
+          panelContent.innerHTML = '<p class="panel-placeholder">Organizations for this country are coming soon.</p>';
+        } else {
+          panelContent.innerHTML = '<ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">' +
+            orgs.map(o => `<li style="font-size:13.5px;color:var(--text);padding:8px 12px;background:var(--bg-secondary);border-radius:8px;">${o}</li>`).join('') +
+            '</ul>';
+        }
+      } else {
+        panelContent.innerHTML = `<p>${content}</p>`;
+      }
+    }
+
+    function closePanel() {
+      countryPanel.classList.remove('open');
+      if (activeLayer && countryLayer) {
+        countryLayer.resetStyle(activeLayer);
+      }
+      activeLayer = null;
+      currentCountryCode = null;
+      hideHoverCard();
+    }
+
+    // Tab switching
+    document.getElementById('panelTabs').addEventListener('click', function(e) {
+      const btn = e.target.closest('.tab-btn');
+      if (!btn) return;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentTab = btn.dataset.tab;
+      if (currentCountryCode && COUNTRIES[currentCountryCode]) {
+        renderTab(COUNTRIES[currentCountryCode], currentTab);
+      }
+    });
+
+    document.getElementById('panelClose').addEventListener('click', closePanel);
+
+    // ── EXPLORE / EXIT LOGIC ──────────────────────────────────────
+
+    let isMapActive = false;
+
+    const heroOverlay = document.getElementById('heroOverlay');
+    const exitBtn = document.getElementById('exitBtn');
+    const exploreBtn = document.getElementById('exploreBtn');
+    const exploreNavBtn = document.getElementById('exploreNavBtn');
+    const mapEl = document.getElementById('map');
+
+    function enterMap() {
+      isMapActive = true;
+      heroOverlay.classList.add('hidden');
+      mapEl.classList.add('active');
+      exitBtn.classList.add('visible');
+      document.body.classList.add('map-active');
+      map.scrollWheelZoom.enable();
+      // Invalidate map size in case of layout shift
+      setTimeout(() => map.invalidateSize(), 100);
+    }
+
+    function exitMap() {
+      isMapActive = false;
+      heroOverlay.classList.remove('hidden');
+      mapEl.classList.remove('active');
+      exitBtn.classList.remove('visible');
+      document.body.classList.remove('map-active');
+      map.scrollWheelZoom.disable();
+      closePanel();
+    }
+
+    exploreBtn.addEventListener('click', enterMap);
+    exploreNavBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      // Scroll to top first, then enter map
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(enterMap, 400);
+    });
+    exitBtn.addEventListener('click', exitMap);
+
+    // Exit on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && isMapActive) exitMap();
+    });
+
+    // When user scrolls away from map section, exit map mode
+    window.addEventListener('scroll', function() {
+      if (isMapActive && window.scrollY > 100) {
+        exitMap();
+      }
+    });
+
+  </script>
 </body>
 </html>
