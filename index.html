@@ -48,6 +48,7 @@
 
     body.map-active { overflow: hidden; }
 
+    /* ── NAV ── */
     nav {
       position: fixed;
       top: 0;
@@ -94,6 +95,7 @@
       pointer-events: none;
     }
 
+    /* ── MAP SECTION ── */
     .map-section {
       position: relative;
       height: calc(100vh - 56px);
@@ -140,6 +142,7 @@
 
     .leaflet-control-attribution a { color: var(--accent-mid) !important; }
 
+    /* Move zoom control below the exit button */
     .leaflet-top.leaflet-left {
       top: 60px !important;
       left: 1rem !important;
@@ -149,6 +152,7 @@
       margin: 0 !important;
     }
 
+    /* ── HERO OVERLAY ── */
     .hero-overlay {
       position: absolute;
       inset: 0;
@@ -256,6 +260,7 @@
 
     .btn-secondary:hover { background: var(--bg-secondary); }
 
+    /* ── EXIT BUTTON ── */
     .exit-btn {
       position: absolute;
       top: 1rem;
@@ -283,6 +288,7 @@
       pointer-events: all;
     }
 
+    /* ── HOVER CARD ── */
     .hover-card {
       position: absolute;
       z-index: 40;
@@ -293,24 +299,20 @@
       pointer-events: none;
       display: none;
       box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-      width: 220px;
+      width: 210px;
       transition: opacity 0.1s;
     }
 
     .hover-card-top {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
       margin-bottom: 8px;
     }
 
     .hover-card-flag {
-      width: 22px;
-      height: 16px;
-      border-radius: 2px;
-      object-fit: cover;
-      flex-shrink: 0;
-      box-shadow: 0 0 0 0.5px rgba(0,0,0,0.15);
+      font-size: 18px;
+      line-height: 1;
     }
 
     .hover-card-name {
@@ -355,12 +357,12 @@
       margin-top: 8px;
     }
 
+    /* ── COUNTRY PANEL ── */
     .country-panel {
       position: absolute;
       top: 76px;
       bottom: 24px;
       right: 1.5rem;
-      height: calc(100% - 100px);
       transform: translateX(calc(100% + 2rem));
       z-index: 40;
       background: var(--bg);
@@ -381,41 +383,27 @@
     }
 
     .panel-header {
-      padding: 0.875rem 1rem;
+      padding: 0.875rem 2.75rem 0.625rem 1.25rem;
       border-bottom: 0.5px solid var(--border);
       display: flex;
       align-items: center;
-      gap: 0.625rem;
+      gap: 0.6rem;
       flex-shrink: 0;
-    }
-
-    .panel-flag {
-      width: 26px;
-      height: 19px;
-      border-radius: 2px;
-      object-fit: cover;
-      flex-shrink: 0;
-      box-shadow: 0 0 0 0.5px rgba(0,0,0,0.15);
-    }
-
-    .panel-name {
-      font-size: 15px;
-      font-weight: 500;
-      letter-spacing: -0.01em;
-      color: var(--text);
-      line-height: 1.2;
-      flex: 1;
+      position: relative;
     }
 
     .panel-close {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
       background: none;
       border: none;
-      font-size: 22px;
+      font-size: 26px;
       cursor: pointer;
       color: var(--text-secondary);
       line-height: 1;
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -423,7 +411,7 @@
       font-family: inherit;
       border-radius: 6px;
       transition: color 0.15s, background 0.15s;
-      flex-shrink: 0;
+      z-index: 10;
     }
 
     .panel-close:hover {
@@ -431,10 +419,20 @@
       background: var(--bg-secondary);
     }
 
+    .panel-flag { font-size: 20px; line-height: 1; }
+
+    .panel-name {
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
     .panel-stats {
       display: flex;
-      gap: 4px;
-      padding: 0.5rem 0.75rem;
+      gap: 6px;
+      padding: 0.625rem 1.25rem;
       border-bottom: 0.5px solid var(--border);
       flex-shrink: 0;
     }
@@ -443,31 +441,31 @@
       flex: 1;
       background: var(--bg-secondary);
       border: 0.5px solid var(--border);
-      border-radius: 7px;
-      padding: 4px 4px;
+      border-radius: 10px;
+      padding: 6px 8px;
       display: flex;
       flex-direction: column;
-      gap: 1px;
+      gap: 2px;
       text-align: center;
-      min-width: 0;
     }
 
     .stat-pill span {
-      font-size: 7.5px;
+      font-size: 8.5px;
       font-weight: 500;
       text-transform: uppercase;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.03em;
       color: var(--text-secondary);
       opacity: 0.75;
-      line-height: 1.2;
+      line-height: 1.25;
     }
 
     .stat-pill strong {
       font-weight: 500;
       color: var(--text);
-      font-size: 11px;
+      font-size: 12px;
     }
 
+    /* Panel tabs */
     .panel-tabs {
       display: flex;
       border-bottom: 0.5px solid var(--border);
@@ -479,7 +477,7 @@
       flex: 1;
       background: none;
       border: none;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 500;
       color: var(--text-secondary);
       padding: 9px 4px;
@@ -536,6 +534,7 @@
 
     .btn-explore-country:hover { opacity: 0.85; }
 
+    /* ── BELOW-FOLD CONTENT ── */
     .page-content { background: var(--bg); }
 
     .divider {
@@ -747,7 +746,7 @@
     <!-- Hover card -->
     <div class="hover-card" id="hoverCard">
       <div class="hover-card-top">
-        <img class="hover-card-flag" id="hoverFlag" alt="" />
+        <span class="hover-card-flag" id="hoverFlag"></span>
         <span class="hover-card-name" id="hoverName"></span>
       </div>
       <div class="hover-card-stats" id="hoverStats"></div>
@@ -757,7 +756,7 @@
     <!-- Country panel -->
     <div class="country-panel" id="countryPanel">
       <div class="panel-header">
-        <img class="panel-flag" id="panelFlag" alt="" />
+        <span class="panel-flag" id="panelFlag"></span>
         <h2 class="panel-name" id="panelName"></h2>
         <button class="panel-close" id="panelClose" type="button" aria-label="Close">×</button>
       </div>
@@ -767,6 +766,8 @@
         <button class="tab-btn" data-tab="energy">Energy</button>
         <button class="tab-btn" data-tab="emissions">Emissions</button>
         <button class="tab-btn" data-tab="threats">Threats</button>
+        <button class="tab-btn" data-tab="government">Government</button>
+        <button class="tab-btn" data-tab="initiatives">Initiatives</button>
       </div>
       <div class="panel-content" id="panelContent"></div>
       <div class="panel-footer">
@@ -861,25 +862,20 @@
     // ── COUNTRY DATA ──────────────────────────────────────────────
     // Sources for headline stats:
     //  - Population: UN World Population Prospects, latest estimates
-    //  - Clean Energy Share: share of ELECTRICITY generation from
-    //    renewable sources (Ember Global Electricity Review 2025,
-    //    IEA). Where a country relies heavily on nuclear (e.g. France,
-    //    Switzerland, Sweden), nuclear is noted separately in the
-    //    Energy tab since it is low-carbon but not classified as
-    //    renewable.
+    //  - Clean Energy (% of electricity from renewables): Ember Global
+    //    Electricity Review / Our World in Data, most recent available year
+    //    (France's figure excludes its ~70% nuclear share, which is
+    //    low-carbon but not classified as renewable)
     //  - GHG Emissions per capita (CO2e, all greenhouse gases):
-    //    UNEP Emissions Gap Report 2024 where available, otherwise
-    //    estimated from Global Carbon Project CO2 data and typical
-    //    CO2-to-CO2e ratios for that country's economy.
-    // The "government" and "initiatives" fields are retained here for
-    // use on each country's future Explore page, alongside additional
-    // detail to be added later. They are not shown in the map panel.
-    // All tab content marked Placeholder will be replaced with fully
-    // sourced writing as the project develops.
+    //    UNEP Emissions Gap Report 2024 (2023 data) where available,
+    //    otherwise estimated from Global Carbon Project CO2 data and
+    //    typical CO2-to-CO2e ratios for that country's economy
+    // All tab content below is marked Placeholder and will be replaced
+    // with fully sourced writing as the project develops.
 
     const COUNTRIES = {
       'USA': {
-        name: 'United States', iso2: 'us',
+        name: 'United States',
         stats: { population: '335M', cleanEnergy: '21%', ghg: '18.0t' },
         tabs: {
           overview: 'Placeholder — The United States is the world\'s second-largest emitter of greenhouse gases, accounting for roughly 11% of global emissions. A major clean energy transition is underway, though recent federal policy reversals have created significant uncertainty for the sector.',
@@ -887,12 +883,12 @@
           emissions: 'Placeholder — CO2 emissions: roughly 14.3t per capita. Total GHG emissions including methane and other gases (CO2e): 18.0t per capita (UNEP, 2023). Emissions have declined gradually since 2005 but remain among the highest per capita of any major economy.',
           threats: 'Placeholder — Rollback of federal climate regulations and clean energy incentives. Restrictions on federal climate science funding and communication. Increasing frequency and severity of wildfires, hurricanes, and flooding. Legal pressure facing environmental researchers and advocacy organizations.',
           government: 'Placeholder — See The Watch for a regularly updated log of current federal actions on energy, climate, and the environment, including executive orders, legislation, and agency rules.',
-          initiatives: 'Placeholder — State-level clean electricity targets (such as California\'s), corporate renewable energy procurement at large scale, and city-level climate action plans continue independent of federal policy shifts.'
+          initiatives: 'Placeholder — State-level clean electricity targets (such as California\'s), corporate renewable energy procurement at large scale, and city-level climate action plans continue independent of federal policy shifts. Several tribal nations are also leading clean energy microgrid projects.'
         },
         page: 'country-usa.html'
       },
       'FRA': {
-        name: 'France', iso2: 'fr',
+        name: 'France',
         stats: { population: '68M', cleanEnergy: '23%', ghg: '6.4t' },
         tabs: {
           overview: 'Placeholder — France is a global leader in nuclear energy, which provides roughly 70% of its electricity, giving it one of the lowest-carbon electricity grids among major economies. The country is expanding renewables while navigating the long-term future of its aging nuclear fleet.',
@@ -900,12 +896,12 @@
           emissions: 'Placeholder — CO2 emissions: roughly 4.6t per capita. Total GHG emissions including methane and other gases (CO2e): approximately 6.4t per capita, among the lowest of major industrialized economies due to its nuclear-heavy grid.',
           threats: 'Placeholder — Aging nuclear fleet and debates over plant safety and lifetime extensions. Increasing heatwaves affecting agriculture and public health. Drought conditions impacting river-based cooling for nuclear plants. Coastal erosion and Mediterranean sea level rise.',
           government: 'Placeholder — France\'s multi-year energy program (Programmation Pluriannuelle de l\'Energie) sets targets for nuclear capacity, renewable deployment, and emissions reductions in line with EU climate law.',
-          initiatives: 'Placeholder — Major offshore wind tenders along the Atlantic coast, continued investment in next-generation nuclear reactor designs (EPR2), and participation in EU-wide carbon border adjustment mechanisms.'
+          initiatives: 'Placeholder — Major offshore wind tenders along the Atlantic coast, continued investment in next-generation nuclear reactor designs (EPR2), and participation in EU-wide carbon border adjustment mechanisms affecting French industry.'
         },
         page: 'country-france.html'
       },
       'DEU': {
-        name: 'Germany', iso2: 'de',
+        name: 'Germany',
         stats: { population: '84M', cleanEnergy: '47%', ghg: '10.4t' },
         tabs: {
           overview: 'Placeholder — Germany has been a global leader in the energy transition known as the Energiewende, dramatically expanding wind and solar capacity while phasing out nuclear power entirely. Managing the coal phase-out remains a major economic and political challenge.',
@@ -918,7 +914,7 @@
         page: 'country-germany.html'
       },
       'NOR': {
-        name: 'Norway', iso2: 'no',
+        name: 'Norway',
         stats: { population: '5.5M', cleanEnergy: '98%', ghg: '9.0t' },
         tabs: {
           overview: 'Placeholder — Norway generates nearly all of its electricity from hydropower, making it one of the cleanest electricity systems in the world. At the same time, it remains one of the world\'s largest oil and gas exporters, creating a notable contrast between domestic energy use and export-driven emissions.',
@@ -931,7 +927,7 @@
         page: 'country-norway.html'
       },
       'IND': {
-        name: 'India', iso2: 'in',
+        name: 'India',
         stats: { population: '1.45B', cleanEnergy: '20%', ghg: '2.7t' },
         tabs: {
           overview: 'Placeholder — India is the world\'s third-largest emitter in absolute terms but has one of the lowest per-capita emissions among major economies. The country has set ambitious renewable energy targets and is rapidly expanding solar and wind capacity, while coal continues to dominate electricity generation.',
@@ -944,7 +940,7 @@
         page: 'country-india.html'
       },
       'CHN': {
-        name: 'China', iso2: 'cn',
+        name: 'China',
         stats: { population: '1.41B', cleanEnergy: '30%', ghg: '11.0t' },
         tabs: {
           overview: 'Placeholder — China is the world\'s largest emitter of greenhouse gases in absolute terms, but also by far the world\'s largest installer of clean energy capacity. It leads global manufacturing of solar panels, wind turbines, and electric vehicles, while also continuing to build new coal power plants.',
@@ -957,7 +953,7 @@
         page: 'country-china.html'
       },
       'KHM': {
-        name: 'Cambodia', iso2: 'kh',
+        name: 'Cambodia',
         stats: { population: '17M', cleanEnergy: '35%', ghg: '3.0t' },
         tabs: {
           overview: 'Placeholder — Cambodia is a low-emission, developing nation in Southeast Asia facing significant climate vulnerability, including flooding, drought, and sea level rise affecting coastal and river delta communities.',
@@ -970,7 +966,7 @@
         page: 'country-cambodia.html'
       },
       'SGP': {
-        name: 'Singapore', iso2: 'sg',
+        name: 'Singapore',
         stats: { population: '6M', cleanEnergy: '3%', ghg: '9.0t' },
         tabs: {
           overview: 'Placeholder — Singapore is a small, highly urbanized city-state with limited domestic renewable energy potential due to its land area and geography. It is pursuing imported clean electricity from the region and carbon pricing policies to meet its climate targets.',
@@ -983,7 +979,7 @@
         page: 'country-singapore.html'
       },
       'VNM': {
-        name: 'Vietnam', iso2: 'vn',
+        name: 'Vietnam',
         stats: { population: '98M', cleanEnergy: '44%', ghg: '3.8t' },
         tabs: {
           overview: 'Placeholder — Vietnam has experienced one of the fastest clean energy transitions in Southeast Asia, dramatically expanding solar capacity in just a few years. The country faces significant climate vulnerability, particularly in the densely populated Mekong Delta.',
@@ -994,13 +990,381 @@
           initiatives: 'Placeholder — The Just Energy Transition Partnership with international donors supporting Vietnam\'s shift away from coal, rapid offshore wind project development, and Mekong Delta climate adaptation programs.'
         },
         page: 'country-vietnam.html'
-      },
-      'CAN': {
-        name: 'Canada', iso2: 'ca',
-        stats: { population: '41M', cleanEnergy: '67%', ghg: '18.0t' },
-        tabs: {
-          overview: 'Placeholder — Canada has one of the cleanest electricity grids among major economies thanks to vast hydropower resources, but is also a major oil producer, with the Alberta oil sands among the highest per-barrel emission intensity sources of oil in the world.',
-          energy: 'Placeholder — Energy mix: hydropower ~60%, nuclear ~15%, natural gas ~10%, wind ~6%, biomass ~1%, other renewables and solar ~3%, remainder coal and other. Quebec and British Columbia rely almost entirely on hydropower for electricity.',
-          emissions: 'Placeholder — CO2 emissions: roughly 14.5t per capita. Total GHG emissions including methane and other gases (CO2e): approximately 18.0t per capita, among the highest in the G7, driven heavily by the oil and gas sector and a large, cold geography requiring significant heating energy.',
-          threats: 'Placeholder — The Arctic and northern Canada are warming at roughly twice the global average rate. Wildfire seasons have become significantly more severe and widespread in recent years. Permafrost thaw is destabilizing infrastructure in northern communities. Oil sands expansion remains a point of tension with national climate targets and indigenous land rights.',
-          government: 'Placeholder — Canada\'s federal carbon pricing system sets a national price floor on emissions, with provinces able to implement equivalent syste
+      }
+    };
+
+    // ── HELPERS ───────────────────────────────────────────────────
+
+    function getCountryCode(props) {
+      let code = props.ISO_A3;
+      if (!code || code === '-99') code = props.ADM0_A3;
+      if (!code || code === '-99') code = props.ISO_A3_EH;
+      return code;
+    }
+
+    function getCountryName(props) {
+      let name = props.ADMIN || props.NAME_LONG || props.NAME_EN || props.NAME || props.name;
+      // Guard against any short code-like strings slipping through
+      if (!name || (name.length <= 3 && name === name.toUpperCase())) {
+        name = props.NAME_LONG || props.SOVEREIGNT || 'Unknown region';
+      }
+      return name;
+    }
+
+    function getFlagEmoji(props) {
+      let iso2 = props.ISO_A2 || props.ISO_A2_EH;
+      if (!iso2 || iso2 === '-99' || iso2.length !== 2) return '';
+      const codePoints = iso2.toUpperCase().split('').map(c => 127397 + c.charCodeAt());
+      return String.fromCodePoint(...codePoints);
+    }
+
+    // ── MAP SETUP ─────────────────────────────────────────────────
+
+    const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    const map = L.map('map', {
+      center: [20, 10],
+      zoom: 2,
+      minZoom: 2,
+      maxZoom: 8,
+      zoomControl: false,
+      scrollWheelZoom: false,
+      worldCopyJump: false
+    });
+
+    L.control.zoom({ position: 'topleft' }).addTo(map);
+
+    const tileUrl = isDark
+      ? 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png'
+      : 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png';
+
+    L.tileLayer(tileUrl, {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+
+    let countryLayer = null;
+    let activeLayer = null;
+    let currentCountryCode = null;
+
+    // Featured countries: blue fill/border, brighter in dark mode for contrast
+    const FEATURED_FILL = isDark ? '#3a7fd5' : '#2d6ec2';
+    const FEATURED_BORDER = isDark ? '#5b9de8' : '#1a4a8a';
+    const FEATURED_HOVER_FILL = isDark ? '#5b9de8' : '#1a4a8a';
+    const FEATURED_HOVER_BORDER = isDark ? '#8cc0f5' : '#0f2d5c';
+    const NONFEATURED_FILL = isDark ? '#3f4654' : '#94a3b8';
+    const NONFEATURED_BORDER = isDark ? '#5b6472' : '#94a3b8';
+    const NONFEATURED_HOVER_FILL = isDark ? '#5b6472' : '#64748b';
+    const NONFEATURED_HOVER_BORDER = isDark ? '#7a8494' : '#64748b';
+
+    function defaultStyle(feature) {
+      const code = getCountryCode(feature.properties);
+      if (COUNTRIES[code]) {
+        return {
+          fillColor: FEATURED_FILL,
+          fillOpacity: isDark ? 0.24 : 0.18,
+          color: FEATURED_BORDER,
+          weight: 1.6,
+          opacity: 0.9,
+          smoothFactor: 0.4
+        };
+      }
+      return {
+        fillColor: NONFEATURED_FILL,
+        fillOpacity: isDark ? 0.18 : 0.08,
+        color: NONFEATURED_BORDER,
+        weight: 0.6,
+        opacity: 0.6,
+        smoothFactor: 0.4
+      };
+    }
+
+    function hoverStyle(isFeatured) {
+      return isFeatured ? {
+        fillColor: FEATURED_HOVER_FILL,
+        fillOpacity: 0.38,
+        color: FEATURED_HOVER_BORDER,
+        weight: 2,
+        opacity: 1
+      } : {
+        fillColor: NONFEATURED_HOVER_FILL,
+        fillOpacity: 0.22,
+        color: NONFEATURED_HOVER_BORDER,
+        weight: 1,
+        opacity: 0.8
+      };
+    }
+
+    function selectedStyle() {
+      return {
+        fillColor: FEATURED_HOVER_FILL,
+        fillOpacity: 0.5,
+        color: FEATURED_HOVER_BORDER,
+        weight: 2.5,
+        opacity: 1
+      };
+    }
+
+    // Loading indicator
+    const loadingDiv = L.control({ position: 'bottomleft' });
+    loadingDiv.onAdd = function() {
+      const div = L.DomUtil.create('div');
+      div.id = 'mapLoading';
+      div.style.cssText = 'background:var(--bg);border:0.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:12px;color:var(--text-secondary);font-family:inherit;';
+      div.textContent = 'Loading countries...';
+      return div;
+    };
+    loadingDiv.addTo(map);
+
+    fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/master/50m/cultural/ne_50m_admin_0_countries.json')
+      .then(r => r.json())
+      .then(data => {
+        const loading = document.getElementById('mapLoading');
+        if (loading) loading.remove();
+
+        countryLayer = L.geoJson(data, {
+          style: defaultStyle,
+          smoothFactor: 0.4,
+          onEachFeature: function(feature, layer) {
+            const code = getCountryCode(feature.properties);
+            const name = getCountryName(feature.properties);
+            const flag = getFlagEmoji(feature.properties);
+            const isFeatured = !!COUNTRIES[code];
+            const country = COUNTRIES[code];
+
+            layer.on({
+              mouseover: function(e) {
+                if (!isMapActive) return;
+                if (code !== currentCountryCode) {
+                  layer.setStyle(hoverStyle(isFeatured));
+                }
+                if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                  layer.bringToFront();
+                }
+                showHoverCard(e, name, flag, country, isFeatured);
+              },
+              mouseout: function() {
+                if (!isMapActive) return;
+                if (code !== currentCountryCode) {
+                  countryLayer.resetStyle(layer);
+                }
+                hideHoverCard();
+              },
+              mousemove: function(e) {
+                if (!isMapActive) return;
+                positionHoverCard(e);
+              },
+              click: function(e) {
+                if (!isMapActive) return;
+                L.DomEvent.stopPropagation(e);
+                selectCountry(code, name, flag, country, layer);
+              }
+            });
+          }
+        }).addTo(map);
+      })
+      .catch(err => {
+        console.error('Failed to load country data:', err);
+        const loading = document.getElementById('mapLoading');
+        if (loading) {
+          loading.textContent = 'Country data unavailable in preview. Will load on GitHub Pages.';
+          loading.style.color = '#a32d2d';
+        }
+      });
+
+    map.on('click', function() {
+      if (isMapActive) closePanel();
+    });
+
+    // ── HOVER CARD ────────────────────────────────────────────────
+
+    const hoverCard = document.getElementById('hoverCard');
+    const hoverFlag = document.getElementById('hoverFlag');
+    const hoverName = document.getElementById('hoverName');
+    const hoverStats = document.getElementById('hoverStats');
+    const hoverHint = document.getElementById('hoverHint');
+
+    function showHoverCard(e, name, flag, country, isFeatured) {
+      hoverCard.style.display = 'block';
+      hoverFlag.textContent = flag;
+      hoverName.textContent = name;
+
+      if (isFeatured && country) {
+        hoverName.className = 'hover-card-name';
+        hoverStats.innerHTML = `
+          <div class="hover-card-stat"><span class="hover-card-stat-label">Population</span><span class="hover-card-stat-value">${country.stats.population}</span></div>
+          <div class="hover-card-stat"><span class="hover-card-stat-label">Clean Energy Share</span><span class="hover-card-stat-value">${country.stats.cleanEnergy}</span></div>
+          <div class="hover-card-stat"><span class="hover-card-stat-label">Greenhouse Gas Emissions per Capita (CO2e)</span><span class="hover-card-stat-value">${country.stats.ghg}</span></div>
+        `;
+        hoverHint.textContent = 'Click to explore';
+      } else {
+        hoverName.className = 'hover-card-name generic';
+        hoverStats.innerHTML = '';
+        hoverHint.textContent = '';
+      }
+      positionHoverCard(e);
+    }
+
+    function positionHoverCard(e) {
+      const mapEl = document.getElementById('map');
+      const rect = mapEl.getBoundingClientRect();
+      const x = e.originalEvent.clientX - rect.left;
+      const y = e.originalEvent.clientY - rect.top;
+
+      const cardW = 220;
+      const cardH = 160;
+      const left = Math.min(x + 16, rect.width - cardW - 10);
+      const top = Math.max(Math.min(y - 20, rect.height - cardH - 10), 10);
+
+      hoverCard.style.left = left + 'px';
+      hoverCard.style.top = top + 'px';
+    }
+
+    function hideHoverCard() {
+      hoverCard.style.display = 'none';
+    }
+
+    // ── COUNTRY PANEL ─────────────────────────────────────────────
+
+    const countryPanel = document.getElementById('countryPanel');
+    const panelFlag = document.getElementById('panelFlag');
+    const panelName = document.getElementById('panelName');
+    const panelStats = document.getElementById('panelStats');
+    const panelContent = document.getElementById('panelContent');
+    const panelExploreBtn = document.getElementById('panelExploreBtn');
+
+    let currentTab = 'overview';
+
+    function selectCountry(code, name, flag, country, layer) {
+      if (activeLayer && activeLayer !== layer) {
+        countryLayer.resetStyle(activeLayer);
+      }
+      currentCountryCode = code;
+      activeLayer = layer;
+      layer.setStyle(selectedStyle());
+
+      panelFlag.textContent = flag;
+      panelName.textContent = name;
+
+      if (!country) {
+        panelStats.innerHTML = '';
+        panelContent.innerHTML = '<p class="panel-placeholder">Detailed information for this country is coming soon as The Future Map grows.</p>';
+        panelExploreBtn.style.display = 'none';
+      } else {
+        renderStats(country.stats);
+        renderTab(country, currentTab);
+        panelExploreBtn.href = country.page;
+        panelExploreBtn.style.display = 'block';
+        panelExploreBtn.textContent = 'Explore →';
+      }
+
+      countryPanel.classList.add('open');
+    }
+
+    function renderStats(stats) {
+      panelStats.innerHTML = `
+        <div class="stat-pill"><span>Population</span><strong>${stats.population}</strong></div>
+        <div class="stat-pill"><span>Clean Energy Share</span><strong>${stats.cleanEnergy}</strong></div>
+        <div class="stat-pill"><span>GHG / Capita (CO2e)</span><strong>${stats.ghg}</strong></div>
+      `;
+    }
+
+    const TAB_LABELS = {
+      overview: 'Overview',
+      energy: 'Energy',
+      emissions: 'Emissions',
+      threats: 'Threats',
+      government: 'Government',
+      initiatives: 'Initiatives'
+    };
+
+    function renderTab(country, tab) {
+      const content = country.tabs[tab];
+      panelContent.innerHTML = `<p>${content}</p>`;
+    }
+
+    function closePanel() {
+      countryPanel.classList.remove('open');
+      if (activeLayer && countryLayer) {
+        countryLayer.resetStyle(activeLayer);
+      }
+      activeLayer = null;
+      currentCountryCode = null;
+      hideHoverCard();
+      // Reset to overview tab for next open
+      currentTab = 'overview';
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      const overviewBtn = document.querySelector('.tab-btn[data-tab="overview"]');
+      if (overviewBtn) overviewBtn.classList.add('active');
+    }
+
+    document.getElementById('panelTabs').addEventListener('click', function(e) {
+      const btn = e.target.closest('.tab-btn');
+      if (!btn) return;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentTab = btn.dataset.tab;
+      if (currentCountryCode && COUNTRIES[currentCountryCode]) {
+        renderTab(COUNTRIES[currentCountryCode], currentTab);
+      }
+    });
+
+    const panelCloseBtn = document.getElementById('panelClose');
+    panelCloseBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      closePanel();
+    });
+
+    // ── EXPLORE / EXIT LOGIC ──────────────────────────────────────
+
+    let isMapActive = false;
+
+    const heroOverlay = document.getElementById('heroOverlay');
+    const exitBtn = document.getElementById('exitBtn');
+    const exploreBtn = document.getElementById('exploreBtn');
+    const exploreNavBtn = document.getElementById('exploreNavBtn');
+    const mapEl = document.getElementById('map');
+
+    function enterMap() {
+      isMapActive = true;
+      heroOverlay.classList.add('hidden');
+      mapEl.classList.add('active');
+      exitBtn.classList.add('visible');
+      document.body.classList.add('map-active');
+      map.scrollWheelZoom.enable();
+      setTimeout(() => map.invalidateSize(), 100);
+    }
+
+    function exitMap() {
+      isMapActive = false;
+      heroOverlay.classList.remove('hidden');
+      mapEl.classList.remove('active');
+      exitBtn.classList.remove('visible');
+      document.body.classList.remove('map-active');
+      map.scrollWheelZoom.disable();
+      closePanel();
+    }
+
+    exploreBtn.addEventListener('click', enterMap);
+    exploreNavBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(enterMap, 400);
+    });
+    exitBtn.addEventListener('click', exitMap);
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && isMapActive) exitMap();
+    });
+
+    window.addEventListener('scroll', function() {
+      if (isMapActive && window.scrollY > 100) {
+        exitMap();
+      }
+    });
+
+  </script>
+</body>
+</html>
