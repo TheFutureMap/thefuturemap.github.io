@@ -142,7 +142,6 @@
 
     .leaflet-control-attribution a { color: var(--accent-mid) !important; }
 
-    /* Move zoom control below the exit button */
     .leaflet-top.leaflet-left {
       top: 60px !important;
       left: 1rem !important;
@@ -299,20 +298,24 @@
       pointer-events: none;
       display: none;
       box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-      width: 210px;
+      width: 220px;
       transition: opacity 0.1s;
     }
 
     .hover-card-top {
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 8px;
       margin-bottom: 8px;
     }
 
     .hover-card-flag {
-      font-size: 18px;
-      line-height: 1;
+      width: 22px;
+      height: 16px;
+      border-radius: 2px;
+      object-fit: cover;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 0.5px rgba(0,0,0,0.15);
     }
 
     .hover-card-name {
@@ -363,6 +366,7 @@
       top: 76px;
       bottom: 24px;
       right: 1.5rem;
+      height: calc(100% - 100px);
       transform: translateX(calc(100% + 2rem));
       z-index: 40;
       background: var(--bg);
@@ -383,43 +387,22 @@
     }
 
     .panel-header {
-      padding: 0.875rem 2.75rem 0.625rem 1.25rem;
+      padding: 0.875rem 1rem;
       border-bottom: 0.5px solid var(--border);
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.625rem;
       flex-shrink: 0;
-      position: relative;
     }
 
-    .panel-close {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-      background: none;
-      border: none;
-      font-size: 26px;
-      cursor: pointer;
-      color: var(--text-secondary);
-      line-height: 1;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-      font-family: inherit;
-      border-radius: 6px;
-      transition: color 0.15s, background 0.15s;
-      z-index: 10;
+    .panel-flag {
+      width: 26px;
+      height: 19px;
+      border-radius: 2px;
+      object-fit: cover;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 0.5px rgba(0,0,0,0.15);
     }
-
-    .panel-close:hover {
-      color: var(--text);
-      background: var(--bg-secondary);
-    }
-
-    .panel-flag { font-size: 20px; line-height: 1; }
 
     .panel-name {
       font-size: 15px;
@@ -427,12 +410,37 @@
       letter-spacing: -0.01em;
       color: var(--text);
       line-height: 1.2;
+      flex: 1;
+    }
+
+    .panel-close {
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      line-height: 1;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      font-family: inherit;
+      border-radius: 6px;
+      transition: color 0.15s, background 0.15s;
+      flex-shrink: 0;
+    }
+
+    .panel-close:hover {
+      color: var(--text);
+      background: var(--bg-secondary);
     }
 
     .panel-stats {
       display: flex;
-      gap: 6px;
-      padding: 0.625rem 1.25rem;
+      gap: 4px;
+      padding: 0.5rem 0.75rem;
       border-bottom: 0.5px solid var(--border);
       flex-shrink: 0;
     }
@@ -441,28 +449,29 @@
       flex: 1;
       background: var(--bg-secondary);
       border: 0.5px solid var(--border);
-      border-radius: 10px;
-      padding: 6px 8px;
+      border-radius: 7px;
+      padding: 4px 4px;
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 1px;
       text-align: center;
+      min-width: 0;
     }
 
     .stat-pill span {
-      font-size: 8.5px;
+      font-size: 7.5px;
       font-weight: 500;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.02em;
       color: var(--text-secondary);
       opacity: 0.75;
-      line-height: 1.25;
+      line-height: 1.2;
     }
 
     .stat-pill strong {
       font-weight: 500;
       color: var(--text);
-      font-size: 12px;
+      font-size: 11px;
     }
 
     /* Panel tabs */
@@ -477,7 +486,7 @@
       flex: 1;
       background: none;
       border: none;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 500;
       color: var(--text-secondary);
       padding: 9px 4px;
@@ -746,7 +755,7 @@
     <!-- Hover card -->
     <div class="hover-card" id="hoverCard">
       <div class="hover-card-top">
-        <span class="hover-card-flag" id="hoverFlag"></span>
+        <img class="hover-card-flag" id="hoverFlag" alt="" />
         <span class="hover-card-name" id="hoverName"></span>
       </div>
       <div class="hover-card-stats" id="hoverStats"></div>
@@ -756,7 +765,7 @@
     <!-- Country panel -->
     <div class="country-panel" id="countryPanel">
       <div class="panel-header">
-        <span class="panel-flag" id="panelFlag"></span>
+        <img class="panel-flag" id="panelFlag" alt="" />
         <h2 class="panel-name" id="panelName"></h2>
         <button class="panel-close" id="panelClose" type="button" aria-label="Close">×</button>
       </div>
@@ -766,8 +775,6 @@
         <button class="tab-btn" data-tab="energy">Energy</button>
         <button class="tab-btn" data-tab="emissions">Emissions</button>
         <button class="tab-btn" data-tab="threats">Threats</button>
-        <button class="tab-btn" data-tab="government">Government</button>
-        <button class="tab-btn" data-tab="initiatives">Initiatives</button>
       </div>
       <div class="panel-content" id="panelContent"></div>
       <div class="panel-footer">
@@ -862,20 +869,25 @@
     // ── COUNTRY DATA ──────────────────────────────────────────────
     // Sources for headline stats:
     //  - Population: UN World Population Prospects, latest estimates
-    //  - Clean Energy (% of electricity from renewables): Ember Global
-    //    Electricity Review / Our World in Data, most recent available year
-    //    (France's figure excludes its ~70% nuclear share, which is
-    //    low-carbon but not classified as renewable)
+    //  - Clean Energy Share: share of ELECTRICITY generation from
+    //    renewable sources (Ember Global Electricity Review 2025,
+    //    IEA). Where a country relies heavily on nuclear (e.g. France,
+    //    Switzerland, Sweden), nuclear is noted separately in the
+    //    Energy tab since it is low-carbon but not classified as
+    //    renewable.
     //  - GHG Emissions per capita (CO2e, all greenhouse gases):
-    //    UNEP Emissions Gap Report 2024 (2023 data) where available,
-    //    otherwise estimated from Global Carbon Project CO2 data and
-    //    typical CO2-to-CO2e ratios for that country's economy
-    // All tab content below is marked Placeholder and will be replaced
-    // with fully sourced writing as the project develops.
+    //    UNEP Emissions Gap Report 2024 where available, otherwise
+    //    estimated from Global Carbon Project CO2 data and typical
+    //    CO2-to-CO2e ratios for that country's economy.
+    // The "government" and "initiatives" fields are retained here for
+    // use on each country's future Explore page, alongside additional
+    // detail to be added later. They are not shown in the map panel.
+    // All tab content marked Placeholder will be replaced with fully
+    // sourced writing as the project develops.
 
     const COUNTRIES = {
       'USA': {
-        name: 'United States',
+        name: 'United States', iso2: 'us',
         stats: { population: '335M', cleanEnergy: '21%', ghg: '18.0t' },
         tabs: {
           overview: 'Placeholder — The United States is the world\'s second-largest emitter of greenhouse gases, accounting for roughly 11% of global emissions. A major clean energy transition is underway, though recent federal policy reversals have created significant uncertainty for the sector.',
@@ -883,12 +895,12 @@
           emissions: 'Placeholder — CO2 emissions: roughly 14.3t per capita. Total GHG emissions including methane and other gases (CO2e): 18.0t per capita (UNEP, 2023). Emissions have declined gradually since 2005 but remain among the highest per capita of any major economy.',
           threats: 'Placeholder — Rollback of federal climate regulations and clean energy incentives. Restrictions on federal climate science funding and communication. Increasing frequency and severity of wildfires, hurricanes, and flooding. Legal pressure facing environmental researchers and advocacy organizations.',
           government: 'Placeholder — See The Watch for a regularly updated log of current federal actions on energy, climate, and the environment, including executive orders, legislation, and agency rules.',
-          initiatives: 'Placeholder — State-level clean electricity targets (such as California\'s), corporate renewable energy procurement at large scale, and city-level climate action plans continue independent of federal policy shifts. Several tribal nations are also leading clean energy microgrid projects.'
+          initiatives: 'Placeholder — State-level clean electricity targets (such as California\'s), corporate renewable energy procurement at large scale, and city-level climate action plans continue independent of federal policy shifts.'
         },
         page: 'country-usa.html'
       },
       'FRA': {
-        name: 'France',
+        name: 'France', iso2: 'fr',
         stats: { population: '68M', cleanEnergy: '23%', ghg: '6.4t' },
         tabs: {
           overview: 'Placeholder — France is a global leader in nuclear energy, which provides roughly 70% of its electricity, giving it one of the lowest-carbon electricity grids among major economies. The country is expanding renewables while navigating the long-term future of its aging nuclear fleet.',
@@ -896,12 +908,12 @@
           emissions: 'Placeholder — CO2 emissions: roughly 4.6t per capita. Total GHG emissions including methane and other gases (CO2e): approximately 6.4t per capita, among the lowest of major industrialized economies due to its nuclear-heavy grid.',
           threats: 'Placeholder — Aging nuclear fleet and debates over plant safety and lifetime extensions. Increasing heatwaves affecting agriculture and public health. Drought conditions impacting river-based cooling for nuclear plants. Coastal erosion and Mediterranean sea level rise.',
           government: 'Placeholder — France\'s multi-year energy program (Programmation Pluriannuelle de l\'Energie) sets targets for nuclear capacity, renewable deployment, and emissions reductions in line with EU climate law.',
-          initiatives: 'Placeholder — Major offshore wind tenders along the Atlantic coast, continued investment in next-generation nuclear reactor designs (EPR2), and participation in EU-wide carbon border adjustment mechanisms affecting French industry.'
+          initiatives: 'Placeholder — Major offshore wind tenders along the Atlantic coast, continued investment in next-generation nuclear reactor designs (EPR2), and participation in EU-wide carbon border adjustment mechanisms.'
         },
         page: 'country-france.html'
       },
       'DEU': {
-        name: 'Germany',
+        name: 'Germany', iso2: 'de',
         stats: { population: '84M', cleanEnergy: '47%', ghg: '10.4t' },
         tabs: {
           overview: 'Placeholder — Germany has been a global leader in the energy transition known as the Energiewende, dramatically expanding wind and solar capacity while phasing out nuclear power entirely. Managing the coal phase-out remains a major economic and political challenge.',
@@ -914,7 +926,7 @@
         page: 'country-germany.html'
       },
       'NOR': {
-        name: 'Norway',
+        name: 'Norway', iso2: 'no',
         stats: { population: '5.5M', cleanEnergy: '98%', ghg: '9.0t' },
         tabs: {
           overview: 'Placeholder — Norway generates nearly all of its electricity from hydropower, making it one of the cleanest electricity systems in the world. At the same time, it remains one of the world\'s largest oil and gas exporters, creating a notable contrast between domestic energy use and export-driven emissions.',
@@ -927,7 +939,7 @@
         page: 'country-norway.html'
       },
       'IND': {
-        name: 'India',
+        name: 'India', iso2: 'in',
         stats: { population: '1.45B', cleanEnergy: '20%', ghg: '2.7t' },
         tabs: {
           overview: 'Placeholder — India is the world\'s third-largest emitter in absolute terms but has one of the lowest per-capita emissions among major economies. The country has set ambitious renewable energy targets and is rapidly expanding solar and wind capacity, while coal continues to dominate electricity generation.',
@@ -940,7 +952,7 @@
         page: 'country-india.html'
       },
       'CHN': {
-        name: 'China',
+        name: 'China', iso2: 'cn',
         stats: { population: '1.41B', cleanEnergy: '30%', ghg: '11.0t' },
         tabs: {
           overview: 'Placeholder — China is the world\'s largest emitter of greenhouse gases in absolute terms, but also by far the world\'s largest installer of clean energy capacity. It leads global manufacturing of solar panels, wind turbines, and electric vehicles, while also continuing to build new coal power plants.',
@@ -953,7 +965,7 @@
         page: 'country-china.html'
       },
       'KHM': {
-        name: 'Cambodia',
+        name: 'Cambodia', iso2: 'kh',
         stats: { population: '17M', cleanEnergy: '35%', ghg: '3.0t' },
         tabs: {
           overview: 'Placeholder — Cambodia is a low-emission, developing nation in Southeast Asia facing significant climate vulnerability, including flooding, drought, and sea level rise affecting coastal and river delta communities.',
@@ -966,7 +978,7 @@
         page: 'country-cambodia.html'
       },
       'SGP': {
-        name: 'Singapore',
+        name: 'Singapore', iso2: 'sg',
         stats: { population: '6M', cleanEnergy: '3%', ghg: '9.0t' },
         tabs: {
           overview: 'Placeholder — Singapore is a small, highly urbanized city-state with limited domestic renewable energy potential due to its land area and geography. It is pursuing imported clean electricity from the region and carbon pricing policies to meet its climate targets.',
@@ -979,7 +991,7 @@
         page: 'country-singapore.html'
       },
       'VNM': {
-        name: 'Vietnam',
+        name: 'Vietnam', iso2: 'vn',
         stats: { population: '98M', cleanEnergy: '44%', ghg: '3.8t' },
         tabs: {
           overview: 'Placeholder — Vietnam has experienced one of the fastest clean energy transitions in Southeast Asia, dramatically expanding solar capacity in just a few years. The country faces significant climate vulnerability, particularly in the densely populated Mekong Delta.',
@@ -990,6 +1002,136 @@
           initiatives: 'Placeholder — The Just Energy Transition Partnership with international donors supporting Vietnam\'s shift away from coal, rapid offshore wind project development, and Mekong Delta climate adaptation programs.'
         },
         page: 'country-vietnam.html'
+      },
+      'CAN': {
+        name: 'Canada', iso2: 'ca',
+        stats: { population: '41M', cleanEnergy: '67%', ghg: '18.0t' },
+        tabs: {
+          overview: 'Placeholder — Canada has one of the cleanest electricity grids among major economies thanks to vast hydropower resources, but is also a major oil producer, with the Alberta oil sands among the highest per-barrel emission intensity sources of oil in the world.',
+          energy: 'Placeholder — Energy mix: hydropower ~60%, nuclear ~15%, natural gas ~10%, wind ~6%, biomass ~1%, other renewables and solar ~3%, remainder coal and other. Quebec and British Columbia rely almost entirely on hydropower for electricity.',
+          emissions: 'Placeholder — CO2 emissions: roughly 14.5t per capita. Total GHG emissions including methane and other gases (CO2e): approximately 18.0t per capita, among the highest in the G7, driven heavily by the oil and gas sector and a large, cold geography requiring significant heating energy.',
+          threats: 'Placeholder — The Arctic and northern Canada are warming at roughly twice the global average rate. Wildfire seasons have become significantly more severe and widespread in recent years. Permafrost thaw is destabilizing infrastructure in northern communities. Oil sands expansion remains a point of tension with national climate targets and indigenous land rights.',
+          government: 'Placeholder — Canada\'s federal carbon pricing system sets a national price floor on emissions, with provinces able to implement equivalent systems that meet the federal benchmark.',
+          initiatives: 'Placeholder — Major investment in critical minerals supply chains for batteries, continued hydroelectric expansion in Quebec and Labrador, and new methane reduction regulations for the oil and gas sector.'
+        },
+        page: 'country-canada.html'
+      },
+      'CHE': {
+        name: 'Switzerland', iso2: 'ch',
+        stats: { population: '9M', cleanEnergy: '62%', ghg: '5.0t' },
+        tabs: {
+          overview: 'Placeholder — Switzerland has one of the cleanest electricity grids in the world, generated almost entirely from hydropower and nuclear power. Its territorial emissions are low, though its consumption-based footprint, accounting for imported goods, is notably higher.',
+          energy: 'Placeholder — Energy mix: hydropower ~60%, nuclear ~32%, solar, wind, and biomass ~8%, with minimal fossil fuel generation. Switzerland is a net electricity importer during winter months when hydropower output is lower.',
+          emissions: 'Placeholder — CO2 emissions: roughly 4.0t per capita. Total GHG emissions including methane and other gases (CO2e): approximately 5.0t per capita, among the lowest of any high-income economy due to its clean electricity grid.',
+          threats: 'Placeholder — Alpine glaciers are retreating among the fastest of any glaciated region in the world, with significant loss of ice volume in recent decades. Shifting precipitation patterns are affecting hydropower reliability and water availability for downstream countries. Increased risk of landslides and rockfall as permafrost thaws in mountain regions.',
+          government: 'Placeholder — Switzerland\'s CO2 Act sets binding emissions reduction targets and includes a carbon levy on fossil fuels, with a portion of revenues redistributed to households and businesses.',
+          initiatives: 'Placeholder — Alpine solar installations on south-facing mountain infrastructure to boost winter generation, nationwide building efficiency retrofitting programs, and close coordination with the EU electricity market.'
+        },
+        page: 'country-switzerland.html'
+      },
+      'GBR': {
+        name: 'United Kingdom', iso2: 'gb',
+        stats: { population: '68M', cleanEnergy: '47%', ghg: '6.5t' },
+        tabs: {
+          overview: 'Placeholder — The United Kingdom has dramatically reduced its reliance on coal, from around 40% of electricity a decade ago to under 2% today, while becoming a global leader in offshore wind. It is among the most decarbonized major economies relative to its 1990 baseline.',
+          energy: 'Placeholder — Energy mix: wind ~30%, natural gas ~30%, nuclear ~13%, solar ~5%, biomass ~5%, hydro ~2%, remainder imports and other sources. The UK has some of the largest operating and planned offshore wind farms in the world.',
+          emissions: 'Placeholder — CO2 emissions: roughly 5.5t per capita. Total GHG emissions including methane and other gases (CO2e): approximately 6.5t per capita, among the lowest of the G7 due to the rapid coal phase-out.',
+          threats: 'Placeholder — Increased frequency and intensity of winter storms and associated flooding. Coastal erosion affecting low-lying areas of England. The transition away from North Sea oil and gas presents economic challenges for communities in Scotland and northeast England.',
+          government: 'Placeholder — The UK\'s Climate Change Act establishes legally binding carbon budgets, with the independent Climate Change Committee providing oversight of progress toward net zero by 2050.',
+          initiatives: 'Placeholder — Major offshore wind leasing rounds in the North Sea, a target to fully decarbonize the electricity grid by 2030, and carbon capture and storage projects tied to industrial clusters.'
+        },
+        page: 'country-uk.html'
+      },
+      'KOR': {
+        name: 'South Korea', iso2: 'kr',
+        stats: { population: '52M', cleanEnergy: '9%', ghg: '13.0t' },
+        tabs: {
+          overview: 'Placeholder — South Korea has one of the most carbon-intensive electricity grids among developed economies, with heavy reliance on coal, natural gas, and nuclear power. Renewable energy deployment has lagged behind other OECD countries, though solar capacity is now growing.',
+          energy: 'Placeholder — Energy mix: coal ~30%, natural gas ~25%, nuclear ~30%, renewables ~9% (mostly solar), other ~6%. Land scarcity and regulatory hurdles have slowed onshore wind and solar development relative to South Korea\'s industrial energy demand.',
+          emissions: 'Placeholder — CO2 emissions: roughly 11.5t per capita. Total GHG emissions including methane and other gases (CO2e): approximately 13.0t per capita, among the highest in the OECD due to a large, energy-intensive manufacturing sector.',
+          threats: 'Placeholder — Air pollution from coal-fired power plants affecting public health in major cities. Increasingly severe summer heatwaves straining the electricity grid. Heavy dependence on imported fossil fuels creates energy security vulnerabilities. Slow permitting processes continue to limit renewable expansion.',
+          government: 'Placeholder — South Korea\'s Carbon Neutrality and Green Growth Act sets a legally binding 2050 net-zero target, supported by an emissions trading scheme covering major industrial emitters.',
+          initiatives: 'Placeholder — Expansion of offshore wind off the southwest coast, a national hydrogen economy roadmap including imported green hydrogen, and continued additions to nuclear generation capacity.'
+        },
+        page: 'country-south-korea.html'
+      },
+      'JPN': {
+        name: 'Japan', iso2: 'jp',
+        stats: { population: '123M', cleanEnergy: '25%', ghg: '9.5t' },
+        tabs: {
+          overview: 'Placeholder — Japan is the world\'s fourth-largest solar generator, but the shutdown of most nuclear plants after the 2011 Fukushima disaster sharply increased reliance on imported fossil fuels. Wind power remains underdeveloped relative to Japan\'s coastline potential.',
+          energy: 'Placeholder — Energy mix: natural gas ~34%, coal ~28%, solar ~11%, hydro ~8%, nuclear ~6-8% (gradually restarting), biomass ~4%, wind ~1%. Including nuclear, total clean power accounts for roughly 31% of generation.',
+          emissions: 'Placeholder — CO2 emissions: roughly 8.5t per capita. Total GHG emissions including methane and other gases (CO2e): approximately 9.5t per capita. Emissions intensity of electricity rose sharply after Fukushima and has been declining slowly since.',
+          threats: 'Placeholder — Increasingly intense typhoons and associated flooding and landslides. Record summer heat straining the electricity grid during peak demand. Ongoing public debate over nuclear restarts following the Fukushima disaster. Aging energy infrastructure in some regions.',
+          government: 'Placeholder — Japan\'s Green Transformation (GX) policy framework combines carbon pricing, green transformation bonds, and sector-specific decarbonization roadmaps toward its 2050 net-zero target.',
+          initiatives: 'Placeholder — Floating offshore wind pilot projects suited to Japan\'s deep coastal waters, hydrogen and ammonia co-firing trials at existing power plants, and gradual nuclear restarts under strengthened safety standards.'
+        },
+        page: 'country-japan.html'
+      },
+      'AUS': {
+        name: 'Australia', iso2: 'au',
+        stats: { population: '27M', cleanEnergy: '39%', ghg: '16.0t' },
+        tabs: {
+          overview: 'Placeholder — Australia has the highest rate of rooftop solar adoption in the world and is rapidly expanding utility-scale wind and solar, even as it remains one of the world\'s largest exporters of coal and liquefied natural gas.',
+          energy: 'Placeholder — Energy mix: coal ~38%, natural gas ~17%, solar ~17%, wind ~13%, hydro ~6%, other renewables ~9%. Coal-fired power stations are being retired progressively as renewable capacity and battery storage expand.',
+          emissions: 'Placeholder — CO2 emissions: roughly 14.5t per capita. Total GHG emissions including methane and other gases (CO2e): approximately 16.0t per capita, among the highest in the OECD, driven by a coal-heavy grid and large agricultural and mining sectors.',
+          threats: 'Placeholder — Increasingly severe and prolonged bushfire seasons. Repeated mass coral bleaching events affecting the Great Barrier Reef. Prolonged droughts affecting agriculture and water supply in the Murray-Darling Basin. Ongoing debate over approvals for new coal and gas export projects.',
+          government: 'Placeholder — Australia\'s Climate Change Act sets a legislated 2030 emissions reduction target and a 2050 net-zero commitment, supported by a revamped Safeguard Mechanism applying to major industrial emitters.',
+          initiatives: 'Placeholder — Renewable Energy Zones connecting large-scale solar and wind to the grid via new transmission infrastructure, household battery storage incentive programs, and declared offshore wind zones along the southern and eastern coasts.'
+        },
+        page: 'country-australia.html'
+      },
+      'BRA': {
+        name: 'Brazil', iso2: 'br',
+        stats: { population: '216M', cleanEnergy: '87%', ghg: '6.5t' },
+        tabs: {
+          overview: 'Placeholder — Brazil has one of the cleanest electricity grids of any major economy, generating roughly 87% of its electricity from renewable sources, led by hydropower. However, land-use change, particularly deforestation in the Amazon, is a major additional source of national emissions outside the power sector.',
+          energy: 'Placeholder — Energy mix: hydropower ~56%, wind and solar ~24%, biomass and other renewables ~7%, natural gas and other fossil ~13%. Wind and solar have grown rapidly, from under 6% of generation a decade ago to 24% in 2024.',
+          emissions: 'Placeholder — CO2 emissions from energy: roughly 2.2t per capita, low due to the clean electricity grid. Total GHG emissions including land-use change and agriculture (CO2e): approximately 6.5t per capita, substantially higher due to deforestation.',
+          threats: 'Placeholder — Ongoing deforestation and degradation of the Amazon rainforest, a critical global carbon sink. Increasingly severe droughts affecting hydropower reliability, as seen in 2024. Expanding agricultural frontiers creating pressure on indigenous lands and protected areas. Extreme rainfall and flooding events in southern Brazil.',
+          government: 'Placeholder — Brazil\'s National Policy on Climate Change and updated Nationally Determined Contribution include commitments to end illegal deforestation and expand renewable energy capacity.',
+          initiatives: 'Placeholder — The Amazon Fund supporting forest protection financed by international donors, continued expansion of wind and solar in the northeast, and early-stage green hydrogen production projects.'
+        },
+        page: 'country-brazil.html'
+      },
+      'ITA': {
+        name: 'Italy', iso2: 'it',
+        stats: { population: '59M', cleanEnergy: '41%', ghg: '6.5t' },
+        tabs: {
+          overview: 'Placeholder — Italy has strong solar and hydropower resources and has steadily expanded renewable electricity, but remains heavily dependent on imported natural gas, a dependence that became especially visible following reduced Russian gas supplies.',
+          energy: 'Placeholder — Energy mix: natural gas ~45%, hydropower ~15%, solar ~12%, wind ~7%, geothermal and biomass ~7%, remainder imports and other sources. Italy has significant untapped potential for further solar and agrivoltaic development in the south.',
+          emissions: 'Placeholder — CO2 emissions: roughly 5.5t per capita. Total GHG emissions including methane and other gases (CO2e): approximately 6.5t per capita, near the EU average.',
+          threats: 'Placeholder — Marine heatwaves and rising Mediterranean Sea temperatures. Water scarcity affecting agriculture in southern regions. Increased frequency of intense rainfall events causing flooding in northern Italy. Continued reliance on imported gas creating energy security exposure.',
+          government: 'Placeholder — Italy\'s National Energy and Climate Plan sets targets for renewable capacity and energy efficiency in line with European Union obligations under the Fit for 55 package.',
+          initiatives: 'Placeholder — Large-scale agrivoltaic projects combining solar generation with agriculture in southern regions, geothermal expansion in Tuscany, and planned electricity interconnections with North Africa to support future renewable imports.'
+        },
+        page: 'country-italy.html'
+      },
+      'ESP': {
+        name: 'Spain', iso2: 'es',
+        stats: { population: '48M', cleanEnergy: '56%', ghg: '6.0t' },
+        tabs: {
+          overview: 'Placeholder — Spain is one of Europe\'s fastest-growing wind and solar markets, with abundant sun and wind resources supporting one of the highest renewable electricity shares among large European economies.',
+          energy: 'Placeholder — Energy mix: wind ~24%, solar ~20%, hydropower ~8%, natural gas ~25%, nuclear ~15%, remainder other sources. Spain has experienced rapid utility-scale solar buildout in recent years, particularly in the south.',
+          emissions: 'Placeholder — CO2 emissions: roughly 5.0t per capita. Total GHG emissions including methane and other gases (CO2e): approximately 6.0t per capita, below the EU average.',
+          threats: 'Placeholder — Severe and prolonged droughts affecting hydropower output and agriculture. Increasing wildfire risk linked to hotter, drier summers. Heatwaves posing growing public health risks. Water scarcity in southern and eastern regions affecting both agriculture and tourism.',
+          government: 'Placeholder — Spain\'s Climate Change and Energy Transition Law sets a 2050 net-zero target with binding interim targets for renewable electricity capacity.',
+          initiatives: 'Placeholder — Streamlined permitting reforms for new solar and wind projects, green hydrogen hub development in Andalusia and Aragon, and large-scale battery storage tenders to support grid stability as renewable share grows.'
+        },
+        page: 'country-spain.html'
+      },
+      'SWE': {
+        name: 'Sweden', iso2: 'se',
+        stats: { population: '10.5M', cleanEnergy: '71%', ghg: '5.0t' },
+        tabs: {
+          overview: 'Placeholder — Sweden has one of the cleanest electricity grids in the world, generated almost entirely from hydropower, nuclear, and wind, and has set one of the most ambitious net-zero targets globally.',
+          energy: 'Placeholder — Energy mix: hydropower ~40%, nuclear ~29%, wind ~21%, biomass ~7%, remainder other sources. Including nuclear, electricity generation is close to entirely fossil-free.',
+          emissions: 'Placeholder — CO2 emissions: roughly 4.0t per capita. Total GHG emissions including methane and other gases (CO2e): approximately 5.0t per capita, among the lowest in the European Union.',
+          threats: 'Placeholder — Warming northern forests are experiencing increased pest outbreaks, including bark beetle infestations affecting large areas of forestry. Changing precipitation patterns are affecting hydropower output. The Arctic regions of Sweden are warming significantly faster than the global average.',
+          government: 'Placeholder — Sweden\'s Climate Policy Framework sets a net-zero target for 2045, among the most ambitious in the world, with an independent Climate Policy Council providing oversight.',
+          initiatives: 'Placeholder — Fossil-free steel production pilots (HYBRIT) aiming to decarbonize heavy industry, continued onshore and offshore wind expansion, and investment in next-generation nuclear reactor designs.'
+        },
+        page: 'country-sweden.html'
       }
     };
 
@@ -1004,18 +1146,21 @@
 
     function getCountryName(props) {
       let name = props.ADMIN || props.NAME_LONG || props.NAME_EN || props.NAME || props.name;
-      // Guard against any short code-like strings slipping through
       if (!name || (name.length <= 3 && name === name.toUpperCase())) {
         name = props.NAME_LONG || props.SOVEREIGNT || 'Unknown region';
       }
       return name;
     }
 
-    function getFlagEmoji(props) {
+    function getIso2(props) {
       let iso2 = props.ISO_A2 || props.ISO_A2_EH;
-      if (!iso2 || iso2 === '-99' || iso2.length !== 2) return '';
-      const codePoints = iso2.toUpperCase().split('').map(c => 127397 + c.charCodeAt());
-      return String.fromCodePoint(...codePoints);
+      if (!iso2 || iso2 === '-99' || iso2.length !== 2) return null;
+      return iso2.toLowerCase();
+    }
+
+    function flagUrl(iso2, width) {
+      if (!iso2) return '';
+      return `https://flagcdn.com/w${width}/${iso2}.png`;
     }
 
     // ── MAP SETUP ─────────────────────────────────────────────────
@@ -1048,7 +1193,6 @@
     let activeLayer = null;
     let currentCountryCode = null;
 
-    // Featured countries: blue fill/border, brighter in dark mode for contrast
     const FEATURED_FILL = isDark ? '#3a7fd5' : '#2d6ec2';
     const FEATURED_BORDER = isDark ? '#5b9de8' : '#1a4a8a';
     const FEATURED_HOVER_FILL = isDark ? '#5b9de8' : '#1a4a8a';
@@ -1065,18 +1209,18 @@
           fillColor: FEATURED_FILL,
           fillOpacity: isDark ? 0.24 : 0.18,
           color: FEATURED_BORDER,
-          weight: 1.6,
-          opacity: 0.9,
-          smoothFactor: 0.4
+          weight: 1.8,
+          opacity: 0.95,
+          smoothFactor: 0.2
         };
       }
       return {
         fillColor: NONFEATURED_FILL,
         fillOpacity: isDark ? 0.18 : 0.08,
         color: NONFEATURED_BORDER,
-        weight: 0.6,
-        opacity: 0.6,
-        smoothFactor: 0.4
+        weight: 0.7,
+        opacity: 0.65,
+        smoothFactor: 0.2
       };
     }
 
@@ -1085,14 +1229,14 @@
         fillColor: FEATURED_HOVER_FILL,
         fillOpacity: 0.38,
         color: FEATURED_HOVER_BORDER,
-        weight: 2,
+        weight: 2.2,
         opacity: 1
       } : {
         fillColor: NONFEATURED_HOVER_FILL,
         fillOpacity: 0.22,
         color: NONFEATURED_HOVER_BORDER,
-        weight: 1,
-        opacity: 0.8
+        weight: 1.1,
+        opacity: 0.85
       };
     }
 
@@ -1101,7 +1245,7 @@
         fillColor: FEATURED_HOVER_FILL,
         fillOpacity: 0.5,
         color: FEATURED_HOVER_BORDER,
-        weight: 2.5,
+        weight: 2.6,
         opacity: 1
       };
     }
@@ -1125,11 +1269,11 @@
 
         countryLayer = L.geoJson(data, {
           style: defaultStyle,
-          smoothFactor: 0.4,
+          smoothFactor: 0.2,
           onEachFeature: function(feature, layer) {
             const code = getCountryCode(feature.properties);
             const name = getCountryName(feature.properties);
-            const flag = getFlagEmoji(feature.properties);
+            const iso2 = getIso2(feature.properties);
             const isFeatured = !!COUNTRIES[code];
             const country = COUNTRIES[code];
 
@@ -1142,7 +1286,7 @@
                 if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
                   layer.bringToFront();
                 }
-                showHoverCard(e, name, flag, country, isFeatured);
+                showHoverCard(e, name, iso2, country, isFeatured);
               },
               mouseout: function() {
                 if (!isMapActive) return;
@@ -1158,7 +1302,7 @@
               click: function(e) {
                 if (!isMapActive) return;
                 L.DomEvent.stopPropagation(e);
-                selectCountry(code, name, flag, country, layer);
+                selectCountry(code, name, iso2, country, layer);
               }
             });
           }
@@ -1185,10 +1329,16 @@
     const hoverStats = document.getElementById('hoverStats');
     const hoverHint = document.getElementById('hoverHint');
 
-    function showHoverCard(e, name, flag, country, isFeatured) {
+    function showHoverCard(e, name, iso2, country, isFeatured) {
       hoverCard.style.display = 'block';
-      hoverFlag.textContent = flag;
       hoverName.textContent = name;
+
+      if (iso2) {
+        hoverFlag.src = flagUrl(iso2, 40);
+        hoverFlag.style.display = 'block';
+      } else {
+        hoverFlag.style.display = 'none';
+      }
 
       if (isFeatured && country) {
         hoverName.className = 'hover-card-name';
@@ -1207,164 +1357,4 @@
     }
 
     function positionHoverCard(e) {
-      const mapEl = document.getElementById('map');
-      const rect = mapEl.getBoundingClientRect();
-      const x = e.originalEvent.clientX - rect.left;
-      const y = e.originalEvent.clientY - rect.top;
-
-      const cardW = 220;
-      const cardH = 160;
-      const left = Math.min(x + 16, rect.width - cardW - 10);
-      const top = Math.max(Math.min(y - 20, rect.height - cardH - 10), 10);
-
-      hoverCard.style.left = left + 'px';
-      hoverCard.style.top = top + 'px';
-    }
-
-    function hideHoverCard() {
-      hoverCard.style.display = 'none';
-    }
-
-    // ── COUNTRY PANEL ─────────────────────────────────────────────
-
-    const countryPanel = document.getElementById('countryPanel');
-    const panelFlag = document.getElementById('panelFlag');
-    const panelName = document.getElementById('panelName');
-    const panelStats = document.getElementById('panelStats');
-    const panelContent = document.getElementById('panelContent');
-    const panelExploreBtn = document.getElementById('panelExploreBtn');
-
-    let currentTab = 'overview';
-
-    function selectCountry(code, name, flag, country, layer) {
-      if (activeLayer && activeLayer !== layer) {
-        countryLayer.resetStyle(activeLayer);
-      }
-      currentCountryCode = code;
-      activeLayer = layer;
-      layer.setStyle(selectedStyle());
-
-      panelFlag.textContent = flag;
-      panelName.textContent = name;
-
-      if (!country) {
-        panelStats.innerHTML = '';
-        panelContent.innerHTML = '<p class="panel-placeholder">Detailed information for this country is coming soon as The Future Map grows.</p>';
-        panelExploreBtn.style.display = 'none';
-      } else {
-        renderStats(country.stats);
-        renderTab(country, currentTab);
-        panelExploreBtn.href = country.page;
-        panelExploreBtn.style.display = 'block';
-        panelExploreBtn.textContent = 'Explore →';
-      }
-
-      countryPanel.classList.add('open');
-    }
-
-    function renderStats(stats) {
-      panelStats.innerHTML = `
-        <div class="stat-pill"><span>Population</span><strong>${stats.population}</strong></div>
-        <div class="stat-pill"><span>Clean Energy Share</span><strong>${stats.cleanEnergy}</strong></div>
-        <div class="stat-pill"><span>GHG / Capita (CO2e)</span><strong>${stats.ghg}</strong></div>
-      `;
-    }
-
-    const TAB_LABELS = {
-      overview: 'Overview',
-      energy: 'Energy',
-      emissions: 'Emissions',
-      threats: 'Threats',
-      government: 'Government',
-      initiatives: 'Initiatives'
-    };
-
-    function renderTab(country, tab) {
-      const content = country.tabs[tab];
-      panelContent.innerHTML = `<p>${content}</p>`;
-    }
-
-    function closePanel() {
-      countryPanel.classList.remove('open');
-      if (activeLayer && countryLayer) {
-        countryLayer.resetStyle(activeLayer);
-      }
-      activeLayer = null;
-      currentCountryCode = null;
-      hideHoverCard();
-      // Reset to overview tab for next open
-      currentTab = 'overview';
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      const overviewBtn = document.querySelector('.tab-btn[data-tab="overview"]');
-      if (overviewBtn) overviewBtn.classList.add('active');
-    }
-
-    document.getElementById('panelTabs').addEventListener('click', function(e) {
-      const btn = e.target.closest('.tab-btn');
-      if (!btn) return;
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentTab = btn.dataset.tab;
-      if (currentCountryCode && COUNTRIES[currentCountryCode]) {
-        renderTab(COUNTRIES[currentCountryCode], currentTab);
-      }
-    });
-
-    const panelCloseBtn = document.getElementById('panelClose');
-    panelCloseBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      closePanel();
-    });
-
-    // ── EXPLORE / EXIT LOGIC ──────────────────────────────────────
-
-    let isMapActive = false;
-
-    const heroOverlay = document.getElementById('heroOverlay');
-    const exitBtn = document.getElementById('exitBtn');
-    const exploreBtn = document.getElementById('exploreBtn');
-    const exploreNavBtn = document.getElementById('exploreNavBtn');
-    const mapEl = document.getElementById('map');
-
-    function enterMap() {
-      isMapActive = true;
-      heroOverlay.classList.add('hidden');
-      mapEl.classList.add('active');
-      exitBtn.classList.add('visible');
-      document.body.classList.add('map-active');
-      map.scrollWheelZoom.enable();
-      setTimeout(() => map.invalidateSize(), 100);
-    }
-
-    function exitMap() {
-      isMapActive = false;
-      heroOverlay.classList.remove('hidden');
-      mapEl.classList.remove('active');
-      exitBtn.classList.remove('visible');
-      document.body.classList.remove('map-active');
-      map.scrollWheelZoom.disable();
-      closePanel();
-    }
-
-    exploreBtn.addEventListener('click', enterMap);
-    exploreNavBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      setTimeout(enterMap, 400);
-    });
-    exitBtn.addEventListener('click', exitMap);
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && isMapActive) exitMap();
-    });
-
-    window.addEventListener('scroll', function() {
-      if (isMapActive && window.scrollY > 100) {
-        exitMap();
-      }
-    });
-
-  </script>
-</body>
-</html>
+      const mapEl = document.
