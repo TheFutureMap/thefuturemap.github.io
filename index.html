@@ -858,3 +858,149 @@
   </div>
 
   <script>
+    // ── COUNTRY DATA ──────────────────────────────────────────────
+    // Sources for headline stats:
+    //  - Population: UN World Population Prospects, latest estimates
+    //  - Clean Energy Share: share of ELECTRICITY generation from
+    //    renewable sources (Ember Global Electricity Review 2025,
+    //    IEA). Where a country relies heavily on nuclear (e.g. France,
+    //    Switzerland, Sweden), nuclear is noted separately in the
+    //    Energy tab since it is low-carbon but not classified as
+    //    renewable.
+    //  - GHG Emissions per capita (CO2e, all greenhouse gases):
+    //    UNEP Emissions Gap Report 2024 where available, otherwise
+    //    estimated from Global Carbon Project CO2 data and typical
+    //    CO2-to-CO2e ratios for that country's economy.
+    // The "government" and "initiatives" fields are retained here for
+    // use on each country's future Explore page, alongside additional
+    // detail to be added later. They are not shown in the map panel.
+    // All tab content marked Placeholder will be replaced with fully
+    // sourced writing as the project develops.
+
+    const COUNTRIES = {
+      'USA': {
+        name: 'United States', iso2: 'us',
+        stats: { population: '335M', cleanEnergy: '21%', ghg: '18.0t' },
+        tabs: {
+          overview: 'Placeholder — The United States is the world\'s second-largest emitter of greenhouse gases, accounting for roughly 11% of global emissions. A major clean energy transition is underway, though recent federal policy reversals have created significant uncertainty for the sector.',
+          energy: 'Placeholder — Energy mix: natural gas ~40%, coal ~16%, nuclear ~18%, wind ~10%, solar ~5%, hydro ~6%, other renewables ~5%. Solar and wind capacity have expanded rapidly over the past decade. Offshore wind development continues in key coastal states despite federal headwinds.',
+          emissions: 'Placeholder — CO2 emissions: roughly 14.3t per capita. Total GHG emissions including methane and other gases (CO2e): 18.0t per capita (UNEP, 2023). Emissions have declined gradually since 2005 but remain among the highest per capita of any major economy.',
+          threats: 'Placeholder — Rollback of federal climate regulations and clean energy incentives. Restrictions on federal climate science funding and communication. Increasing frequency and severity of wildfires, hurricanes, and flooding. Legal pressure facing environmental researchers and advocacy organizations.',
+          government: 'Placeholder — See The Watch for a regularly updated log of current federal actions on energy, climate, and the environment, including executive orders, legislation, and agency rules.',
+          initiatives: 'Placeholder — State-level clean electricity targets (such as California\'s), corporate renewable energy procurement at large scale, and city-level climate action plans continue independent of federal policy shifts.'
+        },
+        page: 'country-usa.html'
+      },
+      'FRA': {
+        name: 'France', iso2: 'fr',
+        stats: { population: '68M', cleanEnergy: '23%', ghg: '6.4t' },
+        tabs: {
+          overview: 'Placeholder — France is a global leader in nuclear energy, which provides roughly 70% of its electricity, giving it one of the lowest-carbon electricity grids among major economies. The country is expanding renewables while navigating the long-term future of its aging nuclear fleet.',
+          energy: 'Placeholder — Energy mix: nuclear ~70% of electricity, hydro ~10%, wind ~8%, solar ~5%, natural gas and other ~7%. The 23% clean energy figure reflects renewables only; including nuclear, over 90% of French electricity is low-carbon. Offshore wind capacity is expanding along the Atlantic and Mediterranean coasts.',
+          emissions: 'Placeholder — CO2 emissions: roughly 4.6t per capita. Total GHG emissions including methane and other gases (CO2e): approximately 6.4t per capita, among the lowest of major industrialized economies due to its nuclear-heavy grid.',
+          threats: 'Placeholder — Aging nuclear fleet and debates over plant safety and lifetime extensions. Increasing heatwaves affecting agriculture and public health. Drought conditions impacting river-based cooling for nuclear plants. Coastal erosion and Mediterranean sea level rise.',
+          government: 'Placeholder — France\'s multi-year energy program (Programmation Pluriannuelle de l\'Energie) sets targets for nuclear capacity, renewable deployment, and emissions reductions in line with EU climate law.',
+          initiatives: 'Placeholder — Major offshore wind tenders along the Atlantic coast, continued investment in next-generation nuclear reactor designs (EPR2), and participation in EU-wide carbon border adjustment mechanisms.'
+        },
+        page: 'country-france.html'
+      },
+      'DEU': {
+        name: 'Germany', iso2: 'de',
+        stats: { population: '84M', cleanEnergy: '47%', ghg: '10.4t' },
+        tabs: {
+          overview: 'Placeholder — Germany has been a global leader in the energy transition known as the Energiewende, dramatically expanding wind and solar capacity while phasing out nuclear power entirely. Managing the coal phase-out remains a major economic and political challenge.',
+          energy: 'Placeholder — Energy mix: wind ~27%, solar ~12%, coal ~25%, natural gas ~15%, biomass and other renewables ~8%, remainder imports and other sources. Nuclear power was fully phased out in 2023.',
+          emissions: 'Placeholder — CO2 emissions: roughly 8.1t per capita. Total GHG emissions including methane and other gases (CO2e): approximately 10.4t per capita. Emissions have fallen significantly since reunification but coal dependence keeps the figure elevated relative to neighbors.',
+          threats: 'Placeholder — Energy security concerns following reduced Russian gas supplies. Economic and social challenges in coal-dependent regions during phase-out. Increasing flood events along major rivers. Industrial competitiveness pressures tied to energy costs.',
+          government: 'Placeholder — Germany\'s Climate Protection Act sets legally binding, sector-specific emissions targets, with the Federal Ministry for Economic Affairs and Climate Action overseeing the renewable energy expansion law (EEG).',
+          initiatives: 'Placeholder — Accelerated permitting for new wind turbines, a national hydrogen infrastructure buildout (H2Global), and a coal phase-out roadmap targeting a full exit by 2038 or earlier.'
+        },
+        page: 'country-germany.html'
+      },
+      'NOR': {
+        name: 'Norway', iso2: 'no',
+        stats: { population: '5.5M', cleanEnergy: '98%', ghg: '9.0t' },
+        tabs: {
+          overview: 'Placeholder — Norway generates nearly all of its electricity from hydropower, making it one of the cleanest electricity systems in the world. At the same time, it remains one of the world\'s largest oil and gas exporters, creating a notable contrast between domestic energy use and export-driven emissions.',
+          energy: 'Placeholder — Energy mix: hydropower ~88%, wind ~10%, other renewables and thermal ~2%. Electric vehicles account for the large majority of new car sales, among the highest EV adoption rates in the world.',
+          emissions: 'Placeholder — CO2 emissions: roughly 6.8t per capita. Total GHG emissions including methane and other gases (CO2e): approximately 9.0t per capita, elevated relative to its clean electricity grid due to the domestic oil and gas sector.',
+          threats: 'Placeholder — Arctic warming at a faster rate than the global average, affecting indigenous Sami communities and reindeer herding. Pressure to transition away from oil and gas exports, which fund the national sovereign wealth fund. Shifting fish stocks due to ocean warming.',
+          government: 'Placeholder — Norway\'s climate policy is shaped by participation in the EU Emissions Trading System and a national carbon tax, among the highest in the world, applied to its oil and gas sector.',
+          initiatives: 'Placeholder — Large-scale electrification of offshore oil platforms, continued investment in floating offshore wind technology, and one of the world\'s most extensive electric vehicle charging networks.'
+        },
+        page: 'country-norway.html'
+      },
+      'IND': {
+        name: 'India', iso2: 'in',
+        stats: { population: '1.45B', cleanEnergy: '20%', ghg: '2.7t' },
+        tabs: {
+          overview: 'Placeholder — India is the world\'s third-largest emitter in absolute terms but has one of the lowest per-capita emissions among major economies. The country has set ambitious renewable energy targets and is rapidly expanding solar and wind capacity, while coal continues to dominate electricity generation.',
+          energy: 'Placeholder — Energy mix: coal ~70% of electricity, solar ~7%, wind ~4%, hydro ~9%, nuclear ~2%, other ~8%. Solar capacity has grown dramatically over the past decade, among the fastest expansions globally.',
+          emissions: 'Placeholder — CO2 emissions: roughly 1.9t per capita. Total GHG emissions including methane and other gases (CO2e): approximately 2.7t per capita. While per-capita emissions remain low, total national emissions continue to rise alongside economic growth.',
+          threats: 'Placeholder — Increasingly severe and frequent heat waves, with temperatures regularly exceeding survivable thresholds in some regions. Monsoon pattern disruption affecting agriculture and water supply. Severe air pollution in major cities. Water scarcity affecting hundreds of millions.',
+          government: 'Placeholder — India\'s National Action Plan on Climate Change and updated Nationally Determined Contributions set targets for non-fossil energy capacity and emissions intensity reduction by 2030.',
+          initiatives: 'Placeholder — The India-headquartered International Solar Alliance, large-scale solar park development, and the PM-KUSUM scheme supporting solar adoption in the agricultural sector.'
+        },
+        page: 'country-india.html'
+      },
+      'CHN': {
+        name: 'China', iso2: 'cn',
+        stats: { population: '1.41B', cleanEnergy: '30%', ghg: '11.0t' },
+        tabs: {
+          overview: 'Placeholder — China is the world\'s largest emitter of greenhouse gases in absolute terms, but also by far the world\'s largest installer of clean energy capacity. It leads global manufacturing of solar panels, wind turbines, and electric vehicles, while also continuing to build new coal power plants.',
+          energy: 'Placeholder — Energy mix: coal ~55%, hydro ~15%, wind ~9%, solar ~7%, nuclear ~5%, natural gas and other ~9%. China installs more solar and wind capacity each year than the rest of the world combined, and accounts for roughly 40% of global wind generation.',
+          emissions: 'Placeholder — CO2 emissions: roughly 8.0t per capita. Total GHG emissions including methane and other gases (CO2e): approximately 11.0t per capita (UNEP, 2023). China accounts for roughly 30% of global emissions, the largest share of any country.',
+          threats: 'Placeholder — Severe air pollution health impacts in major urban centers. Water stress in northern regions affecting agriculture and industry. Restrictions on independent environmental reporting and activism. Glacial melt on the Tibetan Plateau affecting major river systems across Asia.',
+          government: 'Placeholder — China\'s Five-Year Plans set binding targets for energy intensity and the non-fossil share of energy consumption, alongside a national emissions trading scheme covering the power sector.',
+          initiatives: 'Placeholder — World-leading deployment of utility-scale solar and wind, rapid expansion of ultra-high-voltage transmission lines connecting renewable-rich regions to demand centers, and dominant global EV and battery manufacturing.'
+        },
+        page: 'country-china.html'
+      },
+      'KHM': {
+        name: 'Cambodia', iso2: 'kh',
+        stats: { population: '17M', cleanEnergy: '35%', ghg: '3.0t' },
+        tabs: {
+          overview: 'Placeholder — Cambodia is a low-emission, developing nation in Southeast Asia facing significant climate vulnerability, including flooding, drought, and sea level rise affecting coastal and river delta communities.',
+          energy: 'Placeholder — Energy mix: hydropower ~45%, coal ~35%, solar ~10%, other ~10%. Solar capacity is expanding rapidly from a small base. Energy access remains a challenge in rural areas, though grid connectivity has improved significantly in recent years.',
+          emissions: 'Placeholder — CO2 emissions: roughly 0.7t per capita, among the lowest in the world. Total GHG emissions including methane and land-use emissions (CO2e): approximately 3.0t per capita, elevated relative to CO2 alone due to deforestation and agricultural emissions.',
+          threats: 'Placeholder — Increased flooding and altered flow patterns along the Mekong River and Tonle Sap. Deforestation affecting biodiversity and local livelihoods. Sea level rise threatening coastal communities. Limited space for independent environmental advocacy and civil society organizing.',
+          government: 'Placeholder — Cambodia\'s Climate Change Action Plan and Long-Term Strategy for Carbon Neutrality outline targets for renewable energy expansion and forest cover protection.',
+          initiatives: 'Placeholder — Large-scale solar park development near Phnom Penh, regional power grid interconnection with neighboring countries, and community forestry programs aimed at reducing deforestation.'
+        },
+        page: 'country-cambodia.html'
+      },
+      'SGP': {
+        name: 'Singapore', iso2: 'sg',
+        stats: { population: '6M', cleanEnergy: '3%', ghg: '9.0t' },
+        tabs: {
+          overview: 'Placeholder — Singapore is a small, highly urbanized city-state with limited domestic renewable energy potential due to its land area and geography. It is pursuing imported clean electricity from the region and carbon pricing policies to meet its climate targets.',
+          energy: 'Placeholder — Energy mix: natural gas ~95%, solar ~3%, other ~2%. Land constraints limit solar deployment to rooftops, reservoirs, and floating installations. Singapore has begun importing low-carbon electricity from neighboring countries via regional grid interconnections.',
+          emissions: 'Placeholder — CO2 emissions: roughly 7.8t per capita. Total GHG emissions including methane and other gases (CO2e): approximately 9.0t per capita, elevated due to its energy-intensive economy including petrochemical refining.',
+          threats: 'Placeholder — Sea level rise poses a direct existential concern for this low-lying island nation. Urban heat island effects intensifying already high temperatures. Regional haze from land-clearing fires in neighboring countries affecting air quality.',
+          government: 'Placeholder — The Singapore Green Plan 2030 sets national sustainability targets across energy, transport, and the built environment, alongside a carbon tax applied to large emitters.',
+          initiatives: 'Placeholder — Participation in a regional power grid integration project with Malaysia, Thailand, and Laos, large-scale floating solar installations on reservoirs, and pilot imports of low-carbon electricity via subsea cables.'
+        },
+        page: 'country-singapore.html'
+      },
+      'VNM': {
+        name: 'Vietnam', iso2: 'vn',
+        stats: { population: '98M', cleanEnergy: '44%', ghg: '3.8t' },
+        tabs: {
+          overview: 'Placeholder — Vietnam has experienced one of the fastest clean energy transitions in Southeast Asia, dramatically expanding solar capacity in just a few years. The country faces significant climate vulnerability, particularly in the densely populated Mekong Delta.',
+          energy: 'Placeholder — Energy mix: coal ~40%, hydro ~28%, solar ~12%, gas ~10%, wind ~4%, other ~6%. Solar capacity grew from nearly zero to a major share of generation within a few years, driven by strong feed-in tariffs. Offshore and onshore wind are expanding.',
+          emissions: 'Placeholder — CO2 emissions: roughly 2.6t per capita. Total GHG emissions including methane and other gases (CO2e): approximately 3.8t per capita. Emissions are rising alongside rapid industrialization and energy demand growth.',
+          threats: 'Placeholder — Sea level rise and saltwater intrusion threatening agriculture across the Mekong Delta, home to tens of millions of people. Increasingly severe typhoons along the central and northern coasts. Restrictions affecting independent environmental NGOs and activists.',
+          government: 'Placeholder — Vietnam\'s Power Development Plan 8 sets targets for renewable capacity expansion and a gradual reduction in new coal power development through 2030.',
+          initiatives: 'Placeholder — The Just Energy Transition Partnership with international donors supporting Vietnam\'s shift away from coal, rapid offshore wind project development, and Mekong Delta climate adaptation programs.'
+        },
+        page: 'country-vietnam.html'
+      },
+      'CAN': {
+        name: 'Canada', iso2: 'ca',
+        stats: { population: '41M', cleanEnergy: '67%', ghg: '18.0t' },
+        tabs: {
+          overview: 'Placeholder — Canada has one of the cleanest electricity grids among major economies thanks to vast hydropower resources, but is also a major oil producer, with the Alberta oil sands among the highest per-barrel emission intensity sources of oil in the world.',
+          energy: 'Placeholder — Energy mix: hydropower ~60%, nuclear ~15%, natural gas ~10%, wind ~6%, biomass ~1%, other renewables and solar ~3%, remainder coal and other. Quebec and British Columbia rely almost entirely on hydropower for electricity.',
+          emissions: 'Placeholder — CO2 emissions: roughly 14.5t per capita. Total GHG emissions including methane and other gases (CO2e): approximately 18.0t per capita, among the highest in the G7, driven heavily by the oil and gas sector and a large, cold geography requiring significant heating energy.',
+          threats: 'Placeholder — The Arctic and northern Canada are warming at roughly twice the global average rate. Wildfire seasons have become significantly more severe and widespread in recent years. Permafrost thaw is destabilizing infrastructure in northern communities. Oil sands expansion remains a point of tension with national climate targets and indigenous land rights.',
+          government: 'Placeholder — Canada\'s federal carbon pricing system sets a national price floor on emissions, with provinces able to implement equivalent syste
