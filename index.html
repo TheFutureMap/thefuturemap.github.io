@@ -2,102 +2,113 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>The Future Map</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#fff;--bg-secondary:#f7f7f5;--text:#1a1a1a;--text-secondary:#6b6b68;--border:rgba(0,0,0,.1);--accent:#1a4a8a;--accent-light:#e8f0fa;--accent-mid:#2d6ec2}
-    @media(prefers-color-scheme:dark){:root{--bg:#1a1a1a;--bg-secondary:#1e2028;--text:#f0ede8;--text-secondary:#9a9992;--border:rgba(255,255,255,.1);--accent:#2d6ec2;--accent-light:#0d1e3a;--accent-mid:#5b9de8}}
+    :root{--bg:#fff;--bg2:#f7f7f5;--text:#1a1a1a;--text2:#6b6b68;--border:rgba(0,0,0,.1);--accent:#1a4a8a;--acl:#e8f0fa;--acm:#2d6ec2}
+    @media(prefers-color-scheme:dark){:root{--bg:#1a1a1a;--bg2:#1e2028;--text:#f0ede8;--text2:#9a9992;--border:rgba(255,255,255,.1);--accent:#2d6ec2;--acl:#0d1e3a;--acm:#5b9de8}}
     html{scroll-behavior:smooth}
-    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:16px}
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:16px}
     body.map-active{overflow:hidden}
     nav{position:fixed;top:0;left:0;right:0;z-index:200;background:var(--bg);border-bottom:.5px solid var(--border);padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between}
     .nav-logo{font-size:15px;font-weight:500;color:var(--text);text-decoration:none;letter-spacing:-.01em}
-    .nav-logo span{color:var(--accent-mid)}
+    .nav-logo span{color:var(--acm)}
     .nav-links{display:flex;gap:2rem;list-style:none}
-    .nav-links a{font-size:14px;color:var(--text-secondary);text-decoration:none;transition:color .15s}
+    .nav-links a{font-size:14px;color:var(--text2);text-decoration:none;transition:color .15s}
     .nav-links a:hover{color:var(--text)}
-    .map-section{position:relative;height:calc(100vh - 56px);margin-top:56px;overflow:hidden;background:var(--bg)}
+    /* MAP SECTION — use dvh so iOS Safari URL bar doesn't overlap content */
+    .map-section{position:relative;height:calc(100vh - 56px);height:calc(100dvh - 56px);margin-top:56px;overflow:hidden;background:var(--bg)}
     #map{position:absolute;inset:0;width:100%;height:100%;z-index:1;opacity:.28;filter:blur(.8px) saturate(.7);pointer-events:none;transition:opacity .7s ease,filter .7s ease;background:var(--bg)}
     #map.active{opacity:1;filter:none;pointer-events:all}
     #map:not(.active) .leaflet-control-container{display:none}
     .leaflet-container{background:var(--bg) !important}
     .leaflet-control-zoom a{background:var(--bg) !important;color:var(--text) !important;border-color:var(--border) !important}
-    .leaflet-control-attribution{font-size:10px !important;opacity:.6;background:var(--bg) !important;color:var(--text-secondary) !important}
-    .leaflet-control-attribution a{color:var(--accent-mid) !important}
+    .leaflet-control-attribution{font-size:10px !important;opacity:.6;background:var(--bg) !important;color:var(--text2) !important}
+    .leaflet-control-attribution a{color:var(--acm) !important}
     .leaflet-top.leaflet-left{top:60px !important;left:1rem !important}
     .leaflet-control-zoom{margin:0 !important}
     .hero-overlay{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 2rem;text-align:center;transition:opacity .6s ease;pointer-events:all;background:radial-gradient(ellipse at center,rgba(255,255,255,.88) 0%,rgba(255,255,255,.55) 55%,transparent 100%)}
     @media(prefers-color-scheme:dark){.hero-overlay{background:radial-gradient(ellipse at center,rgba(26,26,26,.92) 0%,rgba(26,26,26,.6) 55%,transparent 100%)}}
     .hero-overlay.hidden{opacity:0;pointer-events:none}
-    .hero-tag{display:inline-block;font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-mid);background:var(--accent-light);padding:4px 12px;border-radius:100px;margin-bottom:1.75rem}
+    .hero-tag{display:inline-block;font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--acm);background:var(--acl);padding:4px 12px;border-radius:100px;margin-bottom:1.75rem}
     .hero-overlay h1{font-size:clamp(1.9rem,4.5vw,3.2rem);font-weight:500;line-height:1.15;letter-spacing:-.03em;color:var(--text);margin-bottom:1.25rem;max-width:700px}
-    .hero-overlay h1 em{font-style:normal;color:var(--accent-mid)}
-    .hero-overlay p{font-size:1.05rem;color:var(--text-secondary);max-width:520px;margin-bottom:2.25rem;line-height:1.75}
+    .hero-overlay h1 em{font-style:normal;color:var(--acm)}
+    .hero-overlay p{font-size:1.05rem;color:var(--text2);max-width:520px;margin-bottom:2.25rem;line-height:1.75}
     .hero-actions{display:flex;gap:.875rem;flex-wrap:wrap;align-items:center;justify-content:center}
     .btn-primary{display:inline-block;background:var(--accent);color:#fff;padding:11px 28px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;border:none;cursor:pointer;transition:opacity .15s;font-family:inherit}
     .btn-primary:hover{opacity:.85}
-    .btn-secondary{display:inline-block;color:var(--text-secondary);padding:11px 28px;border-radius:8px;font-size:14px;font-weight:400;text-decoration:none;border:.5px solid var(--border);transition:background .15s}
-    .btn-secondary:hover{background:var(--bg-secondary)}
+    .btn-secondary{display:inline-block;color:var(--text2);padding:11px 28px;border-radius:8px;font-size:14px;font-weight:400;text-decoration:none;border:.5px solid var(--border);transition:background .15s}
+    .btn-secondary:hover{background:var(--bg2)}
     .exit-btn{position:absolute;top:1rem;left:1rem;z-index:50;background:var(--bg);color:var(--text);border:.5px solid var(--border);border-radius:8px;padding:8px 16px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;opacity:0;pointer-events:none;transition:opacity .3s ease,background .15s;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-    .exit-btn:hover{background:var(--bg-secondary)}
+    .exit-btn:hover{background:var(--bg2)}
     .exit-btn.visible{opacity:1;pointer-events:all}
-    .hover-card{position:absolute;z-index:40;background:var(--bg);border:.5px solid var(--border);border-radius:10px;padding:12px 14px;pointer-events:none;display:none;box-shadow:0 4px 16px rgba(0,0,0,.12);width:220px}
+    .hover-card{position:absolute;z-index:40;background:var(--bg);border:.5px solid var(--border);border-radius:10px;padding:12px 14px;pointer-events:none;display:none;box-shadow:0 4px 16px rgba(0,0,0,.12);width:224px}
     .hover-card-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
     .hover-card-flag{width:22px;height:16px;border-radius:2px;object-fit:cover;flex-shrink:0;box-shadow:0 0 0 .5px rgba(0,0,0,.15)}
     .hover-card-name{font-size:13.5px;font-weight:500;color:var(--text)}
-    .hover-card-name.generic{color:var(--text-secondary)}
+    .hover-card-name.generic{color:var(--text2)}
     .hover-card-stats{display:flex;flex-direction:column;gap:6px}
     .hover-card-stat{display:flex;flex-direction:column}
-    .hover-card-stat-label{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--text-secondary);opacity:.75;line-height:1.3}
-    .hover-card-stat-value{font-size:12.5px;font-weight:500;color:var(--text)}
-    .hover-card-hint{font-size:11px;color:var(--accent-mid);margin-top:8px}
-    .country-panel{position:absolute;top:76px;bottom:24px;right:1.5rem;transform:translateX(calc(100% + 2rem));z-index:40;background:var(--bg);border:.5px solid var(--border);border-radius:14px;width:350px;display:flex;flex-direction:column;box-shadow:0 8px 32px rgba(0,0,0,.14);transition:transform .4s cubic-bezier(.22,1,.36,1),opacity .4s ease;opacity:0;overflow:hidden}
+    .hcs-label{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--text2);opacity:.75;line-height:1.3}
+    .hcs-value{font-size:12.5px;font-weight:500;color:var(--text)}
+    .hover-card-hint{font-size:11px;color:var(--acm);margin-top:8px}
+    /* PANEL — extended top/bottom for maximum height */
+    .country-panel{position:absolute;top:66px;bottom:10px;right:1.5rem;transform:translateX(calc(100% + 2rem));z-index:40;background:var(--bg);border:.5px solid var(--border);border-radius:14px;width:350px;display:flex;flex-direction:column;box-shadow:0 8px 32px rgba(0,0,0,.14);transition:transform .4s cubic-bezier(.22,1,.36,1),opacity .4s ease;opacity:0;overflow:hidden}
     .country-panel.open{transform:translateX(0);opacity:1}
-    .panel-header{padding:.875rem 1rem;border-bottom:.5px solid var(--border);display:flex;align-items:center;gap:.625rem;flex-shrink:0}
-    .panel-flag{width:26px;height:19px;border-radius:2px;object-fit:cover;flex-shrink:0;box-shadow:0 0 0 .5px rgba(0,0,0,.15)}
-    .panel-name{font-size:15px;font-weight:500;letter-spacing:-.01em;color:var(--text);line-height:1.2;flex:1}
-    .panel-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-secondary);line-height:1;width:30px;height:30px;display:flex;align-items:center;justify-content:center;padding:0;font-family:inherit;border-radius:6px;transition:color .15s,background .15s;flex-shrink:0}
-    .panel-close:hover{color:var(--text);background:var(--bg-secondary)}
+    /* Compact header */
+    .panel-header{padding:.4rem 1rem;border-bottom:.5px solid var(--border);display:flex;align-items:center;gap:.6rem;flex-shrink:0;min-height:44px}
+    .panel-flag{width:24px;height:17px;border-radius:2px;object-fit:cover;flex-shrink:0;box-shadow:0 0 0 .5px rgba(0,0,0,.15)}
+    .panel-name{font-size:14px;font-weight:500;letter-spacing:-.01em;color:var(--text);line-height:1.2;flex:1}
+    .panel-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--text2);line-height:1;width:30px;height:30px;display:flex;align-items:center;justify-content:center;padding:0;font-family:inherit;border-radius:6px;transition:color .15s,background .15s;flex-shrink:0}
+    .panel-close:hover{color:var(--text);background:var(--bg2)}
     .panel-stats{display:flex;gap:4px;padding:.5rem .75rem;border-bottom:.5px solid var(--border);flex-shrink:0}
-    .stat-pill{flex:1;background:var(--bg-secondary);border:.5px solid var(--border);border-radius:7px;padding:4px;display:flex;flex-direction:column;gap:1px;text-align:center;min-width:0}
-    .stat-pill span{font-size:7.5px;font-weight:500;text-transform:uppercase;letter-spacing:.02em;color:var(--text-secondary);opacity:.75;line-height:1.2}
-    .stat-pill strong{font-weight:500;color:var(--text);font-size:11px}
+    .stat-pill{flex:1;background:var(--bg2);border:.5px solid var(--border);border-radius:7px;padding:5px 4px;display:flex;flex-direction:column;gap:2px;text-align:center;min-width:0}
+    /* Bigger stat labels and values */
+    .stat-pill span{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.02em;color:var(--text2);opacity:.8;line-height:1.25}
+    .stat-pill strong{font-weight:600;color:var(--text);font-size:13px}
     .panel-tabs{display:flex;border-bottom:.5px solid var(--border);flex-shrink:0;overflow-x:auto}
-    .tab-btn{flex:1;background:none;border:none;font-size:12px;font-weight:500;color:var(--text-secondary);padding:9px 4px;cursor:pointer;font-family:inherit;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;white-space:nowrap}
+    .tab-btn{flex:1;background:none;border:none;font-size:12px;font-weight:500;color:var(--text2);padding:9px 4px;cursor:pointer;font-family:inherit;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;white-space:nowrap}
     .tab-btn:hover{color:var(--text)}
-    .tab-btn.active{color:var(--accent-mid);border-bottom-color:var(--accent-mid)}
-    .panel-content{padding:1.125rem 1.25rem;overflow-y:auto;flex:1;font-size:13.5px;color:var(--text-secondary);line-height:1.7}
-    .panel-placeholder{background:var(--bg-secondary);border-radius:8px;padding:.875rem 1rem;font-size:13px;color:var(--text-secondary);font-style:italic}
+    .tab-btn.active{color:var(--acm);border-bottom-color:var(--acm)}
+    .panel-content{padding:1.125rem 1.25rem;overflow-y:auto;flex:1;font-size:13.5px;color:var(--text2);line-height:1.7}
+    .panel-placeholder{background:var(--bg2);border-radius:8px;padding:.875rem 1rem;font-size:13px;color:var(--text2);font-style:italic}
     .panel-footer{padding:.625rem 1.25rem;border-top:.5px solid var(--border);flex-shrink:0}
     .btn-explore-country{display:block;text-align:center;background:var(--accent);color:#fff;padding:6px;border-radius:7px;font-size:11.5px;font-weight:500;text-decoration:none;transition:opacity .15s}
     .btn-explore-country:hover{opacity:.85}
     .page-content{background:var(--bg)}
     .divider{border:none;border-top:.5px solid var(--border);margin:0 2rem}
     .section{max-width:720px;margin:0 auto;padding:5rem 2rem}
-    .section-label{font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text-secondary);margin-bottom:3rem}
-    .mission-block{border-left:2px solid var(--accent-mid);padding:.25rem 0 .25rem 1.5rem;margin:3rem 0}
+    .section-label{font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text2);margin-bottom:3rem}
+    .mission-block{border-left:2px solid var(--acm);padding:.25rem 0 .25rem 1.5rem;margin:3rem 0}
     .mission-block p{font-size:1.25rem;font-weight:400;color:var(--text);line-height:1.6;letter-spacing:-.01em}
     .pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:1px;background:var(--border);border:.5px solid var(--border);border-radius:12px;overflow:hidden}
     .pillar{background:var(--bg);padding:2rem 1.75rem}
-    .pillar-icon{width:32px;height:32px;border-radius:8px;background:var(--accent-light);display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
-    .pillar-icon svg{width:16px;height:16px;stroke:var(--accent-mid);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+    .pillar-icon{width:32px;height:32px;border-radius:8px;background:var(--acl);display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
+    .pillar-icon svg{width:16px;height:16px;stroke:var(--acm);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
     .pillar h3{font-size:15px;font-weight:500;margin-bottom:.5rem;color:var(--text)}
-    .pillar p{font-size:13.5px;color:var(--text-secondary);line-height:1.65}
-    .coming-up{background:var(--bg-secondary);border-radius:12px;padding:2.5rem}
+    .pillar p{font-size:13.5px;color:var(--text2);line-height:1.65}
+    .coming-up{background:var(--bg2);border-radius:12px;padding:2.5rem}
     .coming-up h2{font-size:18px;font-weight:500;margin-bottom:.5rem}
-    .coming-up>p{font-size:14px;color:var(--text-secondary);margin-bottom:2rem}
+    .coming-up>p{font-size:14px;color:var(--text2);margin-bottom:2rem}
     .feature-list{list-style:none;display:flex;flex-direction:column;gap:12px}
-    .feature-list li{display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--text-secondary)}
-    .feature-dot{width:6px;height:6px;border-radius:50%;background:var(--accent-mid);margin-top:7px;flex-shrink:0}
+    .feature-list li{display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--text2)}
+    .feature-dot{width:6px;height:6px;border-radius:50%;background:var(--acm);margin-top:7px;flex-shrink:0}
     footer{border-top:.5px solid var(--border);padding:2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
-    footer p{font-size:13px;color:var(--text-secondary)}
+    footer p{font-size:13px;color:var(--text2)}
     .footer-links{display:flex;gap:1.5rem;list-style:none}
-    .footer-links a{font-size:13px;color:var(--text-secondary);text-decoration:none}
+    .footer-links a{font-size:13px;color:var(--text2);text-decoration:none}
     .footer-links a:hover{color:var(--text)}
-    @media(max-width:600px){nav{padding:0 1rem}.nav-links{gap:1rem}.section{padding:3rem 1.25rem}.pillars{grid-template-columns:1fr}.divider{margin:0 1.25rem}footer{padding:1.5rem 1.25rem}.country-panel{top:auto;bottom:0;right:0;left:0;width:100%;height:65vh;border-radius:14px 14px 0 0;transform:translateY(100%)}.country-panel.open{transform:translateY(0)}}
+    @media(max-width:600px){
+      nav{padding:0 1rem}.nav-links{gap:1rem}.section{padding:3rem 1.25rem}.pillars{grid-template-columns:1fr}.divider{margin:0 1.25rem}footer{padding:1.5rem 1.25rem}
+      /* Mobile panel slides up from bottom, above Safari URL bar */
+      .country-panel{top:auto;bottom:0;right:0;left:0;width:100%;height:68vh;border-radius:14px 14px 0 0;transform:translateY(100%)}
+      .country-panel.open{transform:translateY(0)}
+      /* Push footer above iOS safe area / Safari URL bar */
+      .panel-footer{padding-bottom:calc(0.625rem + env(safe-area-inset-bottom, 16px))}
+    }
   </style>
 </head>
 <body>
@@ -111,7 +122,6 @@
       <li><a href="action.html">Take Action</a></li>
     </ul>
   </nav>
-
   <section class="map-section" id="mapSection">
     <div id="map"></div>
     <div class="hero-overlay" id="heroOverlay">
@@ -119,7 +129,7 @@
       <h1>Mapping the path to a <em>sustainable future</em></h1>
       <p>The Future Map is a free, open resource dedicated to informing, enabling, and inspiring action on clean energy, climate change, and the environment.</p>
       <div class="hero-actions">
-        <button class="btn-primary" id="exploreBtn">Explore the Map</button>
+        <button class="btn-primary" id="exploreBtn">Explore</button>
         <a href="#about" class="btn-secondary">Learn More</a>
       </div>
     </div>
@@ -151,36 +161,23 @@
       </div>
     </div>
   </section>
-
   <div class="page-content">
-    <hr class="divider" />
+    <hr class="divider"/>
     <section class="section" id="about">
       <p class="section-label">Mission</p>
       <div class="mission-block"><p>To inform, enable, and inspire a sustainable future.</p></div>
-      <p style="color:var(--text-secondary);font-size:15px;line-height:1.8">The Future Map exists because the climate crisis is not a distant problem, it's happening now at an unprecedented pace. Our future demands understanding and action, and the map is being built to show you where things are, what is being done, who is doing it, and how you can be a part of the change.</p>
+      <p style="color:var(--text2);font-size:15px;line-height:1.8">The Future Map exists because the climate crisis is not a distant problem, it's happening now at an unprecedented pace. Our future demands understanding and action, and the map is being built to show you where things are, what is being done, who is doing it, and how you can be a part of the change.</p>
     </section>
-    <hr class="divider" />
+    <hr class="divider"/>
     <section class="section">
       <p class="section-label">The Foundations</p>
       <div class="pillars">
-        <div class="pillar">
-          <div class="pillar-icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="11" x2="17" y2="11"/><line x1="7" y1="14" x2="14" y2="14"/></svg></div>
-          <h3>Inform</h3>
-          <p>Clear, accurate, and regularly updated information on clean energy development and climate impact across every region of the world.</p>
-        </div>
-        <div class="pillar">
-          <div class="pillar-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-          <h3>Enable</h3>
-          <p>Resources and connections to organizations working on the ground, so anyone can turn awareness and understanding into real action.</p>
-        </div>
-        <div class="pillar">
-          <div class="pillar-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="23" x2="12" y2="11"/><path d="M12 17 C7 17 3 13 3 8 C7 8 11 10 12 14"/><path d="M12 13 C17 13 21 9 21 4 C17 4 13 7 12 11"/></svg></div>
-          <h3>Inspire</h3>
-          <p>Stories of progress, remarkable people, and the case that the future is not set in stone, and that action by anyone at every scale makes a difference.</p>
-        </div>
+        <div class="pillar"><div class="pillar-icon"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="11" x2="17" y2="11"/><line x1="7" y1="14" x2="14" y2="14"/></svg></div><h3>Inform</h3><p>Clear, accurate, and regularly updated information on clean energy development and climate impact across every region of the world.</p></div>
+        <div class="pillar"><div class="pillar-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><h3>Enable</h3><p>Resources and connections to organizations working on the ground, so anyone can turn awareness and understanding into real action.</p></div>
+        <div class="pillar"><div class="pillar-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="23" x2="12" y2="11"/><path d="M12 17 C7 17 3 13 3 8 C7 8 11 10 12 14"/><path d="M12 13 C17 13 21 9 21 4 C17 4 13 7 12 11"/></svg></div><h3>Inspire</h3><p>Stories of progress, remarkable people, and the case that the future is not set in stone, and that action by anyone at every scale makes a difference.</p></div>
       </div>
     </section>
-    <hr class="divider" />
+    <hr class="divider"/>
     <section class="section" id="coming-up">
       <p class="section-label">Coming Soon</p>
       <div class="coming-up">
@@ -195,128 +192,6 @@
     </section>
     <footer>
       <p>&#169; 2026 The Future Map.</p>
-      <ul class="footer-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="https://instagram.com/the_future_map" target="_blank">Instagram</a></li>
-      </ul>
+      <ul class="footer-links"><li><a href="#about">About</a></li><li><a href="https://instagram.com/the_future_map" target="_blank">Instagram</a></li></ul>
     </footer>
   </div>
-
-  <script>
-  const C = {
-    'USA':{name:'United States',iso2:'us',stats:{population:'335M',cleanEnergy:'21%',ghg:'18.0t'},tabs:{overview:'Placeholder — The United States is the world\'s second-largest emitter of greenhouse gases, accounting for roughly 11% of global emissions. A major clean energy transition is underway, though recent federal policy reversals have created significant uncertainty for the sector.',energy:'Placeholder — Energy mix: natural gas ~40%, coal ~16%, nuclear ~18%, wind ~10%, solar ~5%, hydro ~6%, other renewables ~5%. Solar and wind capacity have expanded rapidly over the past decade.',emissions:'Placeholder — CO2 emissions: roughly 14.3t per capita. Total GHG emissions including methane and other gases (CO2e): 18.0t per capita (UNEP, 2023). Emissions have declined gradually since 2005 but remain among the highest per capita of any major economy.',threats:'Placeholder — Rollback of federal climate regulations and clean energy incentives. Restrictions on federal climate science funding and communication. Increasing frequency and severity of wildfires, hurricanes, and flooding.'},page:'country-usa.html'},
-    'FRA':{name:'France',iso2:'fr',stats:{population:'68M',cleanEnergy:'23%',ghg:'6.4t'},tabs:{overview:'Placeholder — France is a global leader in nuclear energy, which provides roughly 70% of its electricity, giving it one of the lowest-carbon electricity grids among major economies.',energy:'Placeholder — Energy mix: nuclear ~70% of electricity, hydro ~10%, wind ~8%, solar ~5%, natural gas and other ~7%. Including nuclear, over 90% of French electricity is low-carbon.',emissions:'Placeholder — CO2 emissions: roughly 4.6t per capita. Total GHG emissions (CO2e): approximately 6.4t per capita, among the lowest of major industrialized economies.',threats:'Placeholder — Aging nuclear fleet and debates over plant safety and lifetime extensions. Increasing heatwaves affecting agriculture and public health. Drought conditions impacting river-based cooling for nuclear plants.'},page:'country-france.html'},
-    'DEU':{name:'Germany',iso2:'de',stats:{population:'84M',cleanEnergy:'47%',ghg:'10.4t'},tabs:{overview:'Placeholder — Germany has been a global leader in the energy transition known as the Energiewende, dramatically expanding wind and solar capacity while phasing out nuclear power entirely.',energy:'Placeholder — Energy mix: wind ~27%, solar ~12%, coal ~25%, natural gas ~15%, biomass and other renewables ~8%. Nuclear power was fully phased out in 2023.',emissions:'Placeholder — CO2 emissions: roughly 8.1t per capita. Total GHG emissions (CO2e): approximately 10.4t per capita. Emissions have fallen significantly since reunification.',threats:'Placeholder — Energy security concerns following reduced Russian gas supplies. Economic challenges in coal-dependent regions. Increasing flood events along major rivers.'},page:'country-germany.html'},
-    'NOR':{name:'Norway',iso2:'no',stats:{population:'5.5M',cleanEnergy:'98%',ghg:'9.0t'},tabs:{overview:'Placeholder — Norway generates nearly all of its electricity from hydropower, making it one of the cleanest electricity systems in the world. At the same time, it remains one of the world\'s largest oil and gas exporters.',energy:'Placeholder — Energy mix: hydropower ~88%, wind ~10%, other renewables and thermal ~2%. Electric vehicles account for the large majority of new car sales.',emissions:'Placeholder — CO2 emissions: roughly 6.8t per capita. Total GHG emissions (CO2e): approximately 9.0t per capita, elevated due to the domestic oil and gas sector.',threats:'Placeholder — Arctic warming at a faster rate than the global average, affecting indigenous Sami communities. Pressure to transition away from oil and gas exports, which fund the national sovereign wealth fund.'},page:'country-norway.html'},
-    'IND':{name:'India',iso2:'in',stats:{population:'1.45B',cleanEnergy:'20%',ghg:'2.7t'},tabs:{overview:'Placeholder — India is the world\'s third-largest emitter in absolute terms but has one of the lowest per-capita emissions among major economies. The country has set ambitious renewable energy targets.',energy:'Placeholder — Energy mix: coal ~70% of electricity, solar ~7%, wind ~4%, hydro ~9%, nuclear ~2%, other ~8%. Solar capacity has grown dramatically over the past decade.',emissions:'Placeholder — CO2 emissions: roughly 1.9t per capita. Total GHG emissions (CO2e): approximately 2.7t per capita. Total national emissions continue to rise alongside economic growth.',threats:'Placeholder — Increasingly severe and frequent heat waves. Monsoon pattern disruption affecting agriculture and water supply. Severe air pollution in major cities. Water scarcity affecting hundreds of millions.'},page:'country-india.html'},
-    'CHN':{name:'China',iso2:'cn',stats:{population:'1.41B',cleanEnergy:'30%',ghg:'11.0t'},tabs:{overview:'Placeholder — China is the world\'s largest emitter of greenhouse gases in absolute terms, but also by far the world\'s largest installer of clean energy capacity.',energy:'Placeholder — Energy mix: coal ~55%, hydro ~15%, wind ~9%, solar ~7%, nuclear ~5%, natural gas and other ~9%. China installs more solar and wind capacity each year than the rest of the world combined.',emissions:'Placeholder — CO2 emissions: roughly 8.0t per capita. Total GHG emissions (CO2e): approximately 11.0t per capita (UNEP, 2023). China accounts for roughly 30% of global emissions.',threats:'Placeholder — Severe air pollution health impacts in major urban centers. Water stress in northern regions. Restrictions on independent environmental reporting. Glacial melt on the Tibetan Plateau affecting major river systems across Asia.'},page:'country-china.html'},
-    'KHM':{name:'Cambodia',iso2:'kh',stats:{population:'17M',cleanEnergy:'35%',ghg:'3.0t'},tabs:{overview:'Placeholder — Cambodia is a low-emission, developing nation in Southeast Asia facing significant climate vulnerability, including flooding, drought, and sea level rise affecting coastal and river delta communities.',energy:'Placeholder — Energy mix: hydropower ~45%, coal ~35%, solar ~10%, other ~10%. Solar capacity is expanding rapidly. Energy access remains a challenge in rural areas.',emissions:'Placeholder — CO2 emissions: roughly 0.7t per capita, among the lowest in the world. Total GHG emissions (CO2e): approximately 3.0t per capita, elevated due to deforestation and agricultural emissions.',threats:'Placeholder — Increased flooding and altered flow patterns along the Mekong River and Tonle Sap. Deforestation affecting biodiversity. Sea level rise threatening coastal communities.'},page:'country-cambodia.html'},
-    'SGP':{name:'Singapore',iso2:'sg',stats:{population:'6M',cleanEnergy:'3%',ghg:'9.0t'},tabs:{overview:'Placeholder — Singapore is a small, highly urbanized city-state with limited domestic renewable energy potential due to its land area and geography.',energy:'Placeholder — Energy mix: natural gas ~95%, solar ~3%, other ~2%. Land constraints limit solar deployment to rooftops, reservoirs, and floating installations.',emissions:'Placeholder — CO2 emissions: roughly 7.8t per capita. Total GHG emissions (CO2e): approximately 9.0t per capita, elevated due to its energy-intensive economy including petrochemical refining.',threats:'Placeholder — Sea level rise poses a direct existential concern for this low-lying island nation. Urban heat island effects intensifying already high temperatures. Regional haze from land-clearing fires in neighboring countries.'},page:'country-singapore.html'},
-    'VNM':{name:'Vietnam',iso2:'vn',stats:{population:'98M',cleanEnergy:'44%',ghg:'3.8t'},tabs:{overview:'Placeholder — Vietnam has experienced one of the fastest clean energy transitions in Southeast Asia, dramatically expanding solar capacity in just a few years. The country faces significant climate vulnerability, particularly in the Mekong Delta.',energy:'Placeholder — Energy mix: coal ~40%, hydro ~28%, solar ~12%, gas ~10%, wind ~4%, other ~6%. Solar capacity grew from nearly zero to a major share of generation within a few years.',emissions:'Placeholder — CO2 emissions: roughly 2.6t per capita. Total GHG emissions (CO2e): approximately 3.8t per capita. Emissions are rising alongside rapid industrialization.',threats:'Placeholder — Sea level rise and saltwater intrusion threatening agriculture across the Mekong Delta. Increasingly severe typhoons along the central and northern coasts. Restrictions affecting independent environmental NGOs and activists.'},page:'country-vietnam.html'},
-    'CAN':{name:'Canada',iso2:'ca',stats:{population:'41M',cleanEnergy:'67%',ghg:'18.0t'},tabs:{overview:'Placeholder — Canada has one of the cleanest electricity grids among major economies thanks to vast hydropower resources, but is also a major oil producer, with the Alberta oil sands among the highest per-barrel emission intensity sources of oil in the world.',energy:'Placeholder — Energy mix: hydropower ~60%, nuclear ~15%, natural gas ~10%, wind ~6%, biomass and solar ~9%. Quebec and British Columbia rely almost entirely on hydropower for electricity.',emissions:'Placeholder — CO2 emissions: roughly 14.5t per capita. Total GHG emissions (CO2e): approximately 18.0t per capita, among the highest in the G7, driven by the oil and gas sector.',threats:'Placeholder — The Arctic and northern Canada are warming at roughly twice the global average rate. Wildfire seasons have become significantly more severe. Permafrost thaw is destabilizing infrastructure in northern communities.'},page:'country-canada.html'},
-    'CHE':{name:'Switzerland',iso2:'ch',stats:{population:'9M',cleanEnergy:'62%',ghg:'5.0t'},tabs:{overview:'Placeholder — Switzerland has one of the cleanest electricity grids in the world, generated almost entirely from hydropower and nuclear power. Its territorial emissions are low, though its consumption-based footprint is notably higher.',energy:'Placeholder — Energy mix: hydropower ~60%, nuclear ~32%, solar, wind, and biomass ~8%, with minimal fossil fuel generation. Switzerland is a net electricity importer during winter months.',emissions:'Placeholder — CO2 emissions: roughly 4.0t per capita. Total GHG emissions (CO2e): approximately 5.0t per capita, among the lowest of any high-income economy.',threats:'Placeholder — Alpine glaciers are retreating among the fastest of any glaciated region in the world. Shifting precipitation patterns are affecting hydropower reliability. Increased risk of landslides and rockfall as permafrost thaws in mountain regions.'},page:'country-switzerland.html'},
-    'GBR':{name:'United Kingdom',iso2:'gb',stats:{population:'68M',cleanEnergy:'47%',ghg:'6.5t'},tabs:{overview:'Placeholder — The United Kingdom has dramatically reduced its reliance on coal, from around 40% of electricity a decade ago to under 2% today, while becoming a global leader in offshore wind.',energy:'Placeholder — Energy mix: wind ~30%, natural gas ~30%, nuclear ~13%, solar ~5%, biomass ~5%, hydro ~2%, remainder imports and other sources.',emissions:'Placeholder — CO2 emissions: roughly 5.5t per capita. Total GHG emissions (CO2e): approximately 6.5t per capita, among the lowest of the G7 due to the rapid coal phase-out.',threats:'Placeholder — Increased frequency and intensity of winter storms and associated flooding. Coastal erosion affecting low-lying areas. The transition away from North Sea oil and gas presents economic challenges for communities in Scotland and northeast England.'},page:'country-uk.html'},
-    'KOR':{name:'South Korea',iso2:'kr',stats:{population:'52M',cleanEnergy:'9%',ghg:'13.0t'},tabs:{overview:'Placeholder — South Korea has one of the most carbon-intensive electricity grids among developed economies, with heavy reliance on coal, natural gas, and nuclear power.',energy:'Placeholder — Energy mix: coal ~30%, natural gas ~25%, nuclear ~30%, renewables ~9%, other ~6%. Land scarcity and regulatory hurdles have slowed renewable development.',emissions:'Placeholder — CO2 emissions: roughly 11.5t per capita. Total GHG emissions (CO2e): approximately 13.0t per capita, among the highest in the OECD due to a large, energy-intensive manufacturing sector.',threats:'Placeholder — Air pollution from coal-fired power plants affecting public health in major cities. Increasingly severe summer heatwaves straining the electricity grid. Heavy dependence on imported fossil fuels creates energy security vulnerabilities.'},page:'country-south-korea.html'},
-    'JPN':{name:'Japan',iso2:'jp',stats:{population:'123M',cleanEnergy:'25%',ghg:'9.5t'},tabs:{overview:'Placeholder — Japan is the world\'s fourth-largest solar generator, but the shutdown of most nuclear plants after the 2011 Fukushima disaster sharply increased reliance on imported fossil fuels.',energy:'Placeholder — Energy mix: natural gas ~34%, coal ~28%, solar ~11%, hydro ~8%, nuclear ~6-8% (gradually restarting), biomass ~4%, wind ~1%.',emissions:'Placeholder — CO2 emissions: roughly 8.5t per capita. Total GHG emissions (CO2e): approximately 9.5t per capita. Emissions intensity of electricity rose sharply after Fukushima.',threats:'Placeholder — Increasingly intense typhoons and associated flooding and landslides. Record summer heat straining the electricity grid. Ongoing public debate over nuclear restarts following the Fukushima disaster.'},page:'country-japan.html'},
-    'AUS':{name:'Australia',iso2:'au',stats:{population:'27M',cleanEnergy:'39%',ghg:'16.0t'},tabs:{overview:'Placeholder — Australia has the highest rate of rooftop solar adoption in the world and is rapidly expanding utility-scale wind and solar, even as it remains one of the world\'s largest exporters of coal and liquefied natural gas.',energy:'Placeholder — Energy mix: coal ~38%, natural gas ~17%, solar ~17%, wind ~13%, hydro ~6%, other renewables ~9%. Coal-fired power stations are being retired progressively.',emissions:'Placeholder — CO2 emissions: roughly 14.5t per capita. Total GHG emissions (CO2e): approximately 16.0t per capita, among the highest in the OECD.',threats:'Placeholder — Increasingly severe and prolonged bushfire seasons. Repeated mass coral bleaching events affecting the Great Barrier Reef. Prolonged droughts affecting agriculture in the Murray-Darling Basin.'},page:'country-australia.html'},
-    'BRA':{name:'Brazil',iso2:'br',stats:{population:'216M',cleanEnergy:'87%',ghg:'6.5t'},tabs:{overview:'Placeholder — Brazil has one of the cleanest electricity grids of any major economy, generating roughly 87% of its electricity from renewable sources, led by hydropower. However, deforestation in the Amazon is a major additional source of national emissions.',energy:'Placeholder — Energy mix: hydropower ~56%, wind and solar ~24%, biomass and other renewables ~7%, natural gas and other fossil ~13%.',emissions:'Placeholder — CO2 emissions from energy: roughly 2.2t per capita, low due to the clean electricity grid. Total GHG emissions including land-use change (CO2e): approximately 6.5t per capita, substantially higher due to deforestation.',threats:'Placeholder — Ongoing deforestation and degradation of the Amazon rainforest, a critical global carbon sink. Increasingly severe droughts affecting hydropower reliability. Extreme rainfall and flooding events in southern Brazil.'},page:'country-brazil.html'},
-    'ITA':{name:'Italy',iso2:'it',stats:{population:'59M',cleanEnergy:'41%',ghg:'6.5t'},tabs:{overview:'Placeholder — Italy has strong solar and hydropower resources and has steadily expanded renewable electricity, but remains heavily dependent on imported natural gas.',energy:'Placeholder — Energy mix: natural gas ~45%, hydropower ~15%, solar ~12%, wind ~7%, geothermal and biomass ~7%, remainder imports and other sources.',emissions:'Placeholder — CO2 emissions: roughly 5.5t per capita. Total GHG emissions (CO2e): approximately 6.5t per capita, near the EU average.',threats:'Placeholder — Marine heatwaves and rising Mediterranean Sea temperatures. Water scarcity affecting agriculture in southern regions. Increased frequency of intense rainfall events causing flooding in northern Italy.'},page:'country-italy.html'},
-    'ESP':{name:'Spain',iso2:'es',stats:{population:'48M',cleanEnergy:'56%',ghg:'6.0t'},tabs:{overview:'Placeholder — Spain is one of Europe\'s fastest-growing wind and solar markets, with abundant sun and wind resources supporting one of the highest renewable electricity shares among large European economies.',energy:'Placeholder — Energy mix: wind ~24%, solar ~20%, hydropower ~8%, natural gas ~25%, nuclear ~15%, remainder other sources.',emissions:'Placeholder — CO2 emissions: roughly 5.0t per capita. Total GHG emissions (CO2e): approximately 6.0t per capita, below the EU average.',threats:'Placeholder — Severe and prolonged droughts affecting hydropower output and agriculture. Increasing wildfire risk linked to hotter, drier summers. Water scarcity in southern and eastern regions affecting agriculture and tourism.'},page:'country-spain.html'},
-    'SWE':{name:'Sweden',iso2:'se',stats:{population:'10.5M',cleanEnergy:'71%',ghg:'5.0t'},tabs:{overview:'Placeholder — Sweden has one of the cleanest electricity grids in the world, generated almost entirely from hydropower, nuclear, and wind, and has set one of the most ambitious net-zero targets globally.',energy:'Placeholder — Energy mix: hydropower ~40%, nuclear ~29%, wind ~21%, biomass ~7%, remainder other sources. Including nuclear, electricity generation is close to entirely fossil-free.',emissions:'Placeholder — CO2 emissions: roughly 4.0t per capita. Total GHG emissions (CO2e): approximately 5.0t per capita, among the lowest in the European Union.',threats:'Placeholder — Warming northern forests experiencing increased pest outbreaks. Changing precipitation patterns affecting hydropower output. The Arctic regions of Sweden are warming significantly faster than the global average.'},page:'country-sweden.html'}
-  };
-
-  function getCode(p){let c=p.ISO_A3;if(!c||c==='-99')c=p.ADM0_A3;if(!c||c==='-99')c=p.ISO_A3_EH;return c}
-  function getName(p){let n=p.ADMIN||p.NAME_LONG||p.NAME_EN||p.NAME||p.name;if(!n||(n.length<=3&&n===n.toUpperCase()))n=p.NAME_LONG||p.SOVEREIGNT||'Unknown region';return n}
-  function getIso2(p){let i=p.ISO_A2||p.ISO_A2_EH;if(!i||i==='-99'||i.length!==2)return null;return i.toLowerCase()}
-  function flagUrl(iso2,w){return iso2?`https://flagcdn.com/w${w}/${iso2}.png`:''}
-
-  const isDark=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches;
-  const map=L.map('map',{center:[20,10],zoom:2,minZoom:2,maxZoom:8,zoomControl:false,scrollWheelZoom:false,worldCopyJump:false});
-  L.control.zoom({position:'topleft'}).addTo(map);
-  L.tileLayer(isDark?'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png':'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank">CARTO</a>',subdomains:'abcd',maxZoom:19}).addTo(map);
-
-  const FF=isDark?'#3a7fd5':'#2d6ec2',FB=isDark?'#5b9de8':'#1a4a8a',FHF=isDark?'#5b9de8':'#1a4a8a',FHB=isDark?'#8cc0f5':'#0f2d5c';
-  const NF=isDark?'#3f4654':'#94a3b8',NB=isDark?'#5b6472':'#94a3b8';
-
-  function dStyle(f){const c=getCode(f.properties);return C[c]?{fillColor:FF,fillOpacity:isDark?.24:.18,color:FB,weight:1.8,opacity:.95,smoothFactor:.2}:{fillColor:NF,fillOpacity:isDark?.18:.08,color:NB,weight:.7,opacity:.65,smoothFactor:.2}}
-  function hStyle(feat){return feat?{fillColor:FHF,fillOpacity:.38,color:FHB,weight:2.2,opacity:1}:{fillColor:NF,fillOpacity:.22,color:NB,weight:1.1,opacity:.85}}
-  function sStyle(){return{fillColor:FHF,fillOpacity:.5,color:FHB,weight:2.6,opacity:1}}
-
-  let cLayer=null,aLayer=null,curCode=null,isActive=false,curTab='overview';
-
-  const ld=L.control({position:'bottomleft'});
-  ld.onAdd=function(){const d=L.DomUtil.create('div');d.id='mapLd';d.style.cssText='background:var(--bg);border:.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:12px;color:var(--text-secondary);font-family:inherit';d.textContent='Loading countries...';return d};
-  ld.addTo(map);
-
-  fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/master/50m/cultural/ne_50m_admin_0_countries.json')
-    .then(r=>r.json())
-    .then(data=>{
-      const el=document.getElementById('mapLd');if(el)el.remove();
-      cLayer=L.geoJson(data,{style:dStyle,smoothFactor:.2,onEachFeature:function(f,l){
-        const code=getCode(f.properties),name=getName(f.properties),iso2=getIso2(f.properties),feat=!!C[code],country=C[code];
-        l.on({
-          mouseover:function(e){if(!isActive)return;if(code!==curCode)l.setStyle(hStyle(feat));if(!L.Browser.ie&&!L.Browser.opera&&!L.Browser.edge)l.bringToFront();showHC(e,name,iso2,country,feat)},
-          mouseout:function(){if(!isActive)return;if(code!==curCode)cLayer.resetStyle(l);hideHC()},
-          mousemove:function(e){if(!isActive)return;posHC(e)},
-          click:function(e){if(!isActive)return;L.DomEvent.stopPropagation(e);selCountry(code,name,iso2,country,l)}
-        });
-      }}).addTo(map);
-    })
-    .catch(()=>{const el=document.getElementById('mapLd');if(el){el.textContent='Country data unavailable in preview. Will load on GitHub Pages.';el.style.color='#a32d2d'}});
-
-  map.on('click',()=>{if(isActive)closePanel()});
-
-  const hCard=document.getElementById('hoverCard'),hFlag=document.getElementById('hoverFlag'),hName=document.getElementById('hoverName'),hStats=document.getElementById('hoverStats'),hHint=document.getElementById('hoverHint');
-  function showHC(e,name,iso2,country,feat){
-    hCard.style.display='block';
-    hName.textContent=name;
-    hFlag.src=iso2?flagUrl(iso2,40):'';hFlag.style.display=iso2?'block':'none';
-    if(feat&&country){
-      hName.className='hover-card-name';
-      hStats.innerHTML=`<div class="hover-card-stat"><span class="hover-card-stat-label">Population</span><span class="hover-card-stat-value">${country.stats.population}</span></div><div class="hover-card-stat"><span class="hover-card-stat-label">Clean Energy Share</span><span class="hover-card-stat-value">${country.stats.cleanEnergy}</span></div><div class="hover-card-stat"><span class="hover-card-stat-label">Greenhouse Gas Emissions per Capita (CO2e)</span><span class="hover-card-stat-value">${country.stats.ghg}</span></div>`;
-      hHint.textContent='Click to explore';
-    }else{hName.className='hover-card-name generic';hStats.innerHTML='';hHint.textContent=''}
-    posHC(e);
-  }
-  function posHC(e){const r=document.getElementById('map').getBoundingClientRect(),x=e.originalEvent.clientX-r.left,y=e.originalEvent.clientY-r.top;hCard.style.left=Math.min(x+16,r.width-230)+'px';hCard.style.top=Math.max(Math.min(y-20,r.height-170),10)+'px'}
-  function hideHC(){hCard.style.display='none'}
-
-  const cPanel=document.getElementById('countryPanel'),pFlag=document.getElementById('panelFlag'),pName=document.getElementById('panelName'),pStats=document.getElementById('panelStats'),pContent=document.getElementById('panelContent'),pBtn=document.getElementById('panelExploreBtn');
-  function selCountry(code,name,iso2,country,layer){
-    if(aLayer&&aLayer!==layer)cLayer.resetStyle(aLayer);
-    curCode=code;aLayer=layer;layer.setStyle(sStyle());
-    pName.textContent=name;
-    pFlag.src=iso2?flagUrl(iso2,80):'';pFlag.style.display=iso2?'block':'none';
-    if(!country){pStats.innerHTML='';pContent.innerHTML='<p class="panel-placeholder">Detailed information for this country is coming soon as The Future Map grows.</p>';pBtn.style.display='none';}
-    else{
-      pStats.innerHTML=`<div class="stat-pill"><span>Population</span><strong>${country.stats.population}</strong></div><div class="stat-pill"><span>Clean Energy Share</span><strong>${country.stats.cleanEnergy}</strong></div><div class="stat-pill"><span>GHG / Capita (CO2e)</span><strong>${country.stats.ghg}</strong></div>`;
-      renderTab(country,curTab);pBtn.href=country.page;pBtn.style.display='block';
-    }
-    cPanel.classList.add('open');
-  }
-  function renderTab(country,tab){pContent.innerHTML='<p>'+(country.tabs[tab]||'')+'</p>'}
-  function closePanel(){
-    cPanel.classList.remove('open');
-    if(aLayer&&cLayer)cLayer.resetStyle(aLayer);
-    aLayer=null;curCode=null;hideHC();curTab='overview';
-    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-    const ob=document.querySelector('.tab-btn[data-tab="overview"]');if(ob)ob.classList.add('active');
-  }
-  document.getElementById('panelTabs').addEventListener('click',function(e){
-    const b=e.target.closest('.tab-btn');if(!b)return;
-    document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');curTab=b.dataset.tab;
-    if(curCode&&C[curCode])renderTab(C[curCode],curTab);
-  });
-  document.getElementById('panelClose').addEventListener('click',function(e){e.preventDefault();e.stopPropagation();closePanel()});
-
-  const heroOverlay=document.getElementById('heroOverlay'),exitBtn=document.getElementById('exitBtn'),mapEl=document.getElementById('map');
-  function enterMap(){isActive=true;heroOverlay.classList.add('hidden');mapEl.classList.add('active');exitBtn.classList.add('visible');document.body.classList.add('map-active');map.scrollWheelZoom.enable();setTimeout(()=>map.invalidateSize(),100)}
-  function exitMap(){isActive=false;heroOverlay.classList.remove('hidden');mapEl.classList.remove('active');exitBtn.classList.remove('visible');document.body.classList.remove('map-active');map.scrollWheelZoom.disable();closePanel()}
-  document.getElementById('exploreBtn').addEventListener('click',enterMap);
-  document.getElementById('exploreNavBtn').addEventListener('click',function(e){e.preventDefault();window.scrollTo({top:0,behavior:'smooth'});setTimeout(enterMap,400)});
-  exitBtn.addEventListener('click',exitMap);
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&isActive)exitMap()});
-  window.addEventListener('scroll',function(){if(isActive&&window.scrollY>100)exitMap()});
-  </script>
-</body>
-</html>
