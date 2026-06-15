@@ -24,7 +24,6 @@
     #map{position:absolute;inset:0;width:100%;height:100%;z-index:1;opacity:.28;filter:blur(.8px) saturate(.7);pointer-events:none;transition:opacity .7s ease,filter .7s ease;background:var(--bg)}
     #map.active{opacity:1;filter:none;pointer-events:all}
     #map:not(.active) .leaflet-control-container{display:none}
-    .leaflet-container{background:var(--bg) !important}
     .leaflet-control-zoom a{background:var(--bg) !important;color:var(--text) !important;border-color:var(--border) !important}
     .leaflet-control-attribution{font-size:10px !important;opacity:.6;background:var(--bg) !important;color:var(--text2) !important}
     .leaflet-control-attribution a{color:var(--acm) !important}
@@ -241,9 +240,9 @@
   function flagUrl(iso2,w){return iso2?`https://flagcdn.com/w${w}/${iso2}.png`:''}
 
   const isDark=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches;
-  const map=L.map('map',{center:[20,10],zoom:2,minZoom:2,maxZoom:8,zoomControl:false,scrollWheelZoom:false,worldCopyJump:false});
+  const map=L.map('map',{center:[20,10],zoom:2,minZoom:2,maxZoom:8,zoomControl:false,scrollWheelZoom:false,worldCopyJump:false,maxBounds:[[-85,-210],[85,210]],maxBoundsViscosity:0.8});
   L.control.zoom({position:'topleft'}).addTo(map);
-  L.tileLayer(isDark?'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png':'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank">CARTO</a>',subdomains:'abcd',maxZoom:19}).addTo(map);
+  L.tileLayer(isDark?'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png':'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank">CARTO</a>',subdomains:'abcd',maxZoom:19,noWrap:false}).addTo(map);
 
   const FF=isDark?'#3a7fd5':'#2d6ec2',FB=isDark?'#5b9de8':'#1a4a8a',FHF=isDark?'#5b9de8':'#1a4a8a',FHB=isDark?'#8cc0f5':'#0f2d5c',NF=isDark?'#3f4654':'#94a3b8',NB=isDark?'#5b6472':'#94a3b8';
   function dStyle(f){const c=getCode(f.properties);return C[c]?{fillColor:FF,fillOpacity:isDark?.24:.18,color:FB,weight:1.8,opacity:.95}:{fillColor:NF,fillOpacity:isDark?.18:.08,color:NB,weight:.8,opacity:.7}}
@@ -256,11 +255,11 @@
   ld.onAdd=function(){const d=L.DomUtil.create('div');d.id='mapLd';d.style.cssText='background:var(--bg);border:.5px solid var(--border);border-radius:8px;padding:6px 12px;font-size:12px;color:var(--text2);font-family:inherit';d.textContent='Loading countries...';return d};
   ld.addTo(map);
 
-  fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/master/10m/cultural/ne_10m_admin_0_countries.json')
+  fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/master/50m/cultural/ne_50m_admin_0_countries.json')
     .then(r=>r.json())
     .then(data=>{
       const el=document.getElementById('mapLd');if(el)el.remove();
-      cLayer=L.geoJson(data,{style:dStyle,smoothFactor:0,onEachFeature:function(f,l){
+      cLayer=L.geoJson(data,{style:dStyle,smoothFactor:0.5,onEachFeature:function(f,l){
         const code=getCode(f.properties),name=getName(f.properties),feat=!!C[code],country=C[code];
         // Use stored iso2 for featured countries to avoid GeoJSON -99 values
         const iso2=feat?country.iso2:getIso2(f.properties);
