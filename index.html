@@ -25,8 +25,9 @@
     #map.active{opacity:1;filter:none;pointer-events:all}
     #map:not(.active) .leaflet-control-container{display:none}
     .leaflet-control-zoom a{background:var(--bg) !important;color:var(--text) !important;border-color:var(--border) !important}
-    .leaflet-control-attribution{font-size:10px !important;opacity:.6;background:var(--bg) !important;color:var(--text2) !important}
-    .leaflet-control-attribution a{color:var(--acm) !important}
+    .leaflet-control-attribution{font-size:9px !important;opacity:.35;background:transparent !important;color:var(--text2) !important;box-shadow:none !important;padding:0 4px !important}
+    .leaflet-control-attribution a{color:var(--text2) !important}
+    .leaflet-control-attribution:hover{opacity:.7}
     .leaflet-top.leaflet-left{top:60px !important;left:1rem !important}
     .leaflet-control-zoom{margin:0 !important}
     .hero-overlay{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 2rem;text-align:center;transition:opacity .6s ease;pointer-events:all;background:radial-gradient(ellipse at center,rgba(255,255,255,.88) 0%,rgba(255,255,255,.55) 55%,transparent 100%)}
@@ -234,6 +235,7 @@
     'AUT':{name:'Austria',iso2:'at',stats:{population:'9M',cleanEnergy:'80%',ghg:'8.0t'},tabs:{overview:'Austria generates approximately 80% of its electricity from renewable sources, overwhelmingly hydropower. It has no nuclear power and banned nuclear energy by referendum in 1978. Austria has one of the most renewable electricity grids in Europe.',energy:'Energy mix: hydropower ~60%, wind ~12%, solar ~8%, biomass ~6%, natural gas ~10%, other ~4%. Austria has no nuclear power. Hydropower from the Alps provides the backbone of a very clean electricity system.',emissions:'CO2 emissions: roughly 6.5t per capita. Total GHG emissions (CO2e): approximately 8.0t per capita, elevated above its clean electricity grid by transportation and heating emissions.',threats:'Alpine glaciers are retreating rapidly, threatening long-term water supply reliability and ski-based tourism. Changing snow patterns and more frequent extreme precipitation events are affecting mountain communities and infrastructure.'},page:'country-austria.html'}
   };
 
+  function getSovereign(p){const s=p.SOVEREIGNT||p.SOV_A3;const a=p.ADMIN||p.NAME;if(s&&a&&s!==a&&s!=='Antarctica')return s;return null}
   function getCode(p){let c=p.ISO_A3;if(!c||c==='-99')c=p.ADM0_A3;if(!c||c==='-99')c=p.ISO_A3_EH;return c}
   function getName(p){let n=p.ADMIN||p.NAME_LONG||p.NAME_EN||p.NAME||p.name;if(!n||(n.length<=3&&n===n.toUpperCase()))n=p.NAME_LONG||p.SOVEREIGNT||'Unknown region';return n}
   function getIso2(p){let i=p.ISO_A2||p.ISO_A2_EH;if(!i||i==='-99'||i.length!==2)return null;return i.toLowerCase()}
@@ -260,11 +262,11 @@
     .then(data=>{
       const el=document.getElementById('mapLd');if(el)el.remove();
       cLayer=L.geoJson(data,{style:dStyle,smoothFactor:0.5,onEachFeature:function(f,l){
-        const code=getCode(f.properties),name=getName(f.properties),feat=!!C[code],country=C[code];
+        const code=getCode(f.properties),name=getName(f.properties),sovereign=getSovereign(f.properties),feat=!!C[code],country=C[code];
         // Use stored iso2 for featured countries to avoid GeoJSON -99 values
         const iso2=feat?country.iso2:getIso2(f.properties);
         l.on({
-          mouseover:function(e){if(!isActive)return;if(code!==curCode)l.setStyle(hStyle(feat));if(!L.Browser.ie&&!L.Browser.opera&&!L.Browser.edge)l.bringToFront();showHC(e,name,iso2,country,feat)},
+          mouseover:function(e){if(!isActive)return;if(code!==curCode)l.setStyle(hStyle(feat));if(!L.Browser.ie&&!L.Browser.opera&&!L.Browser.edge)l.bringToFront();showHC(e,name,sovereign,iso2,country,feat)},
           mouseout:function(){if(!isActive)return;if(code!==curCode)cLayer.resetStyle(l);hideHC()},
           mousemove:function(e){if(!isActive)return;posHC(e)},
           click:function(e){if(!isActive)return;L.DomEvent.stopPropagation(e);selCountry(code,name,iso2,country,l)}
@@ -276,14 +278,18 @@
   map.on('click',()=>{if(isActive)closePanel()});
 
   const hCard=document.getElementById('hoverCard'),hFlag=document.getElementById('hoverFlag'),hName=document.getElementById('hoverName'),hStats=document.getElementById('hoverStats'),hHint=document.getElementById('hoverHint');
-  function showHC(e,name,iso2,country,feat){
+  function showHC(e,name,sovereign,iso2,country,feat){
     hCard.style.display='block';hName.textContent=name;
     hFlag.src=iso2?flagUrl(iso2,40):'';hFlag.style.display=iso2?'block':'none';
     if(feat&&country){
       hName.className='hover-card-name';
       hStats.innerHTML=`<div class="hover-card-stat"><span class="hcs-label">Population</span><span class="hcs-value">${country.stats.population}</span></div><div class="hover-card-stat"><span class="hcs-label">Clean Energy Share</span><span class="hcs-value">${country.stats.cleanEnergy}</span></div><div class="hover-card-stat"><span class="hcs-label">Greenhouse Gas Emissions per Capita (CO2e)</span><span class="hcs-value">${country.stats.ghg}</span></div>`;
       hHint.textContent='Click to explore';
-    }else{hName.className='hover-card-name generic';hStats.innerHTML='';hHint.textContent=''}
+    }else{
+      hName.className='hover-card-name generic';
+      hStats.innerHTML=sovereign?`<div class="hover-card-stat"><span class="hcs-label">Territory of</span><span class="hcs-value" style="font-size:10px">${sovereign}</span></div>`:'';
+      hHint.textContent='';
+    }
     posHC(e);
   }
   function posHC(e){const r=document.getElementById('map').getBoundingClientRect(),x=e.originalEvent.clientX-r.left,y=e.originalEvent.clientY-r.top;hCard.style.left=Math.min(x+16,r.width-234)+'px';hCard.style.top=Math.max(Math.min(y-20,r.height-170),10)+'px'}
