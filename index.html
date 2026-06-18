@@ -25,9 +25,7 @@
     #map.active{opacity:1;filter:none;pointer-events:all}
     #map:not(.active) .leaflet-control-container{display:none}
     .leaflet-control-zoom a{background:var(--bg) !important;color:var(--text) !important;border-color:var(--border) !important}
-    .leaflet-control-attribution{font-size:9px !important;opacity:.35;background:transparent !important;color:var(--text2) !important;box-shadow:none !important;padding:0 4px !important}
-    .leaflet-control-attribution a{color:var(--text2) !important}
-    .leaflet-control-attribution:hover{opacity:.7}
+    .leaflet-control-attribution{display:none !important}
     .leaflet-top.leaflet-left{top:60px !important;left:1rem !important}
     .leaflet-control-zoom{margin:0 !important}
     .hero-overlay{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 2rem;text-align:center;transition:opacity .6s ease;pointer-events:all;background:radial-gradient(ellipse at center,rgba(255,255,255,.88) 0%,rgba(255,255,255,.55) 55%,transparent 100%)}
@@ -191,7 +189,7 @@
       </div>
     </section>
     <footer>
-      <p>&#169; 2026 The Future Map.</p>
+      <p>&#169; 2026 The Future Map. Map data &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" style="color:var(--text2)">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" style="color:var(--text2)">CARTO</a>.</p>
       <ul class="footer-links"><li><a href="#about">About</a></li><li><a href="https://instagram.com/the_future_map" target="_blank">Instagram</a></li></ul>
     </footer>
   </div>
@@ -234,6 +232,12 @@
     'TUR':{name:'Turkey',iso2:'tr',stats:{population:'85M',cleanEnergy:'43%',ghg:'7.0t'},tabs:{overview:'Turkey has significant renewable energy resources, particularly hydropower, wind, and solar, and generates approximately 43% of its electricity from clean sources. It has no nuclear power currently operational, though plants are under construction.',energy:'Energy mix: natural gas ~26%, coal ~18%, hydro ~26%, wind ~11%, solar ~6%, geothermal ~3%, other ~10%. Turkey has Europe\'s largest geothermal electricity capacity. A nuclear plant at Akkuyu is under construction.',emissions:'CO2 emissions: roughly 5.5t per capita. Total GHG emissions (CO2e): approximately 7.0t per capita, growing alongside rapid industrialization and economic expansion.',threats:'Southeastern Turkey faces increasing desertification and water scarcity. Coastal and inland flooding events have become more frequent and severe. Wildfires along the Aegean and Mediterranean coasts have increased significantly. Rapid energy demand growth creates continued pressure to expand fossil fuel use.'},page:'country-turkey.html'},
     'AUT':{name:'Austria',iso2:'at',stats:{population:'9M',cleanEnergy:'80%',ghg:'8.0t'},tabs:{overview:'Austria generates approximately 80% of its electricity from renewable sources, overwhelmingly hydropower. It has no nuclear power and banned nuclear energy by referendum in 1978. Austria has one of the most renewable electricity grids in Europe.',energy:'Energy mix: hydropower ~60%, wind ~12%, solar ~8%, biomass ~6%, natural gas ~10%, other ~4%. Austria has no nuclear power. Hydropower from the Alps provides the backbone of a very clean electricity system.',emissions:'CO2 emissions: roughly 6.5t per capita. Total GHG emissions (CO2e): approximately 8.0t per capita, elevated above its clean electricity grid by transportation and heating emissions.',threats:'Alpine glaciers are retreating rapidly, threatening long-term water supply reliability and ski-based tourism. Changing snow patterns and more frequent extreme precipitation events are affecting mountain communities and infrastructure.'},page:'country-austria.html'}
   };
+
+  // Build lookup from sovereign country name to C key for territory panel fallback
+  const SOVEREIGN_LOOKUP={};
+  for(const[k,v]of Object.entries(C))SOVEREIGN_LOOKUP[v.name]=k;
+  // Common GeoJSON sovereign name variants
+  const SOVEREIGN_ALIASES={'United States of America':'USA','United States':'USA','Britain':'GBR','UK':'GBR'};
 
   function getSovereign(p){const s=p.SOVEREIGNT||p.SOV_A3;const a=p.ADMIN||p.NAME;if(s&&a&&s!==a&&s!=='Antarctica')return s;return null}
   function getCode(p){let c=p.ISO_A3;if(!c||c==='-99')c=p.ADM0_A3;if(!c||c==='-99')c=p.ISO_A3_EH;return c}
