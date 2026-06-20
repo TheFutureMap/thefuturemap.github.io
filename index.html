@@ -338,6 +338,7 @@
   exitBtn.addEventListener('click',exitMap);
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&isActive)exitMap()});
   window.addEventListener('scroll',function(){if(isActive&&window.scrollY>100)exitMap()});
+  if(window.location.hash==='#explore'){history.replaceState(null,'',window.location.pathname);setTimeout(enterMap,150)}
   </script>
 </body>
 </html>
