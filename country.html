@@ -17,106 +17,140 @@ nav{position:sticky;top:0;z-index:500;background:var(--bg);border-bottom:.5px so
 .nav-links{display:flex;gap:2rem;list-style:none}
 .nav-links a{font-size:14px;color:var(--text2);text-decoration:none;transition:color .15s}
 .nav-links a:hover{color:var(--text)}
-.breadcrumb{max-width:1100px;margin:0 auto;padding:1.5rem 2rem 0;display:flex;align-items:center;gap:.5rem;font-size:13px;color:var(--text2)}
-.breadcrumb a{color:var(--acm);text-decoration:none}
-.breadcrumb a:hover{text-decoration:underline}
-.header{max-width:1100px;margin:0 auto;padding:1.5rem 2rem 1.5rem}
-.header-flag{width:56px;height:40px;border-radius:6px;object-fit:cover;box-shadow:0 0 0 .5px rgba(0,0,0,.15);margin-bottom:.75rem;background:var(--bg2)}
+.breadcrumb{max-width:1100px;margin:0 auto;padding:1.25rem 2rem 0;display:flex;align-items:center;gap:.5rem;font-size:13px;color:var(--text2)}
+.breadcrumb a{color:var(--acm);text-decoration:none}.breadcrumb a:hover{text-decoration:underline}
+/* Two-column header: text left, square map right */
+.header{max-width:1100px;margin:0 auto;padding:1.25rem 2rem 2rem;display:flex;gap:2rem;align-items:flex-start}
+.header-main{flex:1;min-width:0}
+.header-flag{width:56px;height:40px;border-radius:5px;object-fit:cover;box-shadow:0 0 0 .5px rgba(0,0,0,.15);margin-bottom:.75rem;background:var(--bg2)}
 .header h1{font-size:2rem;font-weight:500;letter-spacing:-.02em;margin-bottom:.75rem}
-.header-overview{font-size:15px;color:var(--text2);line-height:1.8;max-width:640px}
+.header-overview{font-size:14.5px;color:var(--text2);line-height:1.8;max-width:560px}
 .header-stats{display:flex;gap:8px;margin-top:1.25rem;flex-wrap:wrap}
-.hstat{background:var(--bg2);border:.5px solid var(--border);border-radius:10px;padding:8px 14px;text-align:center;min-width:90px}
+.hstat{background:var(--bg2);border:.5px solid var(--border);border-radius:10px;padding:8px 14px;text-align:center;min-width:88px}
 .hstat span{display:block;font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.03em;color:var(--text2);opacity:.8;margin-bottom:2px}
 .hstat strong{font-size:15px;font-weight:600;color:var(--text)}
-/* BIG MAP BLOCK — isolated stacking context so Leaflet panes never escape above nav */
-.country-map-block{max-width:1100px;margin:0 auto 1rem;padding:0 2rem}
-.map-frame{position:relative;isolation:isolate;z-index:0;width:100%;height:440px;border-radius:16px;overflow:hidden;border:.5px solid var(--border);background:var(--bg2)}
+/* Square map — fixed size, right side, isolated so Leaflet never pops over nav */
+.header-map-wrap{flex-shrink:0;width:340px}
+.header-map{isolation:isolate;z-index:0;width:340px;height:340px;border-radius:14px;overflow:hidden;border:.5px solid var(--border);background:var(--bg2)}
 #countryMap{width:100%;height:100%}
+.map-caption{font-size:11.5px;color:var(--text2);margin-top:.5rem;opacity:.75;text-align:center}
 .leaflet-control-attribution{display:none!important}
-.leaflet-control-zoom a{background:var(--bg) !important;color:var(--text) !important;border-color:var(--border) !important}
-.province-tooltip{background:var(--bg)!important;color:var(--text)!important;border:.5px solid var(--border)!important;border-radius:6px!important;font-family:inherit!important;font-size:12px!important;font-weight:500!important;padding:4px 9px!important;box-shadow:0 2px 8px rgba(0,0,0,.12)!important}
+.leaflet-control-zoom a{background:var(--bg)!important;color:var(--text)!important;border-color:var(--border)!important}
+.province-tooltip{background:var(--bg)!important;color:var(--text)!important;border:.5px solid var(--acm)!important;border-radius:6px!important;font-family:inherit!important;font-size:12px!important;font-weight:500!important;padding:4px 9px!important;box-shadow:0 2px 8px rgba(0,0,0,.12)!important}
 .province-tooltip::before{display:none!important}
-.map-caption{font-size:12px;color:var(--text2);margin-top:.6rem;opacity:.8}
+/* Container */
 .container{max-width:1100px;margin:0 auto;padding:0 2rem 5rem}
-.section-label{font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--acm);margin:3rem 0 1rem;padding-top:2rem;border-top:.5px solid var(--border)}
+.section-label{font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--acm);margin:2.75rem 0 1rem;padding-top:2rem;border-top:.5px solid var(--border)}
 .section-label:first-of-type{border-top:none;margin-top:0;padding-top:0}
 .section-text{font-size:14.5px;color:var(--text2);line-height:1.85;max-width:760px}
-.section-text+.section-text{margin-top:1rem}
-/* Energy: radial meter + bars side by side */
+.section-text+.section-text{margin-top:.875rem}
+/* Energy */
 .energy-layout{display:flex;gap:2rem;align-items:flex-start;flex-wrap:wrap;margin-top:1.25rem}
-.radial-meter{flex-shrink:0;text-align:center}
-.radial-meter span{display:block;font-size:11px;color:var(--text2);margin-top:.5rem;max-width:120px}
-.energy-bars{display:flex;flex-direction:column;gap:8px;flex:1;min-width:240px}
+.radial-wrap{text-align:center;flex-shrink:0}
+.radial-wrap span{display:block;font-size:11px;color:var(--text2);margin-top:.4rem;max-width:120px}
+.energy-bars{flex:1;min-width:240px;display:flex;flex-direction:column;gap:8px}
 .ebar-row{display:flex;align-items:center;gap:10px}
 .ebar-label{font-size:12.5px;color:var(--text2);width:90px;flex-shrink:0}
 .ebar-track{flex:1;height:8px;background:var(--bg2);border-radius:4px;overflow:hidden}
-.ebar-fill{height:100%;background:var(--acm);border-radius:4px}
-.ebar-pct{font-size:12px;font-weight:500;color:var(--text);width:36px;text-align:right;flex-shrink:0}
-/* Emissions comparison */
-.compare-bars{display:flex;flex-direction:column;gap:10px;margin-top:1.25rem;max-width:520px}
-.cbar-row{display:flex;flex-direction:column;gap:3px}
-.cbar-top{display:flex;justify-content:space-between;font-size:12.5px}
+.ebar-fill{height:100%;border-radius:4px}
+.ebar-pct{font-size:12px;font-weight:500;color:var(--text);width:32px;text-align:right;flex-shrink:0}
+/* Emissions */
+.emissions-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.25rem}
+.em-stat-card{background:var(--bg2);border-radius:12px;padding:1.25rem 1.5rem}
+.em-stat-number{font-size:2rem;font-weight:600;color:var(--acm);letter-spacing:-.03em;line-height:1}
+.em-stat-unit{font-size:12px;color:var(--text2);margin-top:.25rem}
+.em-stat-label{font-size:12px;color:var(--text2);margin-top:.4rem;line-height:1.4}
+.em-compare{background:var(--bg2);border-radius:12px;padding:1.25rem 1.5rem;grid-column:span 2}
+.em-compare h4{font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);margin-bottom:1rem}
+.cbar-row{display:flex;flex-direction:column;gap:3px;margin-bottom:.75rem}
+.cbar-row:last-child{margin-bottom:0}
+.cbar-top{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:3px}
 .cbar-top span:first-child{color:var(--text2)}
-.cbar-top span:last-child{font-weight:600;color:var(--text)}
-.cbar-track{height:10px;background:var(--bg2);border-radius:5px;overflow:hidden}
+.cbar-top strong{font-weight:600;color:var(--text)}
+.cbar-track{height:10px;background:var(--bg);border-radius:5px;overflow:hidden}
 .cbar-fill{height:100%;border-radius:5px}
-/* Icon badges, reused for threats/facts/orgs */
-.icon-badge{width:32px;height:32px;border-radius:8px;background:var(--acl);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.icon-badge svg{width:16px;height:16px;stroke:var(--acm);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.threat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--border);border:.5px solid var(--border);border-radius:12px;overflow:hidden;margin-top:1.25rem}
-.threat-card{background:var(--bg);padding:1.25rem 1.5rem;display:flex;flex-direction:column;gap:.6rem}
-.threat-card h4{font-size:13.5px;font-weight:500;color:var(--text)}
-.threat-card p{font-size:13px;color:var(--text2);line-height:1.6}
+.em-sector{margin-top:.875rem}
+.em-sector h4{font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);margin-bottom:.75rem}
+.sector-bars{display:flex;flex-direction:column;gap:6px}
+.sector-row{display:flex;align-items:center;gap:8px}
+.sector-label{font-size:12px;color:var(--text2);width:100px;flex-shrink:0}
+.sector-track{flex:1;height:6px;background:var(--bg2);border-radius:3px;overflow:hidden}
+.sector-fill{height:100%;border-radius:3px}
+.sector-pct{font-size:11px;font-weight:500;color:var(--text);width:32px;text-align:right}
+/* Threats */
+.threat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:1.25rem}
+.threat-card{background:var(--bg2);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.threat-img{width:100%;height:120px;object-fit:cover;display:block;background:var(--bg2)}
+.threat-img-placeholder{width:100%;height:120px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;background:linear-gradient(135deg,var(--acl),var(--bg2))}
+.threat-body{padding:1rem 1.25rem 1.25rem}
+.threat-stat{font-size:1.5rem;font-weight:700;color:var(--acm);letter-spacing:-.02em;line-height:1;margin-bottom:.25rem}
+.threat-body h4{font-size:13.5px;font-weight:500;color:var(--text);margin-bottom:.4rem}
+.threat-body p{font-size:12.5px;color:var(--text2);line-height:1.6}
 /* Government timeline */
-.gov-timeline{position:relative;margin-top:1.5rem;padding-left:1.75rem;max-width:700px}
-.gov-timeline::before{content:'';position:absolute;left:5px;top:6px;bottom:6px;width:1px;background:var(--border)}
+.gov-timeline{position:relative;margin-top:1.5rem;padding-left:1.75rem;max-width:680px}
+.gov-timeline::before{content:"";position:absolute;left:5px;top:8px;bottom:8px;width:2px;background:var(--border);border-radius:2px}
 .gov-item{position:relative;padding-bottom:1.5rem}
 .gov-item:last-child{padding-bottom:0}
-.gov-dot{position:absolute;left:-1.75rem;top:4px;width:11px;height:11px;border-radius:50%;background:var(--acm);border:2px solid var(--bg)}
-.gov-year{font-size:11px;font-weight:600;color:var(--acm);letter-spacing:.04em;margin-bottom:.25rem}
-.gov-text{font-size:13.5px;color:var(--text2);line-height:1.7}
-/* Initiatives with optional progress */
-.init-block{margin-bottom:1.5rem}
-.init-block:last-child{margin-bottom:0}
-.init-title{font-size:14.5px;font-weight:500;color:var(--text);margin-bottom:.4rem}
-.init-text{font-size:14px;color:var(--text2);line-height:1.8}
-.init-progress{margin-top:.6rem;max-width:380px}
+.gov-dot{position:absolute;left:-1.75rem;top:5px;width:12px;height:12px;border-radius:50%;background:var(--acm);border:2.5px solid var(--bg)}
+.gov-year{font-size:11px;font-weight:700;color:var(--acm);letter-spacing:.06em;margin-bottom:.2rem}
+.gov-title{font-size:13.5px;font-weight:500;color:var(--text);margin-bottom:.2rem}
+.gov-text{font-size:13px;color:var(--text2);line-height:1.65}
+/* Initiatives */
+.init-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-top:1.25rem}
+.init-card{background:var(--bg2);border-radius:14px;padding:1.5rem;display:flex;flex-direction:column;gap:.75rem}
+.init-card-top{display:flex;align-items:center;gap:.875rem}
+.init-icon{width:40px;height:40px;border-radius:10px;background:var(--acm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.init-icon svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.init-card-title{font-size:14px;font-weight:600;color:var(--text);line-height:1.3}
+.init-card-text{font-size:13px;color:var(--text2);line-height:1.7;flex:1}
+.init-numbers{display:flex;gap:.75rem;flex-wrap:wrap}
+.init-num{background:var(--bg);border:.5px solid var(--border);border-radius:8px;padding:6px 12px;text-align:center}
+.init-num strong{display:block;font-size:15px;font-weight:700;color:var(--acm)}
+.init-num span{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.03em}
+.init-progress{margin-top:.25rem}
 .init-progress-top{display:flex;justify-content:space-between;font-size:11.5px;color:var(--text2);margin-bottom:4px}
-.init-progress-track{height:7px;background:var(--bg2);border-radius:4px;overflow:hidden}
-.init-progress-fill{height:100%;background:var(--acm);border-radius:4px}
-/* People avatars */
-.people-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--border);border:.5px solid var(--border);border-radius:12px;overflow:hidden;margin-top:1.25rem}
-.person-card{background:var(--bg);padding:1.5rem;display:flex;gap:1rem}
-.avatar{width:46px;height:46px;border-radius:50%;background:var(--acm);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;flex-shrink:0}
-.person-info h4{font-size:14.5px;font-weight:500;color:var(--text);margin-bottom:.2rem}
+.init-progress-track{height:6px;background:var(--bg);border-radius:3px;overflow:hidden}
+.init-progress-fill{height:100%;background:var(--acm);border-radius:3px}
+/* People */
+.people-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-top:1.25rem}
+.person-card{background:var(--bg2);border-radius:14px;overflow:hidden}
+.person-img-wrap{width:100%;height:140px;position:relative;overflow:hidden;background:var(--acl)}
+.person-img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.person-avatar-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--acm);font-size:2.25rem;font-weight:700;color:#fff;letter-spacing:.05em}
+.person-body{padding:1.125rem 1.25rem 1.25rem}
+.person-body h4{font-size:14.5px;font-weight:500;color:var(--text);margin-bottom:.2rem}
 .person-role{font-size:11.5px;color:var(--acm);font-weight:500;margin-bottom:.5rem}
-.person-info p{font-size:13px;color:var(--text2);line-height:1.65}
-/* Organizations */
-.org-list{display:flex;flex-direction:column;gap:0;margin-top:1.25rem}
-.org-row{display:flex;align-items:center;gap:.875rem;padding:.875rem 0;border-bottom:.5px solid var(--border)}
-.org-row:first-child{border-top:.5px solid var(--border)}
-.org-row-text{flex:1}
-.org-row a{font-size:14px;font-weight:500;color:var(--text);text-decoration:none}
-.org-row a:hover{color:var(--acm)}
-.org-desc{font-size:12.5px;color:var(--text2);margin-top:2px}
-.tag{display:inline-block;font-size:11px;font-weight:500;color:var(--acm);background:var(--acl);padding:4px 12px;border-radius:100px;flex-shrink:0}
-/* Facts */
-.fact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-top:1.25rem}
-.fact-card{background:var(--bg2);border-radius:12px;padding:1.25rem 1.5rem;display:flex;gap:.875rem;align-items:flex-start}
-.fact-card p{font-size:13.5px;color:var(--text);line-height:1.65}
-.source-note{font-size:11.5px;color:var(--text2);opacity:.7;margin-top:2.5rem;padding-top:1.5rem;border-top:.5px solid var(--border)}
+.person-body p{font-size:13px;color:var(--text2);line-height:1.65}
+/* Orgs */
+.org-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-top:1.25rem}
+.org-card{background:var(--bg2);border-radius:14px;padding:1.25rem;display:flex;gap:.875rem;align-items:flex-start}
+.org-logo-wrap{width:44px;height:44px;border-radius:10px;background:var(--bg);border:.5px solid var(--border);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.org-logo{width:36px;height:36px;object-fit:contain}
+.org-info{flex:1;min-width:0}
+.org-info a{font-size:14px;font-weight:500;color:var(--text);text-decoration:none;line-height:1.35;display:block}
+.org-info a:hover{color:var(--acm)}
+.org-info p{font-size:12.5px;color:var(--text2);margin-top:.3rem;line-height:1.5}
+.tag{display:inline-block;font-size:11px;font-weight:500;color:var(--acm);background:var(--acl);padding:3px 10px;border-radius:100px;margin-top:.5rem}
+/* Did You Know */
+.fact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:1.25rem}
+.fact-card{background:var(--bg2);border-radius:14px;padding:1.5rem;position:relative;overflow:hidden}
+.fact-num{font-size:3rem;font-weight:800;color:var(--acm);letter-spacing:-.04em;line-height:1;margin-bottom:.5rem;opacity:.9}
+.fact-card p{font-size:13.5px;color:var(--text);line-height:1.65;position:relative;z-index:1}
+.fact-card::after{content:attr(data-icon);position:absolute;right:1rem;bottom:.5rem;font-size:3rem;opacity:.08}
+/* Shared */
+.source-note{font-size:11.5px;color:var(--text2);opacity:.65;margin-top:2.5rem;padding-top:1.5rem;border-top:.5px solid var(--border)}
 .back-link{display:inline-flex;align-items:center;gap:.4rem;font-size:14px;color:var(--acm);text-decoration:none;margin-top:2.5rem}
 .back-link:hover{text-decoration:underline}
 .researching{background:var(--bg2);border-radius:12px;padding:1.5rem 1.75rem;margin-top:1.25rem}
 .researching p{font-size:13.5px;color:var(--text2);font-style:italic;line-height:1.7}
-.not-found{max-width:1100px;margin:4rem auto;padding:0 2rem;text-align:center}
+.not-found{max-width:800px;margin:4rem auto;padding:0 2rem;text-align:center}
 .not-found h1{font-size:1.5rem;font-weight:500;margin-bottom:.75rem}
 .not-found p{color:var(--text2);font-size:14.5px}
 footer{border-top:.5px solid var(--border);padding:2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;max-width:1100px;margin:0 auto}
 footer p{font-size:13px;color:var(--text2)}
 .footer-links{display:flex;gap:1.5rem;list-style:none}
 .footer-links a{font-size:13px;color:var(--text2);text-decoration:none}
-@media(max-width:700px){nav{padding:0 1rem}.nav-links{gap:1rem}.container{padding:0 1.25rem 3rem}.breadcrumb{padding:1.5rem 1.25rem 0}.header{padding:1.5rem 1.25rem}.country-map-block{padding:0 1.25rem}.map-frame{height:320px}.energy-layout{flex-direction:column}}
+@media(max-width:800px){.header{flex-direction:column-reverse}.header-map-wrap{width:100%}.header-map{width:100%;height:280px}nav{padding:0 1rem}.nav-links{gap:1rem}.container{padding:0 1.25rem 3rem}.breadcrumb{padding:1.25rem 1.25rem 0}.header{padding:1.25rem 1.25rem 1.5rem}.emissions-grid{grid-template-columns:1fr}.em-compare{grid-column:span 1}.threat-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -130,291 +164,8 @@ footer p{font-size:13px;color:var(--text2)}
     <li><a href="action.html">Take Action</a></li>
   </ul>
 </nav>
-
 <div id="page"></div>
-
 <footer>
   <p>&#169; 2026 The Future Map.</p>
   <ul class="footer-links"><li><a href="index.html#about">About</a></li><li><a href="https://instagram.com/the_future_map" target="_blank">Instagram</a></li></ul>
 </footer>
-
-<script>
-
-// ── ICONS — small reusable inline SVGs ──
-const ICONS = {
-  water: '<svg viewBox="0 0 24 24"><path d="M3 16c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0"/><path d="M3 11c1.5-2 3-2 4.5 0s3 2 4.5 0 3-2 4.5 0 3 2 4.5 0" opacity="0.5"/></svg>',
-  wind: '<svg viewBox="0 0 24 24"><path d="M4 8h10a3 3 0 1 0-3-3"/><path d="M2 13h13a3 3 0 1 1-3 3"/><path d="M4 18h8a2.5 2.5 0 1 0-2.5-2.5"/></svg>',
-  chart: '<svg viewBox="0 0 24 24"><line x1="5" y1="20" x2="5" y2="12"/><line x1="12" y1="20" x2="12" y2="6"/><line x1="19" y1="20" x2="19" y2="15"/></svg>',
-  scale: '<svg viewBox="0 0 24 24"><line x1="12" y1="3" x2="12" y2="21"/><path d="M7 7L4 13a3 3 0 0 0 6 0z"/><path d="M17 7l-3 6a3 3 0 0 0 6 0z"/><line x1="6" y1="7" x2="18" y2="7"/></svg>',
-  leaf: '<svg viewBox="0 0 24 24"><path d="M5 13c0-5 4-9 9-9h5v5c0 5-4 9-9 9H5z"/><line x1="5" y1="19" x2="13" y2="11"/></svg>',
-  spark: '<svg viewBox="0 0 24 24"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="2.5"/></svg>'
-};
-function icon(key){ return '<div class="icon-badge">' + (ICONS[key]||ICONS.leaf) + '</div>'; }
-
-// ── BASIC STATS for currently featured map countries ──
-const STATS = {
-'USA':{name:'United States',iso2:'us',population:'335M',cleanEnergy:'39%',ghg:'18.0t'},
-'FRA':{name:'France',iso2:'fr',population:'68M',cleanEnergy:'93%',ghg:'6.4t'},
-'DEU':{name:'Germany',iso2:'de',population:'84M',cleanEnergy:'47%',ghg:'10.4t'},
-'NOR':{name:'Norway',iso2:'no',population:'5.5M',cleanEnergy:'98%',ghg:'9.0t'},
-'IND':{name:'India',iso2:'in',population:'1.45B',cleanEnergy:'22%',ghg:'2.7t'},
-'CHN':{name:'China',iso2:'cn',population:'1.41B',cleanEnergy:'35%',ghg:'11.0t'},
-'KHM':{name:'Cambodia',iso2:'kh',population:'17M',cleanEnergy:'35%',ghg:'3.0t'},
-'SGP':{name:'Singapore',iso2:'sg',population:'6M',cleanEnergy:'3%',ghg:'9.0t'},
-'VNM':{name:'Vietnam',iso2:'vn',population:'98M',cleanEnergy:'44%',ghg:'3.8t'},
-'CAN':{name:'Canada',iso2:'ca',population:'41M',cleanEnergy:'82%',ghg:'18.0t'},
-'CHE':{name:'Switzerland',iso2:'ch',population:'9M',cleanEnergy:'94%',ghg:'5.0t'},
-'GBR':{name:'United Kingdom',iso2:'gb',population:'68M',cleanEnergy:'60%',ghg:'6.5t'},
-'KOR':{name:'South Korea',iso2:'kr',population:'52M',cleanEnergy:'39%',ghg:'13.0t'},
-'JPN':{name:'Japan',iso2:'jp',population:'123M',cleanEnergy:'32%',ghg:'9.5t'},
-'AUS':{name:'Australia',iso2:'au',population:'27M',cleanEnergy:'39%',ghg:'16.0t'},
-'BRA':{name:'Brazil',iso2:'br',population:'216M',cleanEnergy:'89%',ghg:'6.5t'},
-'ITA':{name:'Italy',iso2:'it',population:'59M',cleanEnergy:'41%',ghg:'6.5t'},
-'ESP':{name:'Spain',iso2:'es',population:'48M',cleanEnergy:'71%',ghg:'6.0t'},
-'SWE':{name:'Sweden',iso2:'se',population:'10.5M',cleanEnergy:'99%',ghg:'5.0t'},
-'MEX':{name:'Mexico',iso2:'mx',population:'130M',cleanEnergy:'28%',ghg:'4.5t'},
-'ARG':{name:'Argentina',iso2:'ar',population:'46M',cleanEnergy:'42%',ghg:'7.5t'},
-'PRT':{name:'Portugal',iso2:'pt',population:'10.3M',cleanEnergy:'65%',ghg:'5.5t'},
-'FIN':{name:'Finland',iso2:'fi',population:'5.5M',cleanEnergy:'80%',ghg:'7.0t'},
-'NLD':{name:'Netherlands',iso2:'nl',population:'17.5M',cleanEnergy:'43%',ghg:'9.0t'},
-'DNK':{name:'Denmark',iso2:'dk',population:'5.9M',cleanEnergy:'87%',ghg:'7.0t'},
-'BEL':{name:'Belgium',iso2:'be',population:'11.6M',cleanEnergy:'72%',ghg:'9.0t'},
-'ISL':{name:'Iceland',iso2:'is',population:'380K',cleanEnergy:'99%',ghg:'7.5t'},
-'TWN':{name:'Taiwan',iso2:'tw',population:'23.5M',cleanEnergy:'18%',ghg:'11.5t'},
-'GRC':{name:'Greece',iso2:'gr',population:'10.5M',cleanEnergy:'50%',ghg:'7.0t'},
-'RUS':{name:'Russia',iso2:'ru',population:'145M',cleanEnergy:'40%',ghg:'16.0t'},
-'NZL':{name:'New Zealand',iso2:'nz',population:'5.1M',cleanEnergy:'85%',ghg:'8.0t'},
-'POL':{name:'Poland',iso2:'pl',population:'38M',cleanEnergy:'26%',ghg:'12.0t'},
-'EGY':{name:'Egypt',iso2:'eg',population:'105M',cleanEnergy:'14%',ghg:'3.5t'},
-'TUR':{name:'Turkey',iso2:'tr',population:'85M',cleanEnergy:'43%',ghg:'7.0t'},
-'AUT':{name:'Austria',iso2:'at',population:'9M',cleanEnergy:'80%',ghg:'8.0t'}
-};
-
-// World average GHG/capita reference for emissions comparison (UNEP/Our World in Data, approx)
-const WORLD_AVG_GHG = 6.6;
-
-// ── DEEP RESEARCH content ──
-const RESEARCH = {
-'VNM': {
-  hasProvinces: true,
-  netZero: '2050',
-  overview: 'Vietnam has experienced one of the fastest clean energy transitions in Southeast Asia, dramatically expanding solar capacity in just a few years. The country faces significant climate vulnerability, particularly in the densely populated Mekong Delta, while pursuing an ambitious net-zero target backed by international financing.',
-  energyOverview: 'Vietnam\'s electricity mix has shifted dramatically over the past decade. Solar capacity grew from essentially zero in 2015 to 16.6 GW by 2020, driven by strong feed-in tariffs that made Vietnam one of the fastest-growing solar markets in the world. Coal still plays a significant role in meeting rising demand, and the revised Power Development Plan 8 (PDP8) controversially reintroduces nuclear power as a future baseload option.',
-  energyNote: 'Vietnam\'s long coastline gives it offshore wind potential of up to 500 GW, comparable in scale to the baseload currently provided by coal. Realizing this potential will require significant investment, since existing wind capacity stands at slightly below 4 GW today.',
-  cleanEnergyPct: 44,
-  bars: [['Coal',40,'#8a6200'],['Hydropower',28,'#2d6ec2'],['Solar',12,'#e8a33d'],['Natural Gas',10,'#9a7ab8'],['Wind',4,'#4db8a8'],['Other',6,'#94a3b8']],
-  emissions: 'Vietnam\'s CO2 emissions sit at roughly 2.6 tonnes per capita, with total greenhouse gas emissions including methane and land-use change reaching approximately 3.8 tonnes CO2e per capita. While still well below the global average for industrialized economies, emissions are rising quickly alongside rapid industrialization and growing energy demand, which PDP8 projects could grow 12-13% as the economy targets 10% annual GDP growth between 2026 and 2030.',
-  ghgValue: 3.8,
-  threats: [
-    ['Mekong Delta Vulnerability','Sea level rise and saltwater intrusion threaten agriculture across the Mekong Delta, home to tens of millions of people and a critical rice-growing region for the entire country.','water'],
-    ['Severe Typhoons','Increasingly severe typhoons along the central and northern coasts cause widespread flooding, landslides, and infrastructure damage each year.','wind'],
-    ['Economic Cost','Climate-related disasters already cost Vietnam an estimated 1 to 1.5 percent of GDP annually, with adaptation costs projected to reach 3 to 5 percent of GDP by 2030.','chart'],
-    ['Civil Society Restrictions','Independent environmental NGOs and activists face significant restrictions, limiting the space for grassroots climate advocacy and oversight.','scale']
-  ],
-  government: [
-    ['2021','At COP26, Prime Minister Pham Minh Chinh announced Vietnam\'s commitment to reach net-zero emissions by 2050. Vietnam also signed the Global Coal to Clean Power Transition statement and joined the Global Methane Pledge.'],
-    ['2025','A pilot emissions trading scheme launched in June, covering the power, cement, and steel sectors, together responsible for nearly half of national emissions.'],
-    ['2028','A fully operational national carbon market is expected, building on the pilot ETS launched in 2025.'],
-    ['2030','The revised Power Development Plan 8 (PDP8) governs energy planning through this year, assuming 10% annual GDP growth, a target that has driven policy choices extending coal capacity and reviving nuclear power for baseload supply.']
-  ],
-  initiatives: [
-    ['Just Energy Transition Partnership (JETP)','A landmark partnership signed in 2022 mobilizing $15.5 billion in public and private finance for 2026-2028 to help Vietnam shift away from coal while supporting affected communities and industries. The United States withdrew from the International Partner Group in 2025, narrowing the financing pool, though other international partners have moved to backfill the gap.', 45, '$7B of $15.5B mobilized'],
-    ['Offshore Wind Development','With up to 500 GW of technical potential along its coastline, Vietnam is working to scale offshore wind from its current base of under 4 GW into a major pillar of its clean energy future.', null, null],
-    ['EV Incentives','Tax incentives for electric vehicle buyers have been put in place to accelerate the adoption of zero-emission transportation.', null, null]
-  ],
-  people: [
-    ['Nguy Thi Khanh','NK','Founder, GreenID','The first Vietnamese person to win the Goldman Environmental Prize (2018) and a 2024 Climate Breakthrough Award recipient. Khanh has spent her career building coalitions of scientists, experts, media, and civil society to shift Vietnam\'s power sector away from coal and toward clean energy and efficiency.'],
-    ['Pham Minh Chinh','PC','Prime Minister of Vietnam','Announced Vietnam\'s landmark commitment to reach net-zero emissions by 2050 at COP26 in Glasgow, setting the policy direction that underpins the country\'s current energy transition and international climate financing partnerships.']
-  ],
-  orgs: [
-    ['GreenID (Green Innovation and Development Centre)','https://greenidvietnam.org.vn','Vietnamese NGO advancing clean energy policy and reducing reliance on coal, founded by Nguy Thi Khanh.','Local'],
-    ['Global Energy Alliance for People and Planet','https://energyalliance.org/vietnam','Mobilizes technical assistance and financing to accelerate Vietnam\'s clean energy leapfrog.','International']
-  ],
-  facts: [
-    'Vietnam\'s solar capacity went from zero to 16.6 GW in just five years, one of the fastest renewable buildouts ever recorded anywhere in the world.',
-    'Vietnam\'s potential offshore wind capacity, 500 GW, is large enough to theoretically replace the role coal currently plays in the country\'s electricity grid.',
-    'Vietnam celebrated 80 years of independence in 2025, the same year it launched its first pilot carbon market.'
-  ],
-  sources: 'Climate Action Tracker, UNDP Vietnam, Asia Society Policy Institute, Climate Breakthrough Award, Global Energy Alliance for People and Planet, geoBoundaries.org (province boundaries, CC-BY 4.0). Figures current as of early 2026 and updated periodically. Energy mix percentages are approximate based on available reporting.'
-}
-};
-
-function getCode(p){let c=p.ISO_A3;if(!c||c==='-99')c=p.ADM0_A3;if(!c||c==='-99')c=p.ISO_A3_EH;return c}
-function getName(p){let n=p.ADMIN||p.NAME_LONG||p.NAME_EN||p.NAME||p.name;if(!n||(n.length<=3&&n===n.toUpperCase()))n=p.NAME_LONG||p.SOVEREIGNT||'Unknown region';return n}
-function getIso2(p){let i=p.ISO_A2||p.ISO_A2_EH;if(!i||i==='-99'||i.length!==2)return null;return i.toLowerCase()}
-function initials(name){return name.split(' ').filter(w=>w.length).slice(0,2).map(w=>w[0]).join('').toUpperCase()}
-
-const params = new URLSearchParams(window.location.search);
-const id = (params.get('id')||'').toUpperCase();
-const page = document.getElementById('page');
-const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches;
-
-if(!id){
-  page.innerHTML = '<div class="not-found"><h1>No country specified</h1><p>Go back to the map and click a country to explore it.</p><a href="index.html#explore" class="back-link">&#8592; Back to the Map</a></div>';
-} else {
-  fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/master/50m/cultural/ne_50m_admin_0_countries.json')
-    .then(r=>r.json())
-    .then(worldData=>{
-      const feat = worldData.features.find(f => getCode(f.properties) === id);
-      if(!feat){
-        page.innerHTML = '<div class="not-found"><h1>Country not found</h1><p>We couldn\'t find that country. Go back to the map and try again.</p><a href="index.html#explore" class="back-link">&#8592; Back to the Map</a></div>';
-        return;
-      }
-      const stat = STATS[id];
-      const research = RESEARCH[id];
-      const name = stat ? stat.name : getName(feat.properties);
-      const iso2 = stat ? stat.iso2 : getIso2(feat.properties);
-      document.title = name + ' — The Future Map';
-      document.getElementById('pageTitle').textContent = name + ' — The Future Map';
-
-      const flagImg = iso2 ? `<img class="header-flag" src="https://flagcdn.com/w160/${iso2}.png" alt="${name} flag"/>` : '';
-      const overview = research ? research.overview : (stat ? 'A deeper profile of ' + name + ' is being researched and will be added as The Future Map grows.' : name + ' is part of The Future Map\'s ongoing coverage. Detailed information is being researched and will be added soon.');
-
-      const statsHtml = stat ? `
-        <div class="hstat"><span>Population</span><strong>${stat.population}</strong></div>
-        <div class="hstat"><span>Clean Energy Share</span><strong>${stat.cleanEnergy}</strong></div>
-        <div class="hstat"><span>GHG / Capita (CO2e)</span><strong>${stat.ghg}</strong></div>
-        ${research ? `<div class="hstat"><span>Net-Zero Target</span><strong>${research.netZero}</strong></div>` : ''}
-      ` : `<div class="hstat"><span>Status</span><strong>Researching</strong></div>`;
-
-      function researching(label){
-        return `<p class="section-label">${label}</p><div class="researching"><p>This section for ${name} is still being researched and will be added as The Future Map grows.</p></div>`;
-      }
-
-      let sections = '';
-
-      // Energy
-      if(research){
-        const r = 50, circ = 2*Math.PI*r;
-        const offset = circ * (1 - research.cleanEnergyPct/100);
-        const radial = `<div class="radial-meter"><svg width="120" height="120" viewBox="0 0 120 120">
-          <circle cx="60" cy="60" r="${r}" fill="none" stroke="var(--bg2)" stroke-width="10"/>
-          <circle cx="60" cy="60" r="${r}" fill="none" stroke="var(--acm)" stroke-width="10" stroke-dasharray="${circ}" stroke-dashoffset="${offset}" stroke-linecap="round" transform="rotate(-90 60 60)"/>
-          <text x="60" y="58" text-anchor="middle" font-size="22" font-weight="600" fill="var(--text)" font-family="-apple-system,sans-serif">${research.cleanEnergyPct}%</text>
-          <text x="60" y="76" text-anchor="middle" font-size="9" fill="var(--text2)" font-family="-apple-system,sans-serif">CLEAN</text>
-        </svg><span>Share of electricity from renewables and nuclear</span></div>`;
-        const bars = `<div class="energy-bars">` + research.bars.map(b=>`<div class="ebar-row"><span class="ebar-label">${b[0]}</span><div class="ebar-track"><div class="ebar-fill" style="width:${b[1]}%;background:${b[2]}"></div></div><span class="ebar-pct">${b[1]}%</span></div>`).join('') + `</div>`;
-        sections += `<p class="section-label">Energy Profile</p><p class="section-text">${research.energyOverview}</p><div class="energy-layout">${radial}${bars}</div>`;
-        if(research.energyNote) sections += `<p class="section-text" style="margin-top:1.5rem">${research.energyNote}</p>`;
-      } else { sections += researching('Energy Profile'); }
-
-      // Emissions
-      if(research){
-        const maxScale = Math.max(research.ghgValue, WORLD_AVG_GHG) * 1.25;
-        const cPct = (research.ghgValue/maxScale*100).toFixed(0);
-        const wPct = (WORLD_AVG_GHG/maxScale*100).toFixed(0);
-        sections += `<p class="section-label">Emissions</p><p class="section-text">${research.emissions}</p>
-        <div class="compare-bars">
-          <div class="cbar-row"><div class="cbar-top"><span>${name}</span><span>${research.ghgValue}t CO2e</span></div><div class="cbar-track"><div class="cbar-fill" style="width:${cPct}%;background:var(--acm)"></div></div></div>
-          <div class="cbar-row"><div class="cbar-top"><span>Global Average</span><span>${WORLD_AVG_GHG}t CO2e</span></div><div class="cbar-track"><div class="cbar-fill" style="width:${wPct}%;background:var(--text2);opacity:.5"></div></div></div>
-        </div>`;
-      } else { sections += researching('Emissions'); }
-
-      // Threats
-      if(research){
-        sections += `<p class="section-label">Climate Threats</p><div class="threat-grid">` + research.threats.map(t=>`<div class="threat-card">${icon(t[2])}<h4>${t[0]}</h4><p>${t[1]}</p></div>`).join('') + `</div>`;
-      } else { sections += researching('Climate Threats'); }
-
-      // Government timeline
-      if(research){
-        sections += `<p class="section-label">Government & Policy</p><div class="gov-timeline">` + research.government.map(g=>`<div class="gov-item"><div class="gov-dot"></div><div class="gov-year">${g[0]}</div><div class="gov-text">${g[1]}</div></div>`).join('') + `</div>`;
-        sections += `<p class="section-text" style="margin-top:1.5rem">See <a href="watch.html" style="color:var(--acm)">The Watch</a> for ongoing US federal actions on energy and climate.</p>`;
-      } else { sections += researching('Government & Policy'); }
-
-      // Initiatives
-      if(research){
-        sections += `<p class="section-label">Initiatives</p>` + research.initiatives.map(i=>{
-          let progress = '';
-          if(i[2] !== null){
-            progress = `<div class="init-progress"><div class="init-progress-top"><span>${i[3]}</span><span>${i[2]}%</span></div><div class="init-progress-track"><div class="init-progress-fill" style="width:${i[2]}%"></div></div></div>`;
-          }
-          return `<div class="init-block"><div class="init-title">${i[0]}</div><p class="init-text">${i[1]}</p>${progress}</div>`;
-        }).join('');
-      } else { sections += researching('Initiatives'); }
-
-      // People
-      if(research){
-        sections += `<p class="section-label">Remarkable People</p><div class="people-grid">` + research.people.map(p=>`<div class="person-card"><div class="avatar">${p[1]}</div><div class="person-info"><h4>${p[0]}</h4><p class="person-role">${p[2]}</p><p>${p[3]}</p></div></div>`).join('') + `</div>`;
-      } else { sections += researching('Remarkable People'); }
-
-      // Organizations
-      if(research){
-        sections += `<p class="section-label">Organizations</p><div class="org-list">` + research.orgs.map(o=>`<div class="org-row">${icon('leaf')}<div class="org-row-text"><a href="${o[1]}" target="_blank">${o[0]}</a><p class="org-desc">${o[2]}</p></div><span class="tag">${o[3]}</span></div>`).join('') + `</div>`;
-        sections += `<p class="section-text" style="margin-top:1rem">See <a href="action.html" style="color:var(--acm)">Take Action</a> for more organizations working on clean energy and climate globally.</p>`;
-      } else { sections += researching('Organizations'); }
-
-      // Facts
-      if(research){
-        sections += `<p class="section-label">Did You Know</p><div class="fact-grid">` + research.facts.map(f=>`<div class="fact-card">${icon('spark')}<p>${f}</p></div>`).join('') + `</div>`;
-      }
-
-      const sourceNote = research ? `<p class="source-note">Sources: ${research.sources}</p>` : '';
-
-      page.innerHTML = `
-        <div class="breadcrumb"><a href="index.html#explore">Explore</a><span>&#8250;</span><span>${name}</span></div>
-        <div class="header">
-          ${flagImg}
-          <h1>${name}</h1>
-          <p class="header-overview">${overview}</p>
-          <div class="header-stats">${statsHtml}</div>
-        </div>
-        <div class="country-map-block">
-          <div class="map-frame"><div id="countryMap"></div></div>
-          <p class="map-caption">${research && research.hasProvinces ? name + '\'s provinces are shown on the world map below. Hover to see each region\'s name.' : name + ' highlighted on the world map.'}</p>
-        </div>
-        <div class="container">
-          ${sections}
-          ${sourceNote}
-          <a href="index.html#explore" class="back-link">&#8592; Back to the Map</a>
-        </div>
-      `;
-
-      // ── BIG WORLD MAP with this country highlighted ──
-      const cm = L.map('countryMap',{zoomControl:true,dragging:true,scrollWheelZoom:false,doubleClickZoom:true,touchZoom:true,attributionControl:false,minZoom:2,maxZoom:9});
-      L.tileLayer(isDark?'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png':'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19}).addTo(cm);
-
-      // Context layer: all world countries, neutral, non-interactive
-      L.geoJson(worldData,{style:function(f){
-        const isThis = getCode(f.properties)===id;
-        return isThis ? {fillColor:'transparent',fillOpacity:0,color:'transparent',weight:0} :
-          {fillColor:isDark?'#3f4654':'#94a3b8',fillOpacity:isDark?.15:.08,color:isDark?'#5b6472':'#94a3b8',weight:.5,opacity:.5};
-      },smoothFactor:0.6,interactive:false}).addTo(cm);
-
-      // Highlight layer: just this country
-      const hl = L.geoJson(feat,{style:{fillColor:isDark?'#5b9de8':'#2d6ec2',fillOpacity:.32,color:isDark?'#8cc0f5':'#1a4a8a',weight:2.2},interactive:false}).addTo(cm);
-
-      try { cm.fitBounds(hl.getBounds(), {padding:[60,60]}); } catch(e) { cm.setView([20,10],2); }
-
-      // Province overlay — only for countries with hasProvinces flag (currently Vietnam)
-      if(research && research.hasProvinces){
-        fetch('https://www.geoboundaries.org/api/current/gbOpen/'+id+'/ADM1/')
-          .then(r=>r.json())
-          .then(meta=>{
-            const url = meta.simplifiedGeometryGeoJSON || meta.gjDownloadURL;
-            return fetch(url);
-          })
-          .then(r=>r.json())
-          .then(provData=>{
-            L.geoJson(provData,{
-              style:{fillColor:'transparent',fillOpacity:0,color:isDark?'#cfe3fb':'#1a4a8a',weight:1,opacity:.55},
-              onEachFeature:function(f,layer){
-                const pname = f.properties.shapeName || f.properties.shapeName_en || 'Region';
-                layer.bindTooltip(pname,{className:'province-tooltip',sticky:true,direction:'top'});
-                layer.on({
-                  mouseover:function(){layer.setStyle({fillColor:isDark?'#5b9de8':'#2d6ec2',fillOpacity:.25,weight:1.8})},
-                  mouseout:function(){layer.setStyle({fillColor:'transparent',fillOpacity:0,weight:1})},
-                  click:function(){layer.openTooltip()}
-                });
-              }
-            }).addTo(cm);
-          })
-          .catch(()=>{ /* province overlay optional, fails silently if unavailable */ });
-      }
-    })
-    .catch(()=>{
-      page.innerHTML = '<div class="not-found"><h1>Unable to load country data</h1><p>This may work once live on GitHub Pages. Go back to the map and try again.</p><a href="index.html#explore" class="back-link">&#8592; Back to the Map</a></div>';
-    });
-}
-</script>
-</body>
-</html>
