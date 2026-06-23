@@ -169,3 +169,240 @@ footer p{font-size:13px;color:var(--text2)}
   <p>&#169; 2026 The Future Map.</p>
   <ul class="footer-links"><li><a href="index.html#about">About</a></li><li><a href="https://instagram.com/the_future_map" target="_blank">Instagram</a></li></ul>
 </footer>
+<script>
+const STATS={'USA':{name:'United States',iso2:'us',population:'335M',cleanEnergy:'39%',ghg:'18.0t'},'FRA':{name:'France',iso2:'fr',population:'68M',cleanEnergy:'93%',ghg:'6.4t'},'DEU':{name:'Germany',iso2:'de',population:'84M',cleanEnergy:'47%',ghg:'10.4t'},'NOR':{name:'Norway',iso2:'no',population:'5.5M',cleanEnergy:'98%',ghg:'9.0t'},'IND':{name:'India',iso2:'in',population:'1.45B',cleanEnergy:'22%',ghg:'2.7t'},'CHN':{name:'China',iso2:'cn',population:'1.41B',cleanEnergy:'35%',ghg:'11.0t'},'KHM':{name:'Cambodia',iso2:'kh',population:'17M',cleanEnergy:'35%',ghg:'3.0t'},'SGP':{name:'Singapore',iso2:'sg',population:'6M',cleanEnergy:'3%',ghg:'9.0t'},'VNM':{name:'Vietnam',iso2:'vn',population:'98M',cleanEnergy:'44%',ghg:'3.8t'},'CAN':{name:'Canada',iso2:'ca',population:'41M',cleanEnergy:'82%',ghg:'18.0t'},'CHE':{name:'Switzerland',iso2:'ch',population:'9M',cleanEnergy:'94%',ghg:'5.0t'},'GBR':{name:'United Kingdom',iso2:'gb',population:'68M',cleanEnergy:'60%',ghg:'6.5t'},'KOR':{name:'South Korea',iso2:'kr',population:'52M',cleanEnergy:'39%',ghg:'13.0t'},'JPN':{name:'Japan',iso2:'jp',population:'123M',cleanEnergy:'32%',ghg:'9.5t'},'AUS':{name:'Australia',iso2:'au',population:'27M',cleanEnergy:'39%',ghg:'16.0t'},'BRA':{name:'Brazil',iso2:'br',population:'216M',cleanEnergy:'89%',ghg:'6.5t'},'ITA':{name:'Italy',iso2:'it',population:'59M',cleanEnergy:'41%',ghg:'6.5t'},'ESP':{name:'Spain',iso2:'es',population:'48M',cleanEnergy:'71%',ghg:'6.0t'},'SWE':{name:'Sweden',iso2:'se',population:'10.5M',cleanEnergy:'99%',ghg:'5.0t'},'MEX':{name:'Mexico',iso2:'mx',population:'130M',cleanEnergy:'28%',ghg:'4.5t'},'ARG':{name:'Argentina',iso2:'ar',population:'46M',cleanEnergy:'42%',ghg:'7.5t'},'PRT':{name:'Portugal',iso2:'pt',population:'10.3M',cleanEnergy:'65%',ghg:'5.5t'},'FIN':{name:'Finland',iso2:'fi',population:'5.5M',cleanEnergy:'80%',ghg:'7.0t'},'NLD':{name:'Netherlands',iso2:'nl',population:'17.5M',cleanEnergy:'43%',ghg:'9.0t'},'DNK':{name:'Denmark',iso2:'dk',population:'5.9M',cleanEnergy:'87%',ghg:'7.0t'},'BEL':{name:'Belgium',iso2:'be',population:'11.6M',cleanEnergy:'72%',ghg:'9.0t'},'ISL':{name:'Iceland',iso2:'is',population:'380K',cleanEnergy:'99%',ghg:'7.5t'},'TWN':{name:'Taiwan',iso2:'tw',population:'23.5M',cleanEnergy:'18%',ghg:'11.5t'},'GRC':{name:'Greece',iso2:'gr',population:'10.5M',cleanEnergy:'50%',ghg:'7.0t'},'RUS':{name:'Russia',iso2:'ru',population:'145M',cleanEnergy:'40%',ghg:'16.0t'},'NZL':{name:'New Zealand',iso2:'nz',population:'5.1M',cleanEnergy:'85%',ghg:'8.0t'},'POL':{name:'Poland',iso2:'pl',population:'38M',cleanEnergy:'26%',ghg:'12.0t'},'EGY':{name:'Egypt',iso2:'eg',population:'105M',cleanEnergy:'14%',ghg:'3.5t'},'TUR':{name:'Turkey',iso2:'tr',population:'85M',cleanEnergy:'43%',ghg:'7.0t'},'AUT':{name:'Austria',iso2:'at',population:'9M',cleanEnergy:'80%',ghg:'8.0t'}};
+
+const RESEARCH={
+'VNM':{
+  netZero:'2050',
+  overview:'Vietnam has experienced one of the fastest clean energy transitions in Southeast Asia, dramatically expanding solar capacity in just a few years. The country faces significant climate vulnerability, particularly in the densely populated Mekong Delta, while pursuing an ambitious net-zero target backed by international financing.',
+  cleanEnergyPct:44,
+  energyOverview:'Vietnam\'s electricity mix has shifted dramatically over the past decade. Solar capacity grew from essentially zero in 2015 to 16.6 GW by 2020, driven by strong feed-in tariffs. Coal still plays a significant role, and the revised Power Development Plan 8 (PDP8) controversially reintroduces nuclear power as a future baseload option.',
+  energyNote:'Vietnam\'s long coastline gives it offshore wind potential of up to 500 GW, comparable to the baseload currently provided by coal. Existing wind capacity stands at just under 4 GW today.',
+  bars:[['Coal',40,'#8a6200'],['Hydropower',28,'#2d6ec2'],['Solar',12,'#e8a33d'],['Natural Gas',10,'#9a7ab8'],['Wind',4,'#4db8a8'],['Other',6,'#94a3b8']],
+  ghgValue:3.8,
+  emissionsText:'CO2 emissions sit at roughly 2.6 tonnes per capita, with total greenhouse gas emissions including methane and land-use change reaching approximately 3.8 tonnes CO2e per capita. While still well below the global average for industrialized economies, emissions are rising quickly alongside rapid industrialization and growing energy demand.',
+  sectors:[['Energy',54,'#2d6ec2'],['Agriculture',19,'#4db8a8'],['Industry',15,'#e8a33d'],['Transport',9,'#9a7ab8'],['Other',3,'#94a3b8']],
+  threats:[
+    {icon:'🌊',stat:'1-1.5%',statLabel:'of GDP lost annually to climate disasters',title:'Mekong Delta Vulnerability',text:'Sea level rise and saltwater intrusion threaten agriculture across the Mekong Delta, home to tens of millions and a critical rice-growing region for the entire country.'},
+    {icon:'🌀',stat:'10+',statLabel:'typhoons hit Vietnam per year on average',title:'Severe Typhoons',text:'Increasingly severe typhoons along the central and northern coasts cause widespread flooding, landslides, and infrastructure damage each year.'},
+    {icon:'💰',stat:'3-5%',statLabel:'of GDP in adaptation costs projected by 2030',title:'Economic Cost',text:'Climate-related disasters already cost Vietnam an estimated 1 to 1.5 percent of GDP annually, rising to an estimated 3 to 5 percent by 2030.'},
+    {icon:'⚖️',stat:'',statLabel:'',title:'Civil Society Restrictions',text:'Independent environmental NGOs and activists face significant restrictions, limiting the space for grassroots climate advocacy and independent oversight.'}
+  ],
+  government:[
+    {year:'2021',title:'Net-Zero Pledge at COP26',text:'Prime Minister Pham Minh Chinh announced Vietnam\'s commitment to reach net-zero by 2050. Vietnam signed the Global Coal to Clean Power Transition statement and joined the Global Methane Pledge.'},
+    {year:'2022',title:'JETP Partnership Signed',text:'Vietnam signed a Just Energy Transition Partnership mobilizing $15.5 billion in public and private finance to accelerate the coal-to-clean transition.'},
+    {year:'2023',title:'Power Development Plan 8',text:'The revised PDP8 set energy policy through 2030, targeting rapid GDP growth while balancing coal reduction with nuclear power reintroduction and renewable expansion.'},
+    {year:'2025',title:'Pilot Carbon Market Launch',text:'A pilot emissions trading scheme launched in June covering the power, cement, and steel sectors, responsible for nearly half of national emissions.'},
+    {year:'2028',title:'Full Carbon Market Expected',text:'A fully operational national carbon market is planned, building on the pilot ETS launched in 2025.'}
+  ],
+  initiatives:[
+    {title:'Just Energy Transition Partnership (JETP)',icon:'bolt',text:'A landmark partnership signed in 2022 mobilizing $15.5 billion in public and private finance for 2026-2028 to help Vietnam shift away from coal. The US withdrew from the International Partner Group in 2025, though other international partners have moved to backfill the gap.',numbers:[{val:'$15.5B',label:'Total pledge'},{val:'$7B',label:'Mobilized'},{val:'24',label:'Projects'}],progress:45},
+    {title:'Offshore Wind Development',icon:'wind',text:'With up to 500 GW of technical potential along its coastline, Vietnam is working to scale offshore wind from its current base of under 4 GW into a major pillar of its clean energy future.',numbers:[{val:'500 GW',label:'Potential'},{val:'4 GW',label:'Current'}],progress:null},
+    {title:'EV Incentives',icon:'car',text:'Tax incentives for electric vehicle buyers have been put in place to accelerate the adoption of zero-emission transportation as part of Vietnam\'s broader energy transition strategy.',numbers:[],progress:null}
+  ],
+  people:[
+    {name:'Nguy Thi Khanh',initials:'NK',role:'Founder, GreenID',bio:'The first Vietnamese person to win the Goldman Environmental Prize (2018) and a 2024 Climate Breakthrough Award recipient. Khanh has spent her career building coalitions of scientists, experts, media, and civil society to shift Vietnam\'s power sector away from coal and toward clean energy and efficiency.',wiki:'Nguy_Thi_Khanh'},
+    {name:'Pham Minh Chinh',initials:'PC',role:'Prime Minister of Vietnam',bio:'Announced Vietnam\'s landmark commitment to reach net-zero emissions by 2050 at COP26 in Glasgow, setting the policy direction that underpins the country\'s current energy transition and international climate financing partnerships.',wiki:'Pham_Minh_Chinh'}
+  ],
+  orgs:[
+    {name:'GreenID',fullName:'Green Innovation and Development Centre',url:'https://greenidvietnam.org.vn',desc:'Vietnamese NGO advancing clean energy policy and reducing reliance on coal, founded by Nguy Thi Khanh.',scale:'Local',domain:'greenidvietnam.org.vn'},
+    {name:'Global Energy Alliance',fullName:'Global Energy Alliance for People and Planet',url:'https://energyalliance.org',desc:'Mobilizes technical assistance and financing to accelerate clean energy transitions in emerging economies.',scale:'International',domain:'energyalliance.org'}
+  ],
+  facts:[
+    {num:'0 to 16.6',unit:'GW solar in 5 years',text:'Vietnam added 16.6 GW of solar capacity in just five years, one of the fastest renewable buildouts ever recorded in the world.',icon:'☀️'},
+    {num:'500',unit:'GW offshore wind potential',text:'Vietnam\'s offshore wind potential is large enough to theoretically replace the entire baseload currently provided by coal.',icon:'💨'},
+    {num:'80',unit:'years of independence in 2025',text:'Vietnam celebrated 80 years of independence in 2025, the same year it launched its first pilot carbon market.',icon:'🌿'}
+  ],
+  sources:'Climate Action Tracker, UNDP Vietnam, Asia Society Policy Institute, Climate Breakthrough Award, Global Energy Alliance for People and Planet, Natural Earth (province boundaries). Figures current as of early 2026 and updated periodically.'
+}
+};
+
+const WORLD_AVG=6.6;
+
+function getCode(p){let c=p.ISO_A3;if(!c||c==='-99')c=p.ADM0_A3;if(!c||c==='-99')c=p.ISO_A3_EH;return c}
+function getName(p){let n=p.ADMIN||p.NAME_LONG||p.NAME_EN||p.NAME||p.name;if(!n||(n.length<=3&&n===n.toUpperCase()))n=p.NAME_LONG||p.SOVEREIGNT||'Unknown';return n}
+function getIso2(p){let i=p.ISO_A2||p.ISO_A2_EH;if(!i||i==='-99'||i.length!==2)return null;return i.toLowerCase()}
+
+const ICON_SVGS={
+  bolt:'<svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
+  wind:'<svg viewBox="0 0 24 24"><path d="M4 8h10a3 3 0 1 0-3-3"/><path d="M2 13h13a3 3 0 1 1-3 3"/><path d="M4 18h7"/></svg>',
+  car:'<svg viewBox="0 0 24 24"><rect x="2" y="11" width="20" height="8" rx="2"/><path d="M5 11V9a7 7 0 0 1 14 0v2"/><circle cx="7" cy="19" r="2"/><circle cx="17" cy="19" r="2"/></svg>'
+};
+
+function svgIcon(key,color){
+  const s=ICON_SVGS[key]||ICON_SVGS.bolt;
+  return s.replace('<svg ','<svg width="20" height="20" fill="none" stroke="'+(color||'#fff')+'" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" ');
+}
+
+const params=new URLSearchParams(window.location.search);
+const id=(params.get('id')||'').toUpperCase();
+const page=document.getElementById('page');
+const isDark=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches;
+
+if(!id){
+  page.innerHTML='<div class="not-found"><h1>No country specified</h1><p>Go back to the map and click a country.</p><a href="index.html#explore" class="back-link">&#8592; Back to the Map</a></div>';
+}else{
+  fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/master/50m/cultural/ne_50m_admin_0_countries.json')
+  .then(r=>r.json())
+  .then(worldData=>{
+    const feat=worldData.features.find(f=>getCode(f.properties)===id);
+    if(!feat){page.innerHTML='<div class="not-found"><h1>Country not found</h1><p><a href="index.html#explore" class="back-link">&#8592; Back to the Map</a></p></div>';return;}
+    const stat=STATS[id];
+    const R=RESEARCH[id];
+    const name=stat?stat.name:getName(feat.properties);
+    const iso2=stat?stat.iso2:getIso2(feat.properties);
+    document.title=name+' — The Future Map';
+    document.getElementById('pageTitle').textContent=name+' — The Future Map';
+
+    const flagHtml=iso2?`<img class="header-flag" src="https://flagcdn.com/w160/${iso2}.png" alt="${name} flag"/>`:'';
+    const overview=R?R.overview:(stat?'A deeper profile of '+name+' is being researched and will be added as The Future Map grows.':name+' is part of The Future Map\'s ongoing coverage. Detailed information is coming soon.');
+    const statsHtml=stat?`<div class="hstat"><span>Population</span><strong>${stat.population}</strong></div><div class="hstat"><span>Clean Energy Share</span><strong>${stat.cleanEnergy}</strong></div><div class="hstat"><span>GHG / Capita</span><strong>${stat.ghg} CO2e</strong></div>${R?`<div class="hstat"><span>Net-Zero Target</span><strong>${R.netZero}</strong></div>`:''}`:'<div class="hstat"><span>Status</span><strong>Researching</strong></div>';
+
+    function notYet(label){return`<p class="section-label">${label}</p><div class="researching"><p>This section for ${name} is still being researched and will be added as The Future Map grows.</p></div>`;}
+
+    let s='';
+
+    // Energy
+    if(R){
+      const r=50,circ=2*Math.PI*r,offset=circ*(1-R.cleanEnergyPct/100);
+      const radial=`<div class="radial-wrap"><svg width="120" height="120" viewBox="0 0 120 120"><circle cx="60" cy="60" r="${r}" fill="none" stroke="var(--bg2)" stroke-width="10"/><circle cx="60" cy="60" r="${r}" fill="none" stroke="var(--acm)" stroke-width="10" stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${offset.toFixed(1)}" stroke-linecap="round" transform="rotate(-90 60 60)"/><text x="60" y="57" text-anchor="middle" font-size="22" font-weight="700" fill="var(--text)" font-family="-apple-system,sans-serif">${R.cleanEnergyPct}%</text><text x="60" y="73" text-anchor="middle" font-size="9" fill="var(--text2)" font-family="-apple-system,sans-serif" letter-spacing="1">CLEAN</text></svg><span>Share of electricity<br/>from renewables &amp; nuclear</span></div>`;
+      const bars=`<div class="energy-bars">${R.bars.map(b=>`<div class="ebar-row"><span class="ebar-label">${b[0]}</span><div class="ebar-track"><div class="ebar-fill" style="width:${b[1]}%;background:${b[2]}"></div></div><span class="ebar-pct">${b[1]}%</span></div>`).join('')}</div>`;
+      s+=`<p class="section-label">Energy Profile</p><p class="section-text">${R.energyOverview}</p><div class="energy-layout">${radial}${bars}</div>${R.energyNote?`<p class="section-text" style="margin-top:1.25rem">${R.energyNote}</p>`:''}`;
+    }else s+=notYet('Energy Profile');
+
+    // Emissions
+    if(R){
+      const mx=Math.max(R.ghgValue,WORLD_AVG)*1.3;
+      const cp=(R.ghgValue/mx*100).toFixed(0);
+      const wp=(WORLD_AVG/mx*100).toFixed(0);
+      const below=R.ghgValue<WORLD_AVG;
+      s+=`<p class="section-label">Emissions</p><p class="section-text">${R.emissionsText}</p>
+      <div class="emissions-grid">
+        <div class="em-stat-card"><div class="em-stat-number">${R.ghgValue}t</div><div class="em-stat-unit">CO2e per capita</div><div class="em-stat-label">Total greenhouse gas emissions (UNEP 2024)</div></div>
+        <div class="em-stat-card"><div class="em-stat-number" style="color:${below?'#1a7a3a':'#a32d2d'}">${below?'↓ '+(WORLD_AVG-R.ghgValue).toFixed(1)+'t':'↑ '+(R.ghgValue-WORLD_AVG).toFixed(1)+'t'}</div><div class="em-stat-unit">vs. global average (${WORLD_AVG}t)</div><div class="em-stat-label">${below?'Below':'Above'} the world average per capita</div></div>
+        <div class="em-compare"><h4>Per Capita Comparison (CO2e)</h4>
+          <div class="cbar-row"><div class="cbar-top"><span>${name}</span><strong>${R.ghgValue}t</strong></div><div class="cbar-track"><div class="cbar-fill" style="width:${cp}%;background:var(--acm)"></div></div></div>
+          <div class="cbar-row" style="margin-top:.5rem"><div class="cbar-top"><span>Global Average</span><strong>${WORLD_AVG}t</strong></div><div class="cbar-track"><div class="cbar-fill" style="width:${wp}%;background:var(--text2);opacity:.45"></div></div></div>
+        </div>
+        <div class="em-sector"><h4>Emissions by Sector</h4><div class="sector-bars">${R.sectors.map(sec=>`<div class="sector-row"><span class="sector-label">${sec[0]}</span><div class="sector-track"><div class="sector-fill" style="width:${sec[1]}%;background:${sec[2]}"></div></div><span class="sector-pct">${sec[1]}%</span></div>`).join('')}</div></div>
+      </div>`;
+    }else s+=notYet('Emissions');
+
+    // Threats
+    if(R){
+      s+=`<p class="section-label">Climate Threats</p><div class="threat-grid">${R.threats.map(t=>`<div class="threat-card"><div class="threat-img-placeholder" style="font-size:2.75rem">${t.icon}</div><div class="threat-body">${t.stat?`<div class="threat-stat">${t.stat}</div><div style="font-size:11px;color:var(--text2);margin-bottom:.5rem">${t.statLabel}</div>`:''}<h4>${t.title}</h4><p>${t.text}</p></div></div>`).join('')}</div>`;
+    }else s+=notYet('Climate Threats');
+
+    // Government timeline
+    if(R){
+      s+=`<p class="section-label">Government & Policy</p><div class="gov-timeline">${R.government.map(g=>`<div class="gov-item"><div class="gov-dot"></div><div class="gov-year">${g.year}</div><div class="gov-title">${g.title}</div><div class="gov-text">${g.text}</div></div>`).join('')}</div><p class="section-text" style="margin-top:1.5rem">See <a href="watch.html" style="color:var(--acm)">The Watch</a> for ongoing US federal actions on energy and climate.</p>`;
+    }else s+=notYet('Government & Policy');
+
+    // Initiatives
+    if(R){
+      s+=`<p class="section-label">Initiatives</p><div class="init-cards">${R.initiatives.map(i=>`<div class="init-card"><div class="init-card-top"><div class="init-icon">${svgIcon(i.icon)}</div><div class="init-card-title">${i.title}</div></div><p class="init-card-text">${i.text}</p>${i.numbers.length?`<div class="init-numbers">${i.numbers.map(n=>`<div class="init-num"><strong>${n.val}</strong><span>${n.label}</span></div>`).join('')}</div>`:''}${i.progress!==null?`<div class="init-progress"><div class="init-progress-top"><span>Funds mobilized</span><span>${i.progress}%</span></div><div class="init-progress-track"><div class="init-progress-fill" style="width:${i.progress}%"></div></div></div>`:''}</div>`).join('')}</div>`;
+    }else s+=notYet('Initiatives');
+
+    // People
+    if(R){
+      s+=`<p class="section-label">Remarkable People</p><div class="people-grid">${R.people.map(p=>`<div class="person-card"><div class="person-img-wrap"><div class="person-avatar-fallback" id="av_${p.initials}">${p.initials}</div></div><div class="person-body"><h4>${p.name}</h4><p class="person-role">${p.role}</p><p>${p.bio}</p></div></div>`).join('')}</div>`;
+    }else s+=notYet('Remarkable People');
+
+    // Orgs
+    if(R){
+      s+=`<p class="section-label">Organizations</p><div class="org-grid">${R.orgs.map(o=>`<div class="org-card"><div class="org-logo-wrap"><img class="org-logo" src="https://www.google.com/s2/favicons?sz=128&domain=${o.domain}" alt="${o.name} logo" onerror="this.style.display='none'"/></div><div class="org-info"><a href="${o.url}" target="_blank">${o.fullName}</a><p>${o.desc}</p><span class="tag">${o.scale}</span></div></div>`).join('')}</div><p class="section-text" style="margin-top:1rem">See <a href="action.html" style="color:var(--acm)">Take Action</a> for more organizations working on clean energy and climate globally.</p>`;
+    }else s+=notYet('Organizations');
+
+    // Did You Know
+    if(R){
+      s+=`<p class="section-label">Did You Know</p><div class="fact-grid">${R.facts.map((f,i)=>`<div class="fact-card" data-icon="${f.icon}"><div class="fact-num">${f.num}</div><div style="font-size:11px;font-weight:600;color:var(--acm);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem">${f.unit}</div><p>${f.text}</p></div>`).join('')}</div>`;
+    }
+
+    const sources=R?`<p class="source-note">Sources: ${R.sources}</p>`:'';
+
+    page.innerHTML=`
+      <div class="breadcrumb"><a href="index.html#explore">Explore</a> <span>&#8250;</span> <span>${name}</span></div>
+      <div class="header">
+        <div class="header-main">
+          ${flagHtml}
+          <h1>${name}</h1>
+          <p class="header-overview">${overview}</p>
+          <div class="header-stats">${statsHtml}</div>
+        </div>
+        <div class="header-map-wrap">
+          <div class="header-map"><div id="countryMap"></div></div>
+          <p class="map-caption">Hover provinces to see region names</p>
+        </div>
+      </div>
+      <div class="container">${s}${sources}<a href="index.html#explore" class="back-link">&#8592; Back to the Map</a></div>
+    `;
+
+    // Mini map — full world tiles, country highlighted, provinces from Natural Earth ADM1
+    const cm=L.map('countryMap',{zoomControl:false,dragging:false,scrollWheelZoom:false,doubleClickZoom:false,touchZoom:false,attributionControl:false});
+    L.tileLayer(isDark?'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png':'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:12}).addTo(cm);
+
+    // World context (non-interactive, neutral)
+    L.geoJson(worldData,{
+      style:f=>{
+        const same=getCode(f.properties)===id;
+        return same?{fillColor:'transparent',fillOpacity:0,color:'transparent',weight:0}:{fillColor:isDark?'#3f4654':'#94a3b8',fillOpacity:isDark?.14:.07,color:isDark?'#5b6472':'#94a3b8',weight:.5,opacity:.5};
+      },
+      smoothFactor:.6,interactive:false
+    }).addTo(cm);
+
+    // Country highlight
+    const hl=L.geoJson(feat,{style:{fillColor:isDark?'#5b9de8':'#2d6ec2',fillOpacity:.28,color:isDark?'#8cc0f5':'#1a4a8a',weight:2},interactive:false}).addTo(cm);
+    try{cm.fitBounds(hl.getBounds(),{padding:[20,20]});}catch(e){cm.setView([20,10],2);}
+
+    // Province overlay from Natural Earth ADM1 (same source as main map)
+    fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/master/50m/cultural/ne_50m_admin_1_states_provinces.json')
+      .then(r=>r.json())
+      .then(adm1=>{
+        const provs=adm1.features.filter(f=>(f.properties.iso_a2||'').toUpperCase()===(iso2||'').toUpperCase()||f.properties.adm0_a3===id);
+        if(!provs.length)return;
+        L.geoJson({type:'FeatureCollection',features:provs},{
+          style:{fillColor:'transparent',fillOpacity:0,color:isDark?'rgba(255,255,255,.45)':'rgba(26,74,138,.5)',weight:.8,dashArray:null},
+          onEachFeature:(f,layer)=>{
+            const pname=f.properties.name||f.properties.name_en||'Region';
+            layer.bindTooltip(pname,{className:'province-tooltip',sticky:true,direction:'top'});
+            layer.on({
+              mouseover(){layer.setStyle({fillColor:isDark?'#5b9de8':'#2d6ec2',fillOpacity:.2,weight:1.4})},
+              mouseout(){layer.setStyle({fillColor:'transparent',fillOpacity:0,weight:.8})}
+            });
+          }
+        }).addTo(cm);
+      })
+      .catch(()=>{});
+
+    // Try to load Wikipedia portrait for each person
+    if(R && R.people){
+      R.people.forEach(p=>{
+        if(!p.wiki)return;
+        fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(p.wiki))
+          .then(r=>r.json())
+          .then(data=>{
+            if(data.thumbnail && data.thumbnail.source){
+              const wrap=document.getElementById('av_'+p.initials);
+              if(wrap){
+                const img=document.createElement('img');
+                img.src=data.thumbnail.source;
+                img.className='person-img';
+                img.alt=p.name;
+                img.onerror=()=>{img.remove()};
+                wrap.parentNode.replaceChild(img,wrap);
+              }
+            }
+          })
+          .catch(()=>{});
+      });
+    }
+
+  })
+  .catch(()=>{
+    page.innerHTML='<div class="not-found"><h1>Unable to load map data</h1><p>This will work on GitHub Pages. <a href="index.html#explore" class="back-link">&#8592; Back</a></p></div>';
+  });
+}
+</script>
+</body>
+</html>
