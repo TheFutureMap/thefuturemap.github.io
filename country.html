@@ -339,6 +339,8 @@ if(!id){
     `;
 
     // Mini map — full world tiles, country highlighted, provinces from Natural Earth ADM1
+    // Defer map init until DOM has updated after page.innerHTML assignment
+    setTimeout(()=>{
     const cm=L.map('countryMap',{zoomControl:false,dragging:false,scrollWheelZoom:false,doubleClickZoom:false,touchZoom:false,attributionControl:false});
     L.tileLayer(isDark?'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png':'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:12}).addTo(cm);
 
