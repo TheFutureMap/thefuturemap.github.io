@@ -291,7 +291,7 @@ if(!id){
 
     // Threats
     if(R){
-      s+=`<p class="section-label">Climate Threats</p><div class="threat-grid">${R.threats.map(t=>`<div class="threat-card"><div class="threat-img-placeholder" style="font-size:2.75rem">${t.icon}</div><div class="threat-body">${t.stat?`<div class="threat-stat">${t.stat}</div><div style="font-size:11px;color:var(--text2);margin-bottom:.5rem">${t.statLabel}</div>`:''}<h4>${t.title}</h4><p>${t.text}</p></div></div>`).join('')}</div>`;
+      s+=`<p class="section-label">Climate Threats</p><div class="threat-grid">${R.threats.map(t=>`<div class="threat-card"><div class="threat-body">${t.stat?`<div class="threat-stat">${t.stat}</div><div style="font-size:11px;color:var(--acm);font-weight:500;letter-spacing:.03em;text-transform:uppercase;margin-bottom:.5rem">${t.statLabel}</div>`:''}<h4>${t.title}</h4><p>${t.text}</p></div></div>`).join('')}</div>`;
     }else s+=notYet('Climate Threats');
 
     // Government timeline
@@ -316,7 +316,7 @@ if(!id){
 
     // Did You Know
     if(R){
-      s+=`<p class="section-label">Did You Know</p><div class="fact-grid">${R.facts.map((f,i)=>`<div class="fact-card" data-icon="${f.icon}"><div class="fact-num">${f.num}</div><div style="font-size:11px;font-weight:600;color:var(--acm);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.4rem">${f.unit}</div><p>${f.text}</p></div>`).join('')}</div>`;
+      s+=`<p class="section-label">Did You Know</p><div class="fact-grid">${R.facts.map(f=>`<div class="fact-card"><div class="fact-num">${f.num}</div><div style="font-size:11px;font-weight:600;color:var(--acm);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.5rem">${f.unit}</div><p>${f.text}</p></div>`).join('')}</div>`;
     }
 
     const sources=R?`<p class="source-note">Sources: ${R.sources}</p>`:'';
@@ -376,25 +376,26 @@ if(!id){
         }).addTo(cm);
       })
       .catch(()=>{});
+    },50); // end setTimeout — lets page.innerHTML settle before Leaflet mounts
 
-    // Try to load Wikipedia portrait for each person
+    // Wikipedia portraits — fetch and replace initials avatar
     if(R && R.people){
       R.people.forEach(p=>{
         if(!p.wiki)return;
         fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(p.wiki))
           .then(r=>r.json())
           .then(data=>{
-            if(data.thumbnail && data.thumbnail.source){
-              const wrap=document.getElementById('av_'+p.initials);
-              if(wrap){
-                const img=document.createElement('img');
-                img.src=data.thumbnail.source;
-                img.className='person-img';
-                img.alt=p.name;
-                img.onerror=()=>{img.remove()};
-                wrap.parentNode.replaceChild(img,wrap);
-              }
-            }
+            const src=data.originalimage?data.originalimage.source:data.thumbnail?data.thumbnail.source:null;
+            if(!src)return;
+            const wrap=document.getElementById('av_'+p.initials);
+            if(!wrap)return;
+            const img=document.createElement('img');
+            img.src=src;
+            img.className='person-img';
+            img.alt=p.name;
+            img.style.cssText='width:100%;height:100%;object-fit:cover;object-position:center top;display:block';
+            img.onerror=()=>{}; // silently keep initials if image fails
+            wrap.parentNode.replaceChild(img,wrap);
           })
           .catch(()=>{});
       });
