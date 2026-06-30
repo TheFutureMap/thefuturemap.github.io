@@ -113,8 +113,7 @@ nav{position:sticky;top:0;z-index:500;background:var(--bg);border-bottom:.5px so
 .people-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-top:1.25rem}
 .person-card{background:var(--bg2);border-radius:14px;overflow:hidden}
 .person-img-wrap{width:100%;height:170px;position:relative;overflow:hidden;background:var(--acl)}
-.person-img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block}
-.person-img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block}
+.person-img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
 .person-avatar-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--acm);font-size:2.25rem;font-weight:700;color:#fff;letter-spacing:.05em}
 .person-body{padding:1.125rem 1.25rem 1.25rem}
 .person-body h4{font-size:14.5px;font-weight:500;color:var(--text);margin-bottom:.2rem}
@@ -330,7 +329,7 @@ if(!id){
         </div>
         <div class="header-map-wrap">
           <div class="header-map"><div id="countryMap"></div></div>
-          <p class="map-caption">Hover provinces to see region names</p>
+          <p class="map-caption" id="mapCaption">Hover provinces and cities to see their names</p>
         </div>
       </div>
       <div class="container">${s}${sources}<a href="index.html#explore" class="back-link">&#8592; Back to the Map</a></div>
@@ -368,6 +367,13 @@ if(!id){
       return props.name||props.NAME||props.name_en||props.NAME_EN||props.namealt||props.woe_name||'Region';
     }
 
+    const mapCaption=document.getElementById('mapCaption');
+    const defaultCaption='Hover provinces to see their names';
+    if(mapCaption) mapCaption.textContent=defaultCaption;
+
+    // Province names are shown via the caption label below the map, not
+    // Leaflet's built-in tooltip — the map box clips overflow for its
+    // rounded corners, which was clipping tooltips before they could render
     fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/master/50m/cultural/ne_50m_admin_1_states_provinces.json')
       .then(r=>r.json())
       .then(adm1=>{
@@ -376,40 +382,13 @@ if(!id){
         L.geoJson({type:'FeatureCollection',features:provs},{
           style:{fillColor:'#ffffff',fillOpacity:0.01,color:isDark?'rgba(255,255,255,.45)':'rgba(26,74,138,.5)',weight:.8},
           onEachFeature:(f,layer)=>{
-            layer.bindTooltip(placeName(f.properties),{className:'province-tooltip',sticky:true,direction:'top'});
+            const pname=placeName(f.properties);
             layer.on({
-              mouseover(){layer.setStyle({fillColor:isDark?'#5b9de8':'#2d6ec2',fillOpacity:.22,weight:1.4})},
-              mouseout(){layer.setStyle({fillColor:'#ffffff',fillOpacity:0.01,weight:.8})}
+              mouseover(){layer.setStyle({fillColor:isDark?'#5b9de8':'#2d6ec2',fillOpacity:.22,weight:1.4});if(mapCaption)mapCaption.textContent=pname;},
+              mouseout(){layer.setStyle({fillColor:'#ffffff',fillOpacity:0.01,weight:.8});if(mapCaption)mapCaption.textContent=defaultCaption;}
             });
           }
         }).addTo(cm);
-      })
-      .catch(()=>{});
-
-    // Major cities overlay from Natural Earth Populated Places, filtered
-    // to this country and to larger/more significant cities only
-    fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/master/50m/cultural/ne_50m_populated_places.json')
-      .then(r=>r.json())
-      .then(places=>{
-        const cities=places.features.filter(f=>{
-          if(!countryMatch(f.properties))return false;
-          const pop=f.properties.pop_max||f.properties.POP_MAX||0;
-          const rank=f.properties.scalerank!==undefined?f.properties.scalerank:(f.properties.SCALERANK!==undefined?f.properties.SCALERANK:10);
-          return pop>200000||rank<=6;
-        });
-        cities.forEach(f=>{
-          const coords=f.geometry.coordinates;
-          const cname=placeName(f.properties);
-          const marker=L.circleMarker([coords[1],coords[0]],{
-            radius:4,fillColor:isDark?'#f5c842':'#e8a33d',fillOpacity:.9,color:isDark?'#1a1a1a':'#fff',weight:1.2
-          });
-          marker.bindTooltip(cname,{className:'province-tooltip',sticky:true,direction:'top'});
-          marker.on({
-            mouseover(){marker.setStyle({radius:6})},
-            mouseout(){marker.setStyle({radius:4})}
-          });
-          marker.addTo(cm);
-        });
       })
       .catch(()=>{});
 
@@ -422,7 +401,7 @@ if(!id){
         fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(p.wiki))
           .then(r=>r.json())
           .then(data=>{
-            const src=data.originalimage?data.originalimage.source:data.thumbnail?data.thumbnail.source:null;
+            const src=data.thumbnail?data.thumbnail.source:(data.originalimage?data.originalimage.source:null);
             if(!src)return;
             const wrap=document.getElementById('av_'+p.initials);
             if(!wrap)return;
