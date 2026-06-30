@@ -9,7 +9,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#fff;--bg2:#f7f7f5;--text:#1a1a1a;--text2:#6b6b68;--border:rgba(0,0,0,.1);--accent:#1a4a8a;--acl:#e8f0fa;--acm:#2d6ec2}
-@media(prefers-color-scheme:dark){:root{--bg:#1a1a1a;--bg2:#1e2028;--text:#f0ede8;--text2:#9a9992;--border:rgba(255,255,255,.1);--accent:#2d6ec2;--acl:#0d1e3a;--acm:#5b9de8}}
+@media (min-width: 1px){:root{--bg:#1a1a1a;--bg2:#1e2028;--text:#f0ede8;--text2:#9a9992;--border:rgba(255,255,255,.1);--accent:#2d6ec2;--acl:#0d1e3a;--acm:#5b9de8}}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;font-size:16px}
 nav{position:sticky;top:0;z-index:500;background:var(--bg);border-bottom:.5px solid var(--border);padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between}
 .nav-logo{font-size:15px;font-weight:500;color:var(--text);text-decoration:none;letter-spacing:-.01em}
@@ -112,8 +112,8 @@ nav{position:sticky;top:0;z-index:500;background:var(--bg);border-bottom:.5px so
 /* People */
 .people-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-top:1.25rem}
 .person-card{background:var(--bg2);border-radius:14px;overflow:hidden}
-.person-img-wrap{width:100%;height:140px;position:relative;overflow:hidden;background:var(--acl)}
-.person-img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.person-img-wrap{width:100%;height:170px;position:relative;overflow:hidden;background:var(--acl)}
+.person-img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block}
 .person-avatar-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--acm);font-size:2.25rem;font-weight:700;color:#fff;letter-spacing:.05em}
 .person-body{padding:1.125rem 1.25rem 1.25rem}
 .person-body h4{font-size:14.5px;font-weight:500;color:var(--text);margin-bottom:.2rem}
@@ -338,7 +338,7 @@ if(!id){
     // Mini map — full world tiles, country highlighted, provinces from Natural Earth ADM1
     // Defer map init until DOM has updated after page.innerHTML assignment
     setTimeout(()=>{
-    const cm=L.map('countryMap',{zoomControl:false,dragging:false,scrollWheelZoom:false,doubleClickZoom:false,touchZoom:false,attributionControl:false});
+    const cm=L.map('countryMap',{zoomControl:true,dragging:true,scrollWheelZoom:false,doubleClickZoom:true,touchZoom:true,attributionControl:false});
     L.tileLayer(isDark?'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png':'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:12}).addTo(cm);
 
     // World context (non-interactive, neutral)
@@ -353,6 +353,7 @@ if(!id){
     // Country highlight
     const hl=L.geoJson(feat,{style:{fillColor:isDark?'#5b9de8':'#2d6ec2',fillOpacity:.28,color:isDark?'#8cc0f5':'#1a4a8a',weight:2},interactive:false}).addTo(cm);
     try{cm.fitBounds(hl.getBounds(),{padding:[20,20]});}catch(e){cm.setView([20,10],2);}
+    setTimeout(()=>cm.invalidateSize(),50);
 
     // Province overlay from Natural Earth ADM1 (same source as main map)
     fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/master/50m/cultural/ne_50m_admin_1_states_provinces.json')
@@ -390,7 +391,7 @@ if(!id){
             img.src=src;
             img.className='person-img';
             img.alt=p.name;
-            img.style.cssText='width:100%;height:100%;object-fit:cover;object-position:center top;display:block';
+            img.style.cssText='width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block';
             img.onerror=()=>{}; // silently keep initials if image fails
             wrap.parentNode.replaceChild(img,wrap);
           })
