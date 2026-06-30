@@ -112,7 +112,8 @@ nav{position:sticky;top:0;z-index:500;background:var(--bg);border-bottom:.5px so
 /* People */
 .people-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-top:1.25rem}
 .person-card{background:var(--bg2);border-radius:14px;overflow:hidden}
-.person-img-wrap{width:100%;height:90px;position:relative;overflow:hidden;background:var(--acl)}
+.person-img-wrap{width:100%;height:170px;position:relative;overflow:hidden;background:var(--acl)}
+.person-img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block}
 .person-img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block}
 .person-avatar-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--acm);font-size:2.25rem;font-weight:700;color:#fff;letter-spacing:.05em}
 .person-body{padding:1.125rem 1.25rem 1.25rem}
@@ -355,17 +356,27 @@ if(!id){
     try{cm.fitBounds(hl.getBounds(),{padding:[20,20]});}catch(e){cm.setView([20,10],2);}
     setTimeout(()=>cm.invalidateSize(),50);
 
-    // Province overlay from Natural Earth ADM1 (same source as main map)
+    // Province overlay from Natural Earth ADM1 — robust matching since
+    // field casing/naming varies by mirror (tries several common variants)
+    function countryMatch(props){
+      const iso2u=(iso2||'').toUpperCase();
+      const idu=(id||'').toUpperCase();
+      const candidates=[props.iso_a2,props.ISO_A2,props.adm0_a3,props.ADM0_A3,props.sov_a3,props.SOV_A3,props.iso_a3,props.ISO_A3];
+      return candidates.some(c=>c&&(String(c).toUpperCase()===iso2u||String(c).toUpperCase()===idu));
+    }
+    function placeName(props){
+      return props.name||props.NAME||props.name_en||props.NAME_EN||props.namealt||props.woe_name||'Region';
+    }
+
     fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/master/50m/cultural/ne_50m_admin_1_states_provinces.json')
       .then(r=>r.json())
       .then(adm1=>{
-        const provs=adm1.features.filter(f=>(f.properties.iso_a2||'').toUpperCase()===(iso2||'').toUpperCase()||f.properties.adm0_a3===id);
+        const provs=adm1.features.filter(countryMatch);
         if(!provs.length)return;
         L.geoJson({type:'FeatureCollection',features:provs},{
           style:{fillColor:'#ffffff',fillOpacity:0.01,color:isDark?'rgba(255,255,255,.45)':'rgba(26,74,138,.5)',weight:.8},
           onEachFeature:(f,layer)=>{
-            const pname=f.properties.name||f.properties.name_en||'Region';
-            layer.bindTooltip(pname,{className:'province-tooltip',sticky:true,direction:'top'});
+            layer.bindTooltip(placeName(f.properties),{className:'province-tooltip',sticky:true,direction:'top'});
             layer.on({
               mouseover(){layer.setStyle({fillColor:isDark?'#5b9de8':'#2d6ec2',fillOpacity:.22,weight:1.4})},
               mouseout(){layer.setStyle({fillColor:'#ffffff',fillOpacity:0.01,weight:.8})}
@@ -374,11 +385,57 @@ if(!id){
         }).addTo(cm);
       })
       .catch(()=>{});
+
+    // Major cities overlay from Natural Earth Populated Places, filtered
+    // to this country and to larger/more significant cities only
+    fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/master/50m/cultural/ne_50m_populated_places.json')
+      .then(r=>r.json())
+      .then(places=>{
+        const cities=places.features.filter(f=>{
+          if(!countryMatch(f.properties))return false;
+          const pop=f.properties.pop_max||f.properties.POP_MAX||0;
+          const rank=f.properties.scalerank!==undefined?f.properties.scalerank:(f.properties.SCALERANK!==undefined?f.properties.SCALERANK:10);
+          return pop>200000||rank<=6;
+        });
+        cities.forEach(f=>{
+          const coords=f.geometry.coordinates;
+          const cname=placeName(f.properties);
+          const marker=L.circleMarker([coords[1],coords[0]],{
+            radius:4,fillColor:isDark?'#f5c842':'#e8a33d',fillOpacity:.9,color:isDark?'#1a1a1a':'#fff',weight:1.2
+          });
+          marker.bindTooltip(cname,{className:'province-tooltip',sticky:true,direction:'top'});
+          marker.on({
+            mouseover(){marker.setStyle({radius:6})},
+            mouseout(){marker.setStyle({radius:4})}
+          });
+          marker.addTo(cm);
+        });
+      })
+      .catch(()=>{});
+
     },50); // end setTimeout — lets page.innerHTML settle before Leaflet mounts
 
-    // Note: real photos were tried via Wikipedia's API but proved unreliable
-    // (wrong person matched, poor crops). Sticking with initials avatars
-    // for consistency and accuracy.
+    // Wikipedia portraits — fetch and replace initials avatar
+    if(R && R.people){
+      R.people.forEach(p=>{
+        if(!p.wiki)return;
+        fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(p.wiki))
+          .then(r=>r.json())
+          .then(data=>{
+            const src=data.originalimage?data.originalimage.source:data.thumbnail?data.thumbnail.source:null;
+            if(!src)return;
+            const wrap=document.getElementById('av_'+p.initials);
+            if(!wrap)return;
+            const img=document.createElement('img');
+            img.src=src;
+            img.className='person-img';
+            img.alt=p.name;
+            img.onerror=()=>{};
+            wrap.parentNode.replaceChild(img,wrap);
+          })
+          .catch(()=>{});
+      });
+    }
 
   })
   .catch(()=>{
