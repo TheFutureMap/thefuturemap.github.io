@@ -112,7 +112,7 @@ nav{position:sticky;top:0;z-index:500;background:var(--bg);border-bottom:.5px so
 /* People */
 .people-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-top:1.25rem}
 .person-card{background:var(--bg2);border-radius:14px;overflow:hidden}
-.person-img-wrap{width:100%;height:170px;position:relative;overflow:hidden;background:var(--acl)}
+.person-img-wrap{width:100%;height:90px;position:relative;overflow:hidden;background:var(--acl)}
 .person-img{width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block}
 .person-avatar-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--acm);font-size:2.25rem;font-weight:700;color:#fff;letter-spacing:.05em}
 .person-body{padding:1.125rem 1.25rem 1.25rem}
@@ -338,7 +338,7 @@ if(!id){
     // Mini map — full world tiles, country highlighted, provinces from Natural Earth ADM1
     // Defer map init until DOM has updated after page.innerHTML assignment
     setTimeout(()=>{
-    const cm=L.map('countryMap',{zoomControl:true,dragging:true,scrollWheelZoom:false,doubleClickZoom:true,touchZoom:true,attributionControl:false});
+    const cm=L.map('countryMap',{zoomControl:true,dragging:true,scrollWheelZoom:true,doubleClickZoom:true,touchZoom:true,attributionControl:false});
     L.tileLayer(isDark?'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png':'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:12}).addTo(cm);
 
     // World context (non-interactive, neutral)
@@ -362,13 +362,13 @@ if(!id){
         const provs=adm1.features.filter(f=>(f.properties.iso_a2||'').toUpperCase()===(iso2||'').toUpperCase()||f.properties.adm0_a3===id);
         if(!provs.length)return;
         L.geoJson({type:'FeatureCollection',features:provs},{
-          style:{fillColor:'transparent',fillOpacity:0,color:isDark?'rgba(255,255,255,.45)':'rgba(26,74,138,.5)',weight:.8,dashArray:null},
+          style:{fillColor:'#ffffff',fillOpacity:0.01,color:isDark?'rgba(255,255,255,.45)':'rgba(26,74,138,.5)',weight:.8},
           onEachFeature:(f,layer)=>{
             const pname=f.properties.name||f.properties.name_en||'Region';
             layer.bindTooltip(pname,{className:'province-tooltip',sticky:true,direction:'top'});
             layer.on({
-              mouseover(){layer.setStyle({fillColor:isDark?'#5b9de8':'#2d6ec2',fillOpacity:.2,weight:1.4})},
-              mouseout(){layer.setStyle({fillColor:'transparent',fillOpacity:0,weight:.8})}
+              mouseover(){layer.setStyle({fillColor:isDark?'#5b9de8':'#2d6ec2',fillOpacity:.22,weight:1.4})},
+              mouseout(){layer.setStyle({fillColor:'#ffffff',fillOpacity:0.01,weight:.8})}
             });
           }
         }).addTo(cm);
@@ -376,28 +376,9 @@ if(!id){
       .catch(()=>{});
     },50); // end setTimeout — lets page.innerHTML settle before Leaflet mounts
 
-    // Wikipedia portraits — fetch and replace initials avatar
-    if(R && R.people){
-      R.people.forEach(p=>{
-        if(!p.wiki)return;
-        fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(p.wiki))
-          .then(r=>r.json())
-          .then(data=>{
-            const src=data.originalimage?data.originalimage.source:data.thumbnail?data.thumbnail.source:null;
-            if(!src)return;
-            const wrap=document.getElementById('av_'+p.initials);
-            if(!wrap)return;
-            const img=document.createElement('img');
-            img.src=src;
-            img.className='person-img';
-            img.alt=p.name;
-            img.style.cssText='width:100%;height:100%;object-fit:cover;object-position:center 20%;display:block';
-            img.onerror=()=>{}; // silently keep initials if image fails
-            wrap.parentNode.replaceChild(img,wrap);
-          })
-          .catch(()=>{});
-      });
-    }
+    // Note: real photos were tried via Wikipedia's API but proved unreliable
+    // (wrong person matched, poor crops). Sticking with initials avatars
+    // for consistency and accuracy.
 
   })
   .catch(()=>{
